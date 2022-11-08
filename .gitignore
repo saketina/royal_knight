@@ -1,0 +1,11 @@
+config.py
+.atom
+.cache
+.dotnet
+.android
+__pycache__
+.idea
+.vscode
+.DS_Store
+starter.sh
+output

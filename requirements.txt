@@ -1,0 +1,6 @@
+disnake[voice]
+aiofiles
+pillow
+python-decouple
+requests
+pyrebase4

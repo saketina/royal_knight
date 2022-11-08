@@ -1,0 +1,10 @@
+{
+  "apiKey": "AIzaSyAwqdyZy9hCuKSfu_3eV42WybWf2r-7-c8",
+  "authDomain": "rw-moderation-bot.firebaseapp.com",
+  "databaseURL": "https://rw-moderation-bot-default-rtdb.firebaseio.com",
+  "projectId": "rw-moderation-bot",
+  "storageBucket": "rw-moderation-bot.appspot.com",
+  "messagingSenderId": "638049181021",
+  "appId": "1:638049181021:web:5885459b9579d7f2b95cb4",
+  "measurementId": "G-FSF93E8PTC"
+}
