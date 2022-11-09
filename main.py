@@ -114,6 +114,7 @@ initial_cogs = [
     "cogs.moderation",
     "cogs.prefix",
     "cogs.roleplay",
+    "cogs.testing",
     "cogs.user",
     "cogs.utility",
     "cogs.welcome"
@@ -128,7 +129,7 @@ for cog in initial_cogs:
         #print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
         print(f"{e}")
 
-if cog_counter >= 11:
+if cog_counter >= 12:
     print("\nAll cogs imported succesfully")
     time.sleep(5)
     try:
