@@ -29,4 +29,4 @@ class WelcomeImage:
 
 
 wew_variable = WelcomeImage("nothing")
-wew_variable.CreateImage("output/test.png")
+wew_variable.CreateImage("welcome_image/output/test.png")

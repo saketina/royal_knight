@@ -88,9 +88,9 @@ class User(commands.Cog):
         await ctx.send(file=file, embed=emb)
         # await ctx.send(file=file)
         try:
-            os.system(f"rmdir /S images/generated/{ctx.author.id}.png")
+            os.system(f"del /Q \"C:\\Users\\User\\Documents\\Discord Projects\\karma-master\\images\\generated\\{ctx.author.id}.png\"")
         except:
-            os.system(f"rm -rf images/generated/{ctx.author.id}.png")
+            os.system(f"rm -rf  images/generated/{ctx.author.id}.png")
 
 def setup(client):
     client.add_cog(User(client))

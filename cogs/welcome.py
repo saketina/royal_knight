@@ -84,16 +84,16 @@ class Welcome(commands.Cog):
             font=font_smol,
             )
 
-        path = f"cogs/Assets/welcome/images/welcome_image/output/{member.id}.png"
-        print(path)
+        path = f"./cogs/Assets/welcome/images/welcome_image/output/{member.id}.png"
         im.save(path)
         image_file = disnake.File(path)
         await welcome_channel.send(
             f"Welcome {member.mention} to the server **{server}**!\nYou are our ``{member_count}{end_letter}`` member.",
             file=image_file,
             )
+
         try:
-            os.system(f"rmdir /s /q {path}")
+            os.system(f"del /q \"C:\\Users\\User\\Documents\\Discord Projects\\karma-master\\cogs\\Assets\\welcome\\images\\welcome_image\\output\\{member.id}.png\"")
         except:
             os.system(f"rm -rf {path}")
 
