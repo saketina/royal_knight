@@ -27,6 +27,25 @@ class Help(commands.Cog):
 
         await ctx.send(embed=emb)
 
+    @help.command(pass_context = True)
+    async def test(self, ctx):
+        emb = disnake.Embed(
+            title = "TITLE OF CATEGORY",
+            color = disnake.Color.dark_red()
+            )
+        emb.add_field(
+            name = "TITLE OF COMMAND 1",
+            value = "`COMMAND 1 USAGE`",
+            inline = True
+        )
+
+        emb.add_field(
+            name = "TITLE OF COMMAND 2",
+            value = "`COMMAND 2 USAGE`",
+            inline = False
+        )
+        await ctx.send(embed = emb)
+
     @help.command(pass_context=True)
     async def fun(self, ctx):
         emb = disnake.Embed(

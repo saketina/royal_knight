@@ -87,11 +87,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     async def count(self, ctx, user:disnake.User=None):
-        db_warns = db.child(
-        "MODERATIONS").child(
-        "WARNS").child(
-        ctx.guild.id).child(
-        user.id).get().val()
+        db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get().val()
         warn_count = len(db_warns) - 1
         warn_number = 1
         warn = db_warns.get("1")

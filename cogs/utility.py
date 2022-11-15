@@ -65,7 +65,7 @@ class Utility(commands.Cog):
                 if key_id in keys:
                     afk_reply_embed = disnake.Embed(
                         title=f'{mention.display_name} is currently afk',
-                        description=f'**Notice**: {self.afk_dict["m"+key_id]}'
+                        description=f'**Reason**: {self.afk_dict["m"+key_id]}'
                         )
                     self.afk_dict[key_id].add(
                         f'Mentioned by: {msg.author.display_name}\n'
@@ -205,9 +205,12 @@ class Utility(commands.Cog):
         elif vote_yes>vote_no:
             poll_answer = "Majority is in favour of the poll"
             color=disnake.Color.green()
-        else:
+        elif len(vote_yes) == 0 and  len(vote_no) == 0:
             poll_answer = "Nobody voted..."
             color=disnake.Color.gold()
+        else:
+            poll_answer = "It was a tie!"
+            color = disnake.Color.gold()
 
         result_embed = disnake.Embed(
             title=f'Poll: {question}',
