@@ -76,7 +76,7 @@ class Misc(commands.Cog):
     async def say(self, ctx, *, message):
         if message != None:
              
-            if str(ctx.guild.default_role) not in message:
+            if str(ctx.guild.default_role) not in message and "@here" not in message:
                 msg = message
             else:
                 msg = "You can\'t make me say that"
