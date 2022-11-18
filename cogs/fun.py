@@ -14,7 +14,7 @@ class Fun(commands.Cog):
     @commands.max_concurrency(1, per=commands.BucketType.user)
     @commands.command(aliases=['rps'], pass_context=True)
     async def rockpaperscissors(self, ctx, player: disnake.Member = None):
-        #if player != ctx.author:
+        if player != ctx.author:
             rejected = False
             options = [
                 'Rock',
@@ -334,8 +334,8 @@ class Fun(commands.Cog):
                     await ctx.send(
                         embed=lost_emb
                         )
-        ### else:
-            #await ctx.send("You can\'t start a match with yourself")
+        else:
+            await ctx.send("You can\'t start a match with yourself")
     """
     @rockpaperscissors.error
     async def rps_error(self, ctx, error):
