@@ -154,7 +154,7 @@ class Utility(commands.Cog):
     @commands.command(pass_context=True)
     @commands.guild_only()
     async def poll(self, ctx, *, question):
-        time=20
+        time=4
         yes_mark="✅"
         no_mark="❎"
         poll_embed = disnake.Embed(
@@ -252,7 +252,7 @@ class Utility(commands.Cog):
             )
 
         await ctx.send(embed=result_embed)
-
+    """
     @poll.error
     async def poll_error(self, ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
@@ -262,7 +262,7 @@ class Utility(commands.Cog):
                 color=disnake.Color.dark_red()
                 )
             await ctx.send(embed=embed)
-
+    """
     @commands.command(name="toggle", pass_context=True)
     @commands.is_owner()
     async def toggle(self, ctx, *, command):
