@@ -21,6 +21,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @commands.has_permissions(manage_messages=True)
     async def warn(self, ctx, member:disnake.Member=None, *, reason:str=None):
         if member == None:
             embed = disnake.Embed(
@@ -161,8 +162,7 @@ class Moderation(commands.Cog):
                 )
             await ctx.send(embed=emb)
         elif amount==0:
-            msg = await ctx.send("Please input a number larger then 0.")
-            await msg.delete(delay=10)
+            await ctx.send(content = "Please input a number larger then 0.", delete_after = 10)
 
         elif amount<1001:
             if amount>1:
@@ -171,8 +171,7 @@ class Moderation(commands.Cog):
                 msgs = "message"
 
             deleted = await ctx.channel.purge(limit = amount + 1, bulk=True)
-            msg = await ctx.send(f"Successfully deleted {len(deleted) - 1} {msgs}.")
-            await msg.delete(delay=10)
+            await ctx.send(content = f"Successfully deleted {len(deleted) - 1} {msgs}.", delete_after = 10)
         else:
             await ctx.send("You can\'t delete more then 1000 messages at a time.")
 
@@ -183,8 +182,7 @@ class Moderation(commands.Cog):
         elif isinstance(error, commands.CommandInvokeError):
             await ctx.send("I didn\'t quite catch that.")
         elif isinstance(error, commands.BadArgument):
-            msg = await ctx.send("Please input only numbers.")
-            await msg.delete(delay=10)
+            await ctx.send(content = "Please input only numbers.", delete_after = 10)
         elif isinstance(error, commands.MissingPermissions):
             return
         else:
@@ -202,8 +200,7 @@ class Moderation(commands.Cog):
                 )
             await ctx.send(embed=emb)
         elif member==ctx.author:
-            msg = await ctx.send("You can\'t ban yourself")
-            await msg.delete(delay=10)
+            await ctx.send(content = "You can\'t ban yourself", delete_after = 10)
         else:
             if reason==None:
                 rsn="no reason"
@@ -263,8 +260,7 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.NoPrivateMessage):
             return
         elif isinstance(error, commands.MemberNotFound):
-            msg = await ctx.send("I couldn\'t find that member")
-            await msg.delete(delay=10)
+            await ctx.send(content = "I couldn\'t find that member", delete_after = 10)
         elif isinstance(error, commands.MissingPermissions):
             return
         else:
@@ -282,8 +278,7 @@ class Moderation(commands.Cog):
                 )
             await ctx.send(embed=emb)
         elif member==ctx.author:
-            msg = await ctx.send("You can\'t kick yourself")
-            await msg.delete(delay=10)
+            await ctx.send(content = "You can\'t kick yourself", delete_after = 10)
         else:
             if reason==None:
                 rsn="no reason"
@@ -343,8 +338,7 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.NoPrivateMessage):
             return
         elif isinstance(error, commands.MemberNotFound):
-            msg = await ctx.send("I couldn\'t find that member")
-            await msg.delete(delay=10)
+            await ctx.send(content = "I couldn\'t find that member", delete_after = 10)
         if isinstance(error, commands.MissingPermissions):
             return
         else:
@@ -362,8 +356,7 @@ class Moderation(commands.Cog):
                 )
             await ctx.send(embed=emb)
         elif id == ctx.author:
-            msg = await ctx.send("You aren\'t banned.")
-            await msg.delete(delay=10)
+            await ctx.send(content = "You aren\'t banned.", delete_after = 10)
         else:
             user = await self.client.fetch_user(id)
             await ctx.guild.unban(user)
@@ -374,14 +367,11 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.NoPrivateMessage):
             return
         elif isinstance(error, commands.BadArgument):
-            msg = await ctx.send("Please input only the members id.")
-            await msg.delete(delay=10)
+            await ctx.send(content = "Please input only the members id.", delete_after = 10)
         elif isinstance(error, commands.CommandInvokeError):
-            msg = await ctx.send("I can\'t find that member.")
-            await msg.delete(delay=10)
+            await ctx.send(content = "I can\'t find that member.", delete_after = 10)
         elif isinstance(error, commands.MissingPermissions):
-            msg = await ctx.send("You don\'t have the required permissions to use this command.")
-            await msg.delete(delay=10)
+            await ctx.send(content = "You don\'t have the required permissions to use this command.", delete_after = 10)
         else:
             print(error)
 
