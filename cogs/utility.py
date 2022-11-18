@@ -153,116 +153,114 @@ class Utility(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.guild_only()
-    async def poll(self, ctx, *, question):
-        time=4
-        yes_mark="✅"
-        no_mark="❎"
-        poll_embed = disnake.Embed(
-            title=f'Q. {question}',
-            description=f"{yes_mark} YES \n"
-                        f"{no_mark} NO",
-            color=disnake.Color.dark_red()
-            )
-        poll_embed.set_author(
-            name=ctx.author.display_name,
-            icon_url=ctx.author.display_avatar
-            )
-        poll_message = await ctx.send(embed=poll_embed)
-        vote_yes = []
-        vote_no = []
-        vote = {'yes': [], 'no': []}
-        bot = await self.client.fetch_user(850019720648589352)
-        bot_name = bot.display_name
+    async def poll(self, ctx, *, question = None):
+        if question != None:
+            time=20
+            yes_mark="✅"
+            no_mark="❎"
+            poll_embed = disnake.Embed(
+                title=f'Q. {question}',
+                description=f"{yes_mark} YES \n"
+                            f"{no_mark} NO",
+                color=disnake.Color.dark_red()
+                )
+            poll_embed.set_author(
+                name=ctx.author.display_name,
+                icon_url=ctx.author.display_avatar
+                )
+            poll_message = await ctx.send(embed=poll_embed)
+            vote_yes = []
+            vote_no = []
+            vote = {'yes': [], 'no': []}
+            bot = await self.client.fetch_user(850019720648589352)
+            bot_name = bot.display_name
 
-        await poll_message.add_reaction(yes_mark)
-        await poll_message.add_reaction(no_mark)
+            await poll_message.add_reaction(yes_mark)
+            await poll_message.add_reaction(no_mark)
 
-        await asyncio.sleep(time)
+            await asyncio.sleep(time)
 
-        poll_message = await ctx.channel.fetch_message(poll_message.id)
-        for reaction in poll_message.reactions:
+            poll_message = await ctx.channel.fetch_message(poll_message.id)
+            for reaction in poll_message.reactions:
 
-            if str(reaction.emoji) == yes_mark:
-                reactions = await reaction.users().flatten()
+                if str(reaction.emoji) == yes_mark:
+                    reactions = await reaction.users().flatten()
 
-                for member in reactions:
-                    vote_yes.append(member.display_name)
-                    yx = slice(0, 1)
+                    for member in reactions:
+                        vote_yes.append(member.display_name)
+                        yx = slice(0, 1)
 
-            elif str(reaction.emoji) == no_mark:
-                reactions = await reaction.users().flatten()
+                elif str(reaction.emoji) == no_mark:
+                    reactions = await reaction.users().flatten()
 
-                for member in reactions:
-                    vote_no.append(member.display_name)
-                    nx = slice(0, 1)
+                    for member in reactions:
+                        vote_no.append(member.display_name)
+                        nx = slice(0, 1)
 
-        vote_yes[yx] = ""
-        vote_no[nx] = ""
+            vote_yes[yx] = ""
+            vote_no[nx] = ""
 
-        if vote_yes<vote_no:
-            poll_answer = "Majority is in opposition of the poll"
-            color=disnake.Color.red()
-        elif vote_yes>vote_no:
-            poll_answer = "Majority is in favour of the poll"
-            color=disnake.Color.green()
-        elif len(vote_yes) == 0 and  len(vote_no) == 0:
-            poll_answer = "Nobody voted..."
-            color=disnake.Color.gold()
+            if vote_yes<vote_no:
+                poll_answer = "Majority is in opposition of the poll"
+                color=disnake.Color.red()
+            elif vote_yes>vote_no:
+                poll_answer = "Majority is in favour of the poll"
+                color=disnake.Color.green()
+            elif len(vote_yes) == 0 and  len(vote_no) == 0:
+                poll_answer = "Nobody voted..."
+                color=disnake.Color.gold()
+            else:
+                poll_answer = "It was a tie!"
+                color = disnake.Color.gold()
+
+            result_embed = disnake.Embed(
+                title=f'Poll: {question}',
+                description=f"**Results:**\n{poll_answer}\n"
+                            f'\n**Link:** {poll_message.jump_url}',
+                color=color
+                )
+            result_embed.set_author(
+                name=ctx.author.display_name,
+                icon_url=ctx.author.display_avatar
+                )
+
+            in_favour = 'Nobody' if len(vote_yes) == 0 else ''
+            not_in_favour = 'Nobody' if len(vote_no) == 0 else ''
+
+            len_count = 0
+            for name in vote_yes:
+                if len(in_favour) > 980:
+                    in_favour += '...'
+                    break
+                in_favour += f'{name}\n'
+                len_count += len(name)
+
+            len_count = 0
+            for name in vote_no:
+                if len(in_favour) > 980:
+                    not_in_favour += '...'
+                    break
+                not_in_favour += f'{name}\n'
+                len_count += len(name)
+
+            result_embed.add_field(
+                name=f'People in Favour: {len(vote_yes)}',
+                value=in_favour
+                )
+            result_embed.add_field(
+                name=f'People not in Favour: {len(vote_no)}',
+                value=not_in_favour
+                )
+
+            await ctx.send(embed=result_embed)
         else:
-            poll_answer = "It was a tie!"
-            color = disnake.Color.gold()
-
-        result_embed = disnake.Embed(
-            title=f'Poll: {question}',
-            description=f"**Results:**\n{poll_answer}\n"
-                        f'\n**Link:** {poll_message.jump_url}',
-            color=color
-            )
-        result_embed.set_author(
-            name=ctx.author.display_name,
-            icon_url=ctx.author.display_avatar
-            )
-
-        in_favour = 'Nobody' if len(vote_yes) == 0 else ''
-        not_in_favour = 'Nobody' if len(vote_no) == 0 else ''
-
-        len_count = 0
-        for name in vote_yes:
-            if len(in_favour) > 980:
-                in_favour += '...'
-                break
-            in_favour += f'{name}\n'
-            len_count += len(name)
-
-        len_count = 0
-        for name in vote_no:
-            if len(in_favour) > 980:
-                not_in_favour += '...'
-                break
-            not_in_favour += f'{name}\n'
-            len_count += len(name)
-
-        result_embed.add_field(
-            name=f'People in Favour: {len(vote_yes)}',
-            value=in_favour
-            )
-        result_embed.add_field(
-            name=f'People not in Favour: {len(vote_no)}',
-            value=not_in_favour
-            )
-
-        await ctx.send(embed=result_embed)
-    """
-    @poll.error
-    async def poll_error(self, ctx, error):
-        if isinstance(error, commands.errors.MissingRequiredArgument):
             embed = disnake.Embed(
                 title = "POLL HELP",
                 description="`k.poll [question]`",
                 color=disnake.Color.dark_red()
                 )
             await ctx.send(embed=embed)
-    """
+
     @commands.command(name="toggle", pass_context=True)
     @commands.is_owner()
     async def toggle(self, ctx, *, command):
