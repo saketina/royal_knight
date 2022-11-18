@@ -170,8 +170,8 @@ class Moderation(commands.Cog):
             else:
                 msgs = "message"
 
-            deleted = await ctx.channel.purge(limit = amount, bulk=True)
-            msg = await ctx.send(f"Successfully deleted {len(deleted)} {msgs}.")
+            deleted = await ctx.channel.purge(limit = amount + 1, bulk=True)
+            msg = await ctx.send(f"Successfully deleted {len(deleted) - 1} {msgs}.")
             await msg.delete(delay=10)
         else:
             await ctx.send("You can\'t delete more then 1000 messages at a time.")
