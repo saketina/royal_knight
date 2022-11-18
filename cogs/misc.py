@@ -74,14 +74,17 @@ class Misc(commands.Cog):
 
     @commands.command(pass_context=True)
     async def say(self, ctx, *, message):
-        msg = [message != ctx.guild.default_role]
-        await ctx.message.delete()
-        await ctx.send(msg)
-
-    @say.error
-    async def say_error(self, ctx, error):
-        if isinstance(error, commands.errors.MissingRequiredArgument):
-            await ctx.send("Tell me what to say.")
+        if message != None:
+             
+            if str(ctx.guild.default_role) not in message:
+                msg = message
+            else:
+                msg = "You can\'t make me say that"
+            
+            await ctx.message.delete()
+            await ctx.send(msg)
+        else: 
+            await ctx.send("Please tell me what to say")
 
 def setup(client):
     client.add_cog(Misc(client))
