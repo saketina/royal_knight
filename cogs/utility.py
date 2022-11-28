@@ -19,6 +19,10 @@ class Utility(commands.Cog):
         self.client = client
         self.afk_dict = {}
 
+    @commands.slash_command(name = "hello", description="Greets the user.")
+    async def hello(self, ctx):
+        await ctx.send("Hello! Pleased to meet you.")
+
     @commands.Cog.listener()
     async def on_message(self, msg):
         # Afk System
@@ -59,6 +63,7 @@ class Utility(commands.Cog):
                     )
                 await msg.author.send(embed=afk_dm_embed, file=afk_list_file)
                 self.afk_dict.pop(str(msg.author.id) + str(msg.guild.id))
+                await aiofiles.os.rmdir(f'cogs/Assets/afk_mention_list_messages/{msg.author.id}.txt')
 
             for mention in msg.mentions:
                 key_id = str(mention.id) + str(msg.guild.id)
