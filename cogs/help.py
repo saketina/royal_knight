@@ -71,9 +71,7 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="MISC COMMANDS",
-            value="Avatar\n"
-                  "`Alias: av, pfp`\n"
-                  "Status\n"
+            value="Status\n"
                   "Say"
             )
         emb.add_field(
