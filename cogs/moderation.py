@@ -128,11 +128,17 @@ class Moderation(commands.Cog):
                     button_no = Button(label="No", style=disnake.ButtonStyle.red)
 
                     async def button_yes_callback(interaction):
-                        db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).remove()
-                        await interaction.response.edit_message(content="All warns have been deleted", view=None)
+                        if interaction.author.id == ctx.author.id:
+                            db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).remove()
+                            await interaction.response.edit_message(content="All warns have been deleted", view=None)
+                        else:
+                            return
 
                     async def button_no_callback(interaction):
-                        await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
+                        if interaction.author.id == ctx.author.id:
+                            await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
+                        else:
+                            return
 
                     button_yes.callback = button_yes_callback
                     button_no.callback = button_no_callback
