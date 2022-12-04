@@ -1,6 +1,8 @@
 import os
 import disnake
 
+from decouple import config
+
 from disnake.ext import commands
 from disnake.ext.commands import is_owner
 
@@ -148,4 +150,4 @@ else:
         os.system("clear")
     os.system("title Karma Bot: ERROR IN A COG")
 
-client.run("ODUwMDE5NzIwNjQ4NTg5MzUy.YLjojg.tMwU324N8DBF1yMfMWOwQdw5axE", reconnect=True)
+client.run(config("token"), reconnect=True)
