@@ -30,9 +30,15 @@ class User(commands.Cog):
 
         roleList = [r.mention for r in user.roles if r != ctx.guild.default_role]
         roleList.reverse()
+
+        if roleList != []:
+            rolesAddon = "> " + '\n > '.join(roleList)
+        else:
+            rolesAddon = "None"
+
         ProfileEmbed.add_field(
         name="Roles",
-        value="> " + '\n > '.join(roleList),
+        value=rolesAddon,
         inline=False
         )
         joined_at = user.joined_at.strftime("%b %d, %Y, %T")
