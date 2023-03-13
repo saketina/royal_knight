@@ -257,8 +257,8 @@ class Moderation(commands.Cog):
                     name = f"Ban {bn_amount}",
                     value = f"Moderator: {ctx.author}\nReason: `{reason}`\nAt: {dt_string}"
                 )
+                await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
                 await ctx.send(embed=embed)
-            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
             #await ctx.send(f"{member} was banned for {rsn}.")
 
     @ban.error

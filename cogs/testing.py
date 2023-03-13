@@ -141,25 +141,29 @@ class Testing(commands.Cog):
 
                                 async def button_warns_delete_callback(interaction):
                                     if interaction.author.id == ctx.author.id:
-                                        button_yes = Button(label="Yes", style=disnake.ButtonStyle.green)
-                                        button_no = Button(label="No", style=disnake.ButtonStyle.red)
+                                        button_warns_yes = Button(label="Yes", style=disnake.ButtonStyle.green)
+                                        button_warns_no = Button(label="No", style=disnake.ButtonStyle.red)
 
-                                    async def button_yes_callback(interaction):
+                                    async def button_warns_yes_callback(interaction):
                                         if interaction.author.id == ctx.author.id:
                                             await interaction.response.defer(with_message = False)
                                             db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).child(warn_id).remove()
                                             await interaction.edit_original_response(content="The warn has been deleted 🚮", view=None)
+                                        else:
+                                            return
 
-                                    async def button_no_callback(interaction):
+                                    async def button_warns_no_callback(interaction):
                                         if interaction.author.id == ctx.author.id:
                                             await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
+                                        else:
+                                            return
 
-                                    button_yes.callback = button_yes_callback
-                                    button_no.callback = button_no_callback
+                                    button_warns_yes.callback = button_warns_yes_callback
+                                    button_warns_no.callback = button_warns_no_callback
 
-                                    view = MyView(timeout=30, interaction=[button_yes_callback, button_no_callback])
-                                    view.add_item(button_yes)
-                                    view.add_item(button_no)
+                                    view = MyView(timeout=30, interaction=[button_warns_yes_callback, button_warns_no_callback])
+                                    view.add_item(button_warns_yes)
+                                    view.add_item(button_warns_no)
 
                                     MyView.message = await ctx.send("Are you sure?", view=view)
                                     await interaction.response.edit_message(view=None)
