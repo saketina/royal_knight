@@ -37,26 +37,28 @@ class Testing(commands.Cog):
             await ctx.send("Please tell me who to check.")
         else:
             db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get().val()
-            db_bans = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).get().val()
-            db_kicks = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).get().val()
-            db_moderations = [db_warns, db_bans, db_kicks]
+            db_bans = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).get()
+            db_kicks = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).get()
+            db_moderations = [db_warns.val(), db_bans.val(), db_kicks.val()]
             #print(db_moderations)
+            
+            #if db_warns != None:
+            #print(db_warns)
+            #delattr(db_warns, "warns")
             """
-            if db_warns != None:
-                del db_warns["warns"]
             if db_bans != None:
                 db_bans.pop("bans")
             if db_kicks != None:
                 db_kicks.pop("kicks")
             """
-
+            #print(db_moderations)
             if db_moderations != [None, None, None]:
                 warnings_embed = disnake.Embed(
                     title = f"{user.name}\'s moderations",
                     description = "1. Warns\n2. Bans\n3. Kicks",
                     color = disnake.Color.dark_red()
                 )
-
+                #db_warns.pop("warns")
                 button_warns = Button(label="Warns", disabled = True if db_warns == None else False)
                 button_bans = Button(label="Bans", disabled = True if db_bans == None else False)
                 button_kicks = Button(label="Kicks", disabled = True if db_kicks == None else False)
