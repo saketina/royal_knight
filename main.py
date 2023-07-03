@@ -11,6 +11,8 @@ import sys
 import json
 import pyrebase
 import time
+import datetime
+from datetime import datetime
 
 #import logging
 # logging.basicConfig(level=logging.ERROR)
@@ -47,7 +49,7 @@ async def on_ready():
         response = "server"
     await client.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching, name=f"{len(client.guilds)} {response}"), status=disnake.Status.dnd)
     print(
-        f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\n"
+        f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt:{datetime.now()}\n"
     )
 
 
