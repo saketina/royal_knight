@@ -147,6 +147,7 @@ class Help(commands.Cog):
         emb.add_field(
             name="USER COMMANDS",
             value="Profile\n"
+                  "Prefix\n"
                   "Avatar(*av*, *pfp*)",
             inline=False
             )
