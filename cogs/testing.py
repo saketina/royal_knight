@@ -39,14 +39,16 @@ class MyView(disnake.ui.View):
 class Testing(commands.Cog):
     def __init__(self, client):
         self.client=client
-        #self.warn_number = 0
-        #self.page_number = 0
         self.current_page = 0
         self.pages = {}
         self.pages_list = {}
 
     @commands.command(aliases=["warns", "check"], pass_context=True)
     async def warnings(self, ctx, user:disnake.User=None):
+        try:
+            self.pages_list.popitem(user.id)
+        except:
+            return
         if user == None:
             await ctx.send("Please tell me who to check.")
         else:
