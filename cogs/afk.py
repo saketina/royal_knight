@@ -118,6 +118,27 @@ class Afk(commands.Cog):
             )
         await ctx.send(embed=afk_embed)
 
+    @commands.command(pass_context=True)
+    async def pingmessages(self, ctx):
+        afk_mention_list = ''
+        try:
+            for msg_info in self.afk_dict[str(ctx.author.id) + str(ctx.guild.id)]:
+                afk_mention_list += f'{msg_info}\n'
+
+            afk_dm_embed = disnake.Embed(
+                title=f'AFK mention List',
+                description=afk_mention_list[:1999],
+                color=disnake.Color.dark_red()
+                )
+            await ctx.send(embed=afk_dm_embed)
+
+            self.afk_dict.pop(str(ctx.author.id) + str(ctx.guild.id))
+
+        except KeyError as error:
+            #print(error.__traceback__)
+            await ctx.send(f'{ctx.author.mention} You had no mentions during your last afk session!')
+
+
 def setup(client):
     client.add_cog(Afk(client))
     print(f"Cog: Afk - loaded.")
