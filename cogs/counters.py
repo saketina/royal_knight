@@ -42,6 +42,7 @@ class Counters(commands.Cog):
     async def reset(self):
         time = dt.now().strftime("%d/%m/%Y %H:%M:%S")
         hour = dt.now().hour
+        # print(hour)
 
         msgCounter = await self.client.fetch_channel(message_counter_id)
         joinCounter = await self.client.fetch_channel(member_counter_id)
@@ -54,9 +55,9 @@ class Counters(commands.Cog):
             await msgCounter.edit(name="Msgs Today • 0")
             await joinCounter.edit(name="Joined Today • 0")
 
-            #print(f"\nCounters: reset at - {time}")
+            # print(f"\nCounters: reset at - {time}")
 
-    @tasks.loop(minutes=5.0, reconnect = True)
+    @tasks.loop(minutes=2.0, reconnect = True)
     async def update_vc(self):
         await asyncio.sleep(1)
         guild = self.client.get_guild(guild_id)
