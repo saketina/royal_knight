@@ -86,7 +86,7 @@ class Moderation(commands.Cog):
                 embed.add_field(
                     name = f"New Warn",
                     value = f"Warn ID: ``{wrn_amount}``\n"
-                            f"Moderator: {ctx.author.mention}*\n"
+                            f"Moderator: {ctx.author.mention}\n"
                             f"Reason: **`{reason}`**\n"
                             f"At: **``{dt_string}``**"
                 )
