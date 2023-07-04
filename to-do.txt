@@ -1,0 +1,20 @@
+finish up commands:
+    serverinfo
+    moderation checks for buttons/who invokes the command
+    use try and except for moderation commands instead of using error handlers which goes in the way of GEH
+    warnings command, for buttons add emojis
+
+create:
+    global error handler
+    different gifs for when user is itself(rp commands)
+    rape rp command
+    review each gif and sort them for each command
+    change style of help commands
+    change style of each commands help(when input is blank)
+    sync styles together
+
+remove:
+    404
+
+fix:
+    rps
