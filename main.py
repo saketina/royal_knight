@@ -113,7 +113,7 @@ async def reload_error(ctx, error):
         print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
 
 initial_cogs = [
-    "cogs.afk",
+    #"cogs.afk",
     "cogs.anime",
     "cogs.counters",
     "cogs.fun",
@@ -137,7 +137,7 @@ for cog in initial_cogs:
         #print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
         print(f"{e}")
 
-if cog_counter >= 13:
+if cog_counter >= len(initial_cogs):
     print("All cogs imported succesfully", file=sys.stderr)
     time.sleep(5)
     try:
