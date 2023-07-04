@@ -217,12 +217,12 @@ class Testing(commands.Cog):
             await member.timeout(duration=time)
             await ctx.send(f"{member.name} has been unmuted.")
 
-    @commands.command(aliases=["warns", "check"], pass_context=True)
+    @commands.command(aliases=["warns", "check", "moderations"], pass_context=True)
     async def warnings(self, ctx, user:disnake.User=None):
         try:
             self.pages_list.popitem(user.id)
         except:
-            return
+            pass
         if user == None:
             await ctx.send("Please tell me who to check.")
         else:
@@ -366,7 +366,7 @@ class Testing(commands.Cog):
                                         await interaction.response.edit_message(view=None)
                                 
                                 async def button_warns_previous_previous_callback(interaction):
-                                    print("started-previous_previous")
+                                    # print("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
                                         if self.current_page == 1:
@@ -385,7 +385,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_warns_previous_callback(interaction):
-                                    print("started-previous")
+                                    # print("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
                                         if self.current_page == 1:
@@ -404,7 +404,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_warns_next_next_callback(interaction):
-                                    print("started-next_next")
+                                    # print("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
                                         if self.current_page >= page_number:
@@ -429,7 +429,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                                 
                                 async def button_warns_next_callback(interaction):
-                                    print("started-next")
+                                    # print("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
                                         if self.current_page >= page_number:
