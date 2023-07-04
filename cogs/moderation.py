@@ -59,10 +59,13 @@ class Moderation(commands.Cog):
                     )
                 embed.add_field(
                     name = "Warn",
-                    value = f"Warn ID: ``{wrn_amount}``\nModerator: **``{ctx.author}``**\nReason: **`{reason}`**\nAt: **``{dt_string}``**",
+                    value = f"Warn ID: ``{wrn_amount}``\n"
+                            f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **``{reason}``**\n"
+                            f"At: **``{dt_string}``**",
                     inline = True
                     )
-                await ctx.send(embed=embed)
+                #await ctx.send(embed=embed)
             else:
                 wrn_amount = data.get("warns")
                 wrn_amount += 1
@@ -82,9 +85,12 @@ class Moderation(commands.Cog):
                 )
                 embed.add_field(
                     name = f"New Warn",
-                    value = f"Warn ID: ``{wrn_amount}``\nModerator: **``{ctx.author}``**\nReason: **`{reason}`**\nAt: **``{dt_string}``**"
+                    value = f"Warn ID: ``{wrn_amount}``\n"
+                            f"Moderator: {ctx.author.mention}*\n"
+                            f"Reason: **`{reason}`**\n"
+                            f"At: **``{dt_string}``**"
                 )
-                await ctx.send(embed=embed)
+            await ctx.send(embed=embed)
 
     @commands.command()
     async def count(self, ctx, user:disnake.User=None):
@@ -205,6 +211,8 @@ class Moderation(commands.Cog):
                 color = disnake.Color.dark_red()
                 )
             await ctx.send(embed=emb)
+        elif member.id == self.client.user.id:
+            await ctx.send("Please don\'t ban me.")
         elif member==ctx.author:
             await ctx.send(content = "You can\'t ban yourself", delete_after = 10)
         else:
@@ -216,12 +224,13 @@ class Moderation(commands.Cog):
             f = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).get().val()
             data = f
             if data == None:
+                bn_amount = 1
                 data = ({
                     "bans": 1,
                     1:({
                         "moderator": str(ctx.author.id),
-                        "moderator_name": str(ctx.author.name),
-                        "reason": reason,
+                        "moderator_name": str(ctx.author.display_name),
+                        "reason": rsn,
                         "datetime": dt_string
                     })
                 })
@@ -231,19 +240,22 @@ class Moderation(commands.Cog):
                     color = disnake.Color.dark_red()
                     )
                 embed.add_field(
-                    name = "Ban",
-                    value = f"Moderator: {ctx.author}\nReason: `{reason}`\nAt: {dt_string}",
+                    name = "New Ban",
+                    value = f"Ban ID: ``{bn_amount}``\n"
+                            f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **``{rsn}``**\n"
+                            f"At: **``{dt_string}``**",
                     inline = True
                     )
-                await ctx.send(embed=embed)
+                #await ctx.send(embed=embed)
             else:
                 bn_amount = data.get("bans")
                 bn_amount += 1
                 data["bans"]=bn_amount
                 new_ban = ({
                     "moderator": str(ctx.author.id),
-                    "moderator_name": str(ctx.author.name),
-                    "reason": reason,
+                    "moderator_name": str(ctx.author.display_name),
+                    "reason": rsn,
                     "datetime": dt_string
                 })
                 data[bn_amount]=new_ban
@@ -254,11 +266,14 @@ class Moderation(commands.Cog):
                     color = disnake.Color.dark_red()
                 )
                 embed.add_field(
-                    name = f"Ban {bn_amount}",
-                    value = f"Moderator: {ctx.author}\nReason: `{reason}`\nAt: {dt_string}"
+                    name = f"New Ban",
+                    value = f"Ban ID: ``{bn_amount}``\n"
+                            f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **`{rsn}`**\n"
+                            f"At: **``{dt_string}``**"
                 )
-                await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
-                await ctx.send(embed=embed)
+            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
+            await ctx.send(embed=embed)
             #await ctx.send(f"{member} was banned for {rsn}.")
 
     @ban.error
@@ -294,12 +309,13 @@ class Moderation(commands.Cog):
             f = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).get().val()
             data = f
             if data == None:
+                kck_amount = 1
                 data = ({
                     "kicks": 1,
                     1:({
                         "moderator": str(ctx.author.id),
-                        "moderator_name": str(ctx.author.name),
-                        "reason": reason,
+                        "moderator_name": str(ctx.author.display_name),
+                        "reason": rsn,
                         "datetime": dt_string
                     })
                 })
@@ -309,19 +325,22 @@ class Moderation(commands.Cog):
                     color = disnake.Color.dark_red()
                     )
                 embed.add_field(
-                    name = "Kick",
-                    value = f"Moderator: {ctx.author}\nReason: `{reason}`\nAt: {dt_string}",
+                    name = "New Kick",
+                    value = f"Kick ID: ``{kck_amount}``\n"
+                            f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **``{rsn}``**\n"
+                            f"At: **``{dt_string}``**",
                     inline = True
                     )
-                await ctx.send(embed=embed)
+                #await ctx.send(embed=embed)
             else:
                 kck_amount = data.get("kicks")
                 kck_amount += 1
                 data["kicks"]=kck_amount
                 new_kick = ({
                     "moderator": str(ctx.author.id),
-                    "moderator_name": str(ctx.author.name),
-                    "reason": reason,
+                    "moderator_name": str(ctx.author.display_name),
+                    "reason": rsn,
                     "datetime": dt_string
                 })
                 data[kck_amount]=new_kick
@@ -332,11 +351,15 @@ class Moderation(commands.Cog):
                     color = disnake.Color.dark_red()
                 )
                 embed.add_field(
-                    name = f"Ban {kck_amount}",
-                    value = f"Moderator: {ctx.author}\nReason: `{reason}`\nAt: {dt_string}"
+                    name = f"New Kick",
+                    value = f"Kick ID: ``{kck_amount}``\n"
+                            f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **`{rsn}`**\n"
+                            f"At: **``{dt_string}``**"
                 )
-                await ctx.send(embed=embed)
+                #await ctx.send(embed=embed)
             await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {rsn}.")
+            await ctx.send(embed=embed)
             #await ctx.send(f"{member} was kicked for {rsn}.")
 
     @kick.error
