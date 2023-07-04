@@ -250,7 +250,7 @@ class Testing(commands.Cog):
                     button_warns_delete = Button(label="Delete", style = disnake.ButtonStyle.red)
                     button_warns_edit = Button(label="Edit")
                     button_warns_exit = Button(label="Exit")
-                    button_warns_next = Button(label="Next")
+                    button_warns_next = Button(label="Next", disabled = False)
                     button_warns_previous = Button(label="Previous", disabled=True)
 
                     if author_check(ctx, interaction):
@@ -407,7 +407,10 @@ class Testing(commands.Cog):
                                     # print("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
-                                        if self.current_page >= page_number:
+
+                                        if self.current_page == page_number:
+                                            button_warns_next = Button(label="Next", disabled=True)
+                                        elif self.current_page >= page_number:
                                             button_warns_next = Button(label="Next", disabled=True)
                                         else:
                                             button_warns_next = Button(label="Next", disabled=False)
@@ -432,7 +435,10 @@ class Testing(commands.Cog):
                                     # print("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
-                                        if self.current_page >= page_number:
+
+                                        if self.current_page == page_number:
+                                            button_warns_next = Button(label="Next", disabled=True)
+                                        elif self.current_page >= page_number:
                                             button_warns_next = Button(label="Next", disabled=True)
                                         else:
                                             button_warns_next = Button(label="Next", disabled=False)
@@ -452,7 +458,14 @@ class Testing(commands.Cog):
                                         view.add_item(button_warns_exit)
                                         view.add_item(button_warns_next)
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
-                            
+
+                                if self.current_page == page_number:
+                                            button_warns_next = Button(label="Next", disabled=True)
+                                elif self.current_page >= page_number:
+                                    button_warns_next = Button(label="Next", disabled=True)
+                                else:
+                                    button_warns_next = Button(label="Next", disabled=False)
+
                                 button_warns_delete.callback = button_warns_delete_callback
                                 button_warns_edit.callback = button_warns_edit_callback
                                 button_warns_exit.callback = button_warns_exit_callback
@@ -472,12 +485,490 @@ class Testing(commands.Cog):
                     else:
                         return
 
+                async def button_bans_callback(interaction):
+                    button_bans_delete = Button(label="Delete", style = disnake.ButtonStyle.red)
+                    button_bans_edit = Button(label="Edit")
+                    button_bans_exit = Button(label="Exit")
+                    button_bans_next = Button(label="Next", disabled = False)
+                    button_bans_previous = Button(label="Previous", disabled=True)
+
+                    if author_check(ctx, interaction):
+                            moderation = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).get().val()
+                            if db_bans != None:
+                                moderation.popitem(str("bans"))
+
+                                #self.ban_number[user.id] = 0
+                                ban_number = 0
+                                #self.page_number[user.id] = 0
+                                page_number = 0
+                                self.pages = {}
+                                for key in moderation:
+
+                                    ban = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).child(key).get().val()
+
+                                    ban_number += 1
+                                    ban_id = key
+                                    ban_count = len(moderation)
+                                    time = ban["datetime"]
+                                    mod_id = ban["moderator"]
+                                    mod_name = ban["moderator_name"]
+                                    reason = ban["reason"]
+                                    
+                                    embed = disnake.Embed(
+                                        title=f"{user.name}\'s Bans",
+                                        color=disnake.Color.dark_red()
+                                    )
+                                    embed.add_field(
+                                    name = f"{ban_number}/{ban_count}",
+                                    value = f"Ban ID: ``{ban_id}``\n\n"
+                                            f"Mod ID: ``{mod_id}``\n"
+                                            f"Mod: <@!{mod_id}>\n\n"
+                                            f"Member ID: {user.id}\n"
+                                            f"Member: <@!{user.id}>\n"
+                                            f"Reason: ``{reason}``\n"
+                                            f"At: ``{time}``"
+                                    )
+
+                                    page_number += 1
+                                    self.pages[page_number] = embed
+
+                                self.pages_list[user.id] = self.pages
+                                pages = self.pages_list[user.id]
+                                self.current_page = 1
+
+                                async def button_bans_edit_callback(interaction):
+                                    if interaction.author.id == ctx.author.id:
+                                        await interaction.response.defer(with_message = False)
+
+                                        def check(m):
+                                            return m.author == ctx.author and m.channel == ctx.channel
+
+                                        await ctx.send("What do you want me to change the reason to?")
+
+                                        msg = await self.client.wait_for('message', check=check)
+
+                                        edit_embed = disnake.Embed(
+                                            title = f"{user.name}\'s Bans",
+                                            color = disnake.Color.dark_red()
+                                            )
+
+                                        mod_id = ban["moderator"]
+                                        time = ban["datetime"]
+
+                                        edit_embed.add_field(
+                                            name = f"{ban_number}/{ban_count}",
+                                            value = f"Ban ID: ``{ban_id}``\n\n"
+                                                    f"Mod ID: ``{mod_id}``\n"
+                                                    f"Mod: <@!{mod_id}>\n\n"
+                                                    f"Member ID: {user.id}\n"
+                                                    f"Member: <@!{user.id}>\n"
+                                                    f"Reason: ``{msg.content}``\n"
+                                                    f"At: ``{time}``"
+                                                    )
+                                        #edit_embed.set_footer(text = {dt.now()})
+
+                                        db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).child(self.current_page).update({"reason": str(msg.content)})
+                                        await ctx.send("The moderation has been changed.")
+                                        await interaction.edit_original_response(embed = edit_embed, view = None)
+
+                                async def button_bans_delete_callback(interaction):
+                                    if interaction.author.id == ctx.author.id:
+                                        button_bans_yes = Button(label="Yes", style=disnake.ButtonStyle.green)
+                                        button_bans_no = Button(label="No", style=disnake.ButtonStyle.red)
+
+                                    async def button_bans_yes_callback(interaction):
+                                        if interaction.author.id == ctx.author.id:
+                                            await interaction.response.defer(with_message = False)
+                                            db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
+                                            await interaction.edit_original_response(content="The moderation has been deleted 🚮", view=None)
+                                        else:
+                                            return
+
+                                    async def button_bans_no_callback(interaction):
+                                        if interaction.author.id == ctx.author.id:
+                                            await interaction.response.edit_message(content="I didn\'t delete any moderation", view=None)
+                                        else:
+                                            return
+
+                                    button_bans_yes.callback = button_bans_yes_callback
+                                    button_bans_no.callback = button_bans_no_callback
+
+                                    view = MyView(timeout=30, interaction=[button_bans_yes_callback, button_bans_no_callback])
+                                    view.add_item(button_bans_yes)
+                                    view.add_item(button_bans_no)
+
+                                    MyView.message = await ctx.send("Are you sure?", view=view)
+                                    await interaction.response.edit_message(view=None)
+
+                                async def button_bans_exit_callback(interaction):
+                                    if interaction.author.id == ctx.author.id:
+                                        await interaction.response.edit_message(view=None)
+                                
+                                async def button_bans_previous_previous_callback(interaction):
+                                    # print("started-previous_previous")
+                                    if interaction.author.id == ctx.author.id:                                      
+                                        self.current_page -= 1
+                                        if self.current_page == 1:
+                                            button_bans_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_bans_previous = Button(label="Previous", disabled=False)
+
+                                        button_bans_previous.callback=button_bans_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_bans_delete_callback, button_bans_edit_callback, button_bans_exit_callback, button_bans_next_callback, button_bans_previous_callback])
+                                        view.add_item(button_bans_previous)
+                                        view.add_item(button_bans_delete)
+                                        view.add_item(button_bans_edit)
+                                        view.add_item(button_bans_exit)
+                                        view.add_item(button_bans_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+                            
+                                async def button_bans_previous_callback(interaction):
+                                    # print("started-previous")
+                                    if interaction.author.id == ctx.author.id:
+                                        self.current_page -= 1
+                                        if self.current_page == 1:
+                                            button_bans_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_bans_previous = Button(label="Previous", disabled=False)
+
+                                        button_bans_previous.callback=button_bans_previous_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_bans_delete_callback, button_bans_edit_callback, button_bans_exit_callback, button_bans_next_next_callback, button_bans_previous_previous_callback])
+                                        view.add_item(button_bans_previous)
+                                        view.add_item(button_bans_delete)
+                                        view.add_item(button_bans_edit)
+                                        view.add_item(button_bans_exit)
+                                        view.add_item(button_bans_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+                            
+                                async def button_bans_next_next_callback(interaction):
+                                    # print("started-next_next")
+                                    if interaction.author.id == ctx.author.id:
+                                        self.current_page += 1
+
+                                        if self.current_page == page_number:
+                                            button_bans_next = Button(label="Next", disabled=True)
+                                        elif self.current_page >= page_number:
+                                            button_bans_next = Button(label="Next", disabled=True)
+                                        else:
+                                            button_bans_next = Button(label="Next", disabled=False)
+
+                                        if self.current_page == 1:
+                                            button_bans_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_bans_previous = Button(label="Previous", disabled=False)
+
+                                        button_bans_next.callback=button_bans_next_callback
+                                        button_bans_previous.callback=button_bans_previous_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_bans_delete_callback, button_bans_edit_callback, button_bans_exit_callback, button_bans_next_callback, button_bans_previous_previous_callback])
+                                        view.add_item(button_bans_previous)
+                                        view.add_item(button_bans_delete)
+                                        view.add_item(button_bans_edit)
+                                        view.add_item(button_bans_exit)
+                                        view.add_item(button_bans_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+                                
+                                async def button_bans_next_callback(interaction):
+                                    # print("started-next")
+                                    if interaction.author.id == ctx.author.id:
+                                        self.current_page += 1
+
+                                        if self.current_page == page_number:
+                                            button_bans_next = Button(label="Next", disabled=True)
+                                        elif self.current_page >= page_number:
+                                            button_bans_next = Button(label="Next", disabled=True)
+                                        else:
+                                            button_bans_next = Button(label="Next", disabled=False)
+                                        
+                                        if self.current_page == 1:
+                                            button_bans_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_bans_previous = Button(label="Previous", disabled=False)
+
+                                        button_bans_next.callback=button_bans_next_next_callback
+                                        button_bans_previous.callback=button_bans_previous_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_bans_delete_callback, button_bans_edit_callback, button_bans_exit_callback, button_bans_next_next_callback, button_bans_previous_previous_callback])
+                                        view.add_item(button_bans_previous)
+                                        view.add_item(button_bans_delete)
+                                        view.add_item(button_bans_edit)
+                                        view.add_item(button_bans_exit)
+                                        view.add_item(button_bans_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+
+                                if self.current_page == page_number:
+                                            button_bans_next = Button(label="Next", disabled=True)
+                                elif self.current_page >= page_number:
+                                    button_bans_next = Button(label="Next", disabled=True)
+                                else:
+                                    button_bans_next = Button(label="Next", disabled=False)
+
+                                button_bans_delete.callback = button_bans_delete_callback
+                                button_bans_edit.callback = button_bans_edit_callback
+                                button_bans_exit.callback = button_bans_exit_callback
+                                button_bans_next.callback = button_bans_next_callback
+                                button_bans_previous.callback = button_bans_previous_callback
+
+                                view_bans = MyView(timeout=30, interaction=[button_bans_delete_callback, button_bans_edit_callback, button_bans_exit_callback, button_bans_previous_callback])
+                                view_bans.add_item(button_bans_previous)
+                                view_bans.add_item(button_bans_delete)
+                                view_bans.add_item(button_bans_edit)
+                                view_bans.add_item(button_bans_exit)
+                                view_bans.add_item(button_bans_next)
+                                MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view_bans)
+                            else:
+                                print("There aren't any moderations")
+
+                    else:
+                        return
+
+                async def button_kicks_callback(interaction):
+                    button_kicks_delete = Button(label="Delete", style = disnake.ButtonStyle.red)
+                    button_kicks_edit = Button(label="Edit")
+                    button_kicks_exit = Button(label="Exit")
+                    button_kicks_next = Button(label="Next", disabled = False)
+                    button_kicks_previous = Button(label="Previous", disabled=True)
+
+                    if author_check(ctx, interaction):
+                            moderation = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).get().val()
+                            if db_kicks != None:
+                                moderation.popitem(str("kicks"))
+
+                                #self.kick_number[user.id] = 0
+                                kick_number = 0
+                                #self.page_number[user.id] = 0
+                                page_number = 0
+                                self.pages = {}
+                                for key in moderation:
+
+                                    kick = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).child(key).get().val()
+
+                                    kick_number += 1
+                                    kick_id = key
+                                    kick_count = len(moderation)
+                                    time = kick["datetime"]
+                                    mod_id = kick["moderator"]
+                                    mod_name = kick["moderator_name"]
+                                    reason = kick["reason"]
+                                    
+                                    embed = disnake.Embed(
+                                        title=f"{user.name}\'s Kicks",
+                                        color=disnake.Color.dark_red()
+                                    )
+                                    embed.add_field(
+                                    name = f"{kick_number}/{kick_count}",
+                                    value = f"Kick ID: ``{kick_id}``\n\n"
+                                            f"Mod ID: ``{mod_id}``\n"
+                                            f"Mod: <@!{mod_id}>\n\n"
+                                            f"Member ID: {user.id}\n"
+                                            f"Member: <@!{user.id}>\n"
+                                            f"Reason: ``{reason}``\n"
+                                            f"At: ``{time}``"
+                                    )
+
+                                    page_number += 1
+                                    self.pages[page_number] = embed
+
+                                self.pages_list[user.id] = self.pages
+                                pages = self.pages_list[user.id]
+                                self.current_page = 1
+
+                                async def button_kicks_edit_callback(interaction):
+                                    if interaction.author.id == ctx.author.id:
+                                        await interaction.response.defer(with_message = False)
+
+                                        def check(m):
+                                            return m.author == ctx.author and m.channel == ctx.channel
+
+                                        await ctx.send("What do you want me to change the reason to?")
+
+                                        msg = await self.client.wait_for('message', check=check)
+
+                                        edit_embed = disnake.Embed(
+                                            title = f"{user.name}\'s Kicks",
+                                            color = disnake.Color.dark_red()
+                                            )
+
+                                        mod_id = kick["moderator"]
+                                        time = kick["datetime"]
+
+                                        edit_embed.add_field(
+                                            name = f"{kick_number}/{kick_count}",
+                                            value = f"Kick ID: ``{kick_id}``\n\n"
+                                                    f"Mod ID: ``{mod_id}``\n"
+                                                    f"Mod: <@!{mod_id}>\n\n"
+                                                    f"Member ID: {user.id}\n"
+                                                    f"Member: <@!{user.id}>\n"
+                                                    f"Reason: ``{msg.content}``\n"
+                                                    f"At: ``{time}``"
+                                                    )
+                                        #edit_embed.set_footer(text = {dt.now()})
+
+                                        db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).child(self.current_page).update({"reason": str(msg.content)})
+                                        await ctx.send("The moderation has been changed.")
+                                        await interaction.edit_original_response(embed = edit_embed, view = None)
+
+                                async def button_kicks_delete_callback(interaction):
+                                    if interaction.author.id == ctx.author.id:
+                                        button_kicks_yes = Button(label="Yes", style=disnake.ButtonStyle.green)
+                                        button_kicks_no = Button(label="No", style=disnake.ButtonStyle.red)
+
+                                    async def button_kicks_yes_callback(interaction):
+                                        if interaction.author.id == ctx.author.id:
+                                            await interaction.response.defer(with_message = False)
+                                            db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
+                                            await interaction.edit_original_response(content="The moderation has been deleted 🚮", view=None)
+                                        else:
+                                            return
+
+                                    async def button_kicks_no_callback(interaction):
+                                        if interaction.author.id == ctx.author.id:
+                                            await interaction.response.edit_message(content="I didn\'t delete any moderation", view=None)
+                                        else:
+                                            return
+
+                                    button_kicks_yes.callback = button_kicks_yes_callback
+                                    button_kicks_no.callback = button_kicks_no_callback
+
+                                    view = MyView(timeout=30, interaction=[button_kicks_yes_callback, button_kicks_no_callback])
+                                    view.add_item(button_kicks_yes)
+                                    view.add_item(button_kicks_no)
+
+                                    MyView.message = await ctx.send("Are you sure?", view=view)
+                                    await interaction.response.edit_message(view=None)
+
+                                async def button_kicks_exit_callback(interaction):
+                                    if interaction.author.id == ctx.author.id:
+                                        await interaction.response.edit_message(view=None)
+                                
+                                async def button_kicks_previous_previous_callback(interaction):
+                                    # print("started-previous_previous")
+                                    if interaction.author.id == ctx.author.id:                                      
+                                        self.current_page -= 1
+                                        if self.current_page == 1:
+                                            button_kicks_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_kicks_previous = Button(label="Previous", disabled=False)
+
+                                        button_kicks_previous.callback=button_kicks_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_kicks_delete_callback, button_kicks_edit_callback, button_kicks_exit_callback, button_kicks_next_callback, button_kicks_previous_callback])
+                                        view.add_item(button_kicks_previous)
+                                        view.add_item(button_kicks_delete)
+                                        view.add_item(button_kicks_edit)
+                                        view.add_item(button_kicks_exit)
+                                        view.add_item(button_kicks_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+                            
+                                async def button_kicks_previous_callback(interaction):
+                                    # print("started-previous")
+                                    if interaction.author.id == ctx.author.id:
+                                        self.current_page -= 1
+                                        if self.current_page == 1:
+                                            button_kicks_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_kicks_previous = Button(label="Previous", disabled=False)
+
+                                        button_kicks_previous.callback=button_kicks_previous_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_kicks_delete_callback, button_kicks_edit_callback, button_kicks_exit_callback, button_kicks_next_next_callback, button_kicks_previous_previous_callback])
+                                        view.add_item(button_kicks_previous)
+                                        view.add_item(button_kicks_delete)
+                                        view.add_item(button_kicks_edit)
+                                        view.add_item(button_kicks_exit)
+                                        view.add_item(button_kicks_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+                            
+                                async def button_kicks_next_next_callback(interaction):
+                                    # print("started-next_next")
+                                    if interaction.author.id == ctx.author.id:
+                                        self.current_page += 1
+
+                                        if self.current_page == page_number:
+                                            button_kicks_next = Button(label="Next", disabled=True)
+                                        elif self.current_page >= page_number:
+                                            button_kicks_next = Button(label="Next", disabled=True)
+                                        else:
+                                            button_kicks_next = Button(label="Next", disabled=False)
+
+                                        if self.current_page == 1:
+                                            button_kicks_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_kicks_previous = Button(label="Previous", disabled=False)
+
+                                        button_kicks_next.callback=button_kicks_next_callback
+                                        button_kicks_previous.callback=button_kicks_previous_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_kicks_delete_callback, button_kicks_edit_callback, button_kicks_exit_callback, button_kicks_next_callback, button_kicks_previous_previous_callback])
+                                        view.add_item(button_kicks_previous)
+                                        view.add_item(button_kicks_delete)
+                                        view.add_item(button_kicks_edit)
+                                        view.add_item(button_kicks_exit)
+                                        view.add_item(button_kicks_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+                                
+                                async def button_kicks_next_callback(interaction):
+                                    # print("started-next")
+                                    if interaction.author.id == ctx.author.id:
+                                        self.current_page += 1
+
+                                        if self.current_page == page_number:
+                                            button_kicks_next = Button(label="Next", disabled=True)
+                                        elif self.current_page >= page_number:
+                                            button_kicks_next = Button(label="Next", disabled=True)
+                                        else:
+                                            button_kicks_next = Button(label="Next", disabled=False)
+                                        
+                                        if self.current_page == 1:
+                                            button_kicks_previous = Button(label="Previous", disabled=True)
+                                        else:
+                                            button_kicks_previous = Button(label="Previous", disabled=False)
+
+                                        button_kicks_next.callback=button_kicks_next_next_callback
+                                        button_kicks_previous.callback=button_kicks_previous_previous_callback
+                                        
+                                        view = MyView(timeout=30, interaction=[button_kicks_delete_callback, button_kicks_edit_callback, button_kicks_exit_callback, button_kicks_next_next_callback, button_kicks_previous_previous_callback])
+                                        view.add_item(button_kicks_previous)
+                                        view.add_item(button_kicks_delete)
+                                        view.add_item(button_kicks_edit)
+                                        view.add_item(button_kicks_exit)
+                                        view.add_item(button_kicks_next)
+                                        MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
+
+                                if self.current_page == page_number:
+                                            button_kicks_next = Button(label="Next", disabled=True)
+                                elif self.current_page >= page_number:
+                                    button_kicks_next = Button(label="Next", disabled=True)
+                                else:
+                                    button_kicks_next = Button(label="Next", disabled=False)
+
+                                button_kicks_delete.callback = button_kicks_delete_callback
+                                button_kicks_edit.callback = button_kicks_edit_callback
+                                button_kicks_exit.callback = button_kicks_exit_callback
+                                button_kicks_next.callback = button_kicks_next_callback
+                                button_kicks_previous.callback = button_kicks_previous_callback
+
+                                view_kicks = MyView(timeout=30, interaction=[button_kicks_delete_callback, button_kicks_edit_callback, button_kicks_exit_callback, button_kicks_previous_callback])
+                                view_kicks.add_item(button_kicks_previous)
+                                view_kicks.add_item(button_kicks_delete)
+                                view_kicks.add_item(button_kicks_edit)
+                                view_kicks.add_item(button_kicks_exit)
+                                view_kicks.add_item(button_kicks_next)
+                                MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view_kicks)
+                            else:
+                                print("There aren't any moderations")
+
+                    else:
+                        return
+                
                 async def on_error(self, error, item, interaction):
                     print(error)
 
                 button_warns.callback = button_warns_callback
-                #button_bans.callback = button_bans_callback
-                #button_kicks.callback = button_kicks_callback
+                button_bans.callback = button_bans_callback
+                button_kicks.callback = button_kicks_callback
 
                 view_select = MyView(timeout=30, interaction=[button_warns_callback])
 
@@ -627,9 +1118,9 @@ class Testing(commands.Cog):
 
             staff_help.add_field(
                 name="Options",
-                value="Update\n"
+                value="``Update\n"
                       "Open\n"
-                      "Remove\n"
+                      "Remove``\n"
             )
             await ctx.send(embed=staff_help)
         elif option=="open":
