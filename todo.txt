@@ -12,6 +12,7 @@ create:
     change style of help commands
     change style of each commands help(when input is blank)
     sync styles together
+    transfer dev commands to separate Cog
 
 remove:
     404
