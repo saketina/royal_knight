@@ -22,6 +22,111 @@ db = firebase.database()
 class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
+
+    
+    @commands.command()
+    async def delwarns(self, ctx, member:disnake.Member=None):
+        if member != None:
+            try:
+                db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
+                if db_warns != None:
+                    button_yes = Button(label="Yes", style=disnake.ButtonStyle.green)
+                    button_no = Button(label="No", style=disnake.ButtonStyle.red)
+
+                    async def button_yes_callback(interaction):
+                        if interaction.author.id == ctx.author.id:
+                            db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).remove()
+                            await interaction.response.edit_message(content="All warns have been deleted", view=None)
+                        else:
+                            return
+
+                    async def button_no_callback(interaction):
+                        if interaction.author.id == ctx.author.id:
+                            await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
+                        else:
+                            return
+
+                    button_yes.callback = button_yes_callback
+                    button_no.callback = button_no_callback
+
+                    view = View(timeout=30)
+                    view.add_item(button_yes)
+                    view.add_item(button_no)
+                    msg = await ctx.send("Are you sure?", view=view)
+
+
+                else:
+                    await ctx.send("There aren\'t any moderations to delete")
+            except:
+                await ctx.send("There was an error. Please contact the dev.")
+        else:
+            await ctx.send("Please input a member.")
+
+    @commands.command(pass_context=True)
+    #@has_permissions(administrator=True)
+    async def status(self, ctx, activity=None, *, text=None):
+        if activity == "playing":
+            act = disnake.Activity(type=disnake.ActivityType.playing, name=text)
+            response = "Playing"
+            await self.client.change_presence(activity=act, status=disnake.Status.dnd)
+            await ctx.send(f"Status changed to `{response} {text}`")
+
+        elif activity == "streaming":
+            act = disnake.Activity(type=disnake.ActivityType.streaming, name=text)
+            response = "Streaming"
+            await self.client.change_presence(activity=act, status=disnake.Status.dnd)
+            await ctx.send(f"Status changed to `{response} {text}`")
+
+        elif activity == "watching":
+            act = disnake.Activity(type=disnake.ActivityType.watching, name=text)
+            response = "Watching"
+            await self.client.change_presence(activity=act, status=disnake.Status.dnd)
+            await ctx.send(f"Status changed to `{response} {text}`")
+
+        elif activity == "competing":
+            act = disnake.Activity(type=disnake.ActivityType.competing, name=text)
+            response = "Competing in"
+            await self.client.change_presence(activity=act, status=disnake.Status.dnd)
+            await ctx.send(f"Status changed to `{response} {text}`")
+
+        elif activity == "remove":
+            act = disnake.Activity(type=disnake.ActivityType.custom, name=None)
+            await self.client.change_presence(activity=act, status=disnake.Status.dnd)
+            await ctx.send(f"Status changed to `{text}`")
+
+        elif activity==None or text==None:
+            embed = disnake.Embed(
+            title="STATUS HELP",
+            description="``k.status [activity] [text]``",
+            color = disnake.Color.dark_red()
+            )
+            embed.add_field(
+            name="Activity",
+            value="playing" + "\n" +
+                  "streaming" + "\n" +
+                  "watching" + "\n" +
+                  "competing" + "\n" +
+                  "remove"
+            )
+
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("I didn\'t quite catch that.")
+
+    @commands.command(pass_context=True)
+    async def say(self, ctx, *, message):
+        if message != None:
+             
+            if str(ctx.guild.default_role) not in message and "@here" not in message:
+                msg = message
+            else:
+                msg = "You can\'t make me say that"
+            
+            await ctx.message.delete()
+            await ctx.send(msg)
+        else: 
+            await ctx.send("Please tell me what to say")
+
         
     @commands.command(name='eval', pass_context=True)
     @commands.is_owner()

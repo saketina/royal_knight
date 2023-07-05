@@ -128,44 +128,6 @@ class Moderation(commands.Cog):
         else:
             print(error)
 
-    @commands.command()
-    async def delwarns(self, ctx, member:disnake.Member=None):
-        if member != None:
-            try:
-                db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
-                if db_warns != None:
-                    button_yes = Button(label="Yes", style=disnake.ButtonStyle.green)
-                    button_no = Button(label="No", style=disnake.ButtonStyle.red)
-
-                    async def button_yes_callback(interaction):
-                        if interaction.author.id == ctx.author.id:
-                            db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).remove()
-                            await interaction.response.edit_message(content="All warns have been deleted", view=None)
-                        else:
-                            return
-
-                    async def button_no_callback(interaction):
-                        if interaction.author.id == ctx.author.id:
-                            await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
-                        else:
-                            return
-
-                    button_yes.callback = button_yes_callback
-                    button_no.callback = button_no_callback
-
-                    view = View(timeout=30)
-                    view.add_item(button_yes)
-                    view.add_item(button_no)
-                    msg = await ctx.send("Are you sure?", view=view)
-
-
-                else:
-                    await ctx.send("There aren\'t any moderations to delete")
-            except:
-                await ctx.send("There was an error. Please contact the dev.")
-        else:
-            await ctx.send("Please input a member.")
-
     @commands.command(pass_context=True)
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
