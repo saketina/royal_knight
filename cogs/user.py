@@ -11,6 +11,8 @@ from disnake.ext.commands import guild_only
 from PIL import Image
 
 # //TODO remove unneeded imports and lines of code
+# //TODO add badges to profile command
+# //TODO add if Member is a booster or has nitro
 
 class User(commands.Cog):
 
