@@ -12,6 +12,7 @@ from disnake.ext.commands import guild_only, is_owner
 # //TODO remove unneeded imports and lines of code
 # //TODO tranfer all dev commands here
 # //TODO make commands dev locked
+# //TODO check for help message is variables are blank
 
 firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))

@@ -12,6 +12,8 @@ from disnake.utils import get
 
 # //TODO remove unneeded imports and lines of code
 # //TODO transfer finished commands to appropriate cogs
+# //TODO transfer buttons to emojies for moderations
+# //TODO check for help message is variables are blank
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()

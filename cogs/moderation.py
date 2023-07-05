@@ -10,6 +10,9 @@ from disnake.ui import Button, View
 
 # //TODO remove unneeded imports and lines of code
 # //TODO add feature so its easy to add by role perms for commands
+# //TODO check if only ctx.author can use buttons
+# //TODO use try and except or GEH(global error handler) for errors
+# //TODO check for help message is variables are blank
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()

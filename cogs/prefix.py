@@ -6,6 +6,7 @@ import pyrebase
 from disnake.ext import commands
 
 # //TODO remove unneeded imports and lines of code
+# //TODO check for help message is variables are blank
 
 firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))
