@@ -1,5 +1,3 @@
-# //TODO remove unnecesary imports
-
 import asyncio
 import json
 import time
@@ -10,6 +8,8 @@ import disnake
 import pyrebase
 from disnake.ext import commands, tasks
 from disnake.ext.commands import guild_only, is_owner
+
+# //TODO remove unneeded imports and lines of code
 
 firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))

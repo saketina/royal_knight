@@ -8,6 +8,9 @@ from disnake.ext import commands
 from disnake.ext.commands import has_permissions
 from disnake.ui import Button, View
 
+# //TODO remove unneeded imports and lines of code
+# //TODO add feature so its easy to add by role perms for commands
+
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
 

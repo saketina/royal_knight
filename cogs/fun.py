@@ -6,6 +6,8 @@ import disnake
 from disnake import Forbidden
 from disnake.ext import commands
 
+# //TODO remove unneeded imports and lines of code
+# //FIXME rps is fucked idk where or when
 
 class Fun(commands.Cog):
 

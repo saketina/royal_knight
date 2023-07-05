@@ -8,6 +8,7 @@ import disnake
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
 
+# //TODO remove unneeded imports and lines of code
 
 class Afk(commands.Cog):
     def __init__(self, client):

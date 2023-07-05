@@ -8,6 +8,8 @@ from disnake.ext import commands
 from disnake.ext.commands import guild_only
 from PIL import Image
 
+# //TODO remove unneeded imports and lines of code
+# //TODO add badges displayed on profile
 
 class User(commands.Cog):
 

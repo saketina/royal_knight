@@ -1,6 +1,9 @@
 import disnake
 from disnake.ext import commands
 
+# //TODO remove unneeded imports and lines of code
+# //TODO add new commands to list of commands
+# //TODO sync help embeds to look nicer
 
 class Help(commands.Cog):
     def __init__(self, client):

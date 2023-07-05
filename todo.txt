@@ -12,7 +12,8 @@ create:
     change style of help commands
     change style of each commands help(when input is blank)
     sync styles together
-    transfer dev commands to separate Cog
+    ###transfer dev commands to separate Cog
+    modifiable by role permissions for commands
 
 remove:
     404

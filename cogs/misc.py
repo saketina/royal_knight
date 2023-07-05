@@ -8,6 +8,7 @@ from disnake.ext import commands
 from disnake.ext.commands import has_permissions
 from PIL import Image
 
+# //TODO remove unneeded imports and lines of code
 
 class Misc(commands.Cog):
 

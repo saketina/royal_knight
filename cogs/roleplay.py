@@ -6,6 +6,10 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 
+# //TODO remove unneeded imports and lines of code
+# //TODO make counter for times used on someone and times used by someone
+# //TODO make different gifs displayed if ctx.author used the command on themselves
+
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
 

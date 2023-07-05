@@ -10,6 +10,9 @@ from disnake.ext.commands import Paginator, has_permissions
 from disnake.ui import Button, View
 from disnake.utils import get
 
+# //TODO remove unneeded imports and lines of code
+# //TODO transfer finished commands to appropriate cogs
+
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
 

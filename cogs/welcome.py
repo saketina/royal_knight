@@ -1,5 +1,3 @@
-# TODO remove unnecesary imports
-
 import os
 import random
 from datetime import datetime
@@ -12,6 +10,8 @@ import requests
 from disnake.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+# //TODO remove unneeded imports and lines of code
+# //TODO figure out the welcome system
 
 class Welcome(commands.Cog):
     def __init__(self, bot):
