@@ -1,0 +1,1 @@
+# //TODO create global error handler for commands
