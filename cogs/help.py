@@ -1,9 +1,7 @@
 import disnake
 from disnake.ext import commands
 
-# //TODO remove unneeded imports and lines of code
-# //TODO sync actual commands to command listss
-# //TODO sync help embeds to look nicer
+# //TODO sync help embeds to test help command(except rp cmds)
 
 class Help(commands.Cog):
     def __init__(self, client):
@@ -26,7 +24,7 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="CATEGORIES",
-            value="Fun\nMisc\nModeration\nRoleplay\nUser\nUtility"
+            value="Fun\nModeration\nRoleplay\nUser\nUtility"
             )
 
         await ctx.send(embed=emb)
@@ -76,12 +74,10 @@ class Help(commands.Cog):
         emb.add_field(
             name="MISC COMMANDS",
             value="Status\n"
-                  "Say"
             )
         emb.add_field(
             name="How to use",
-            value="k.status [activity] [text]\n"
-                  "k.say [message]`",
+            value="k.status [activity] [text]\n",
             inline=False
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
@@ -134,7 +130,7 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="MODERATION COMMANDS",
-            value="Ban\nUnban\nKick\nWarn",
+            value="Ban\nKick\nPurge\nUnban\nWarn\n",
             inline=False
             )
         await ctx.send(embed=emb)
@@ -169,15 +165,13 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="UTILITY COMMANDS",
-            value="Afk\n"
-                  "Ping\n"
+            value="Ping\n"
                   "Pingmessages\n"
                   "Poll"
             )
         emb.add_field(
             name="How to use",
-            value="`k.afk (afk message)\n"
-                  "k.ping\n"
+            value="`k.ping\n"
                   "k.pingmessages\n"
                   "k.poll [time] [question]`",
             inline=False
