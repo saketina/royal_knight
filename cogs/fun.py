@@ -7,7 +7,7 @@ from disnake import Forbidden
 from disnake.ext import commands
 
 # //TODO remove unneeded imports and lines of code
-# //TODO check for help message is variables are blank
+
 # //BUG rps is fucked idk where or when
 
 class Fun(commands.Cog):
