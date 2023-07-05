@@ -1,13 +1,15 @@
-import disnake
-from disnake.ext import commands, tasks
-from disnake.ext.commands import guild_only, is_owner
-import json
+# //TODO remove unnecesary imports
 
 import asyncio
-import aiofiles
-import typing
+import json
 import time
+import typing
+
+import aiofiles
+import disnake
 import pyrebase
+from disnake.ext import commands, tasks
+from disnake.ext.commands import guild_only, is_owner
 
 firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))
@@ -39,7 +41,8 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def serverinfo(self, ctx):
-        await ctx.send(ctx.guild.icon)
+        await ctx.send(file=ctx.guild.icon)
+        # //TODO finish serverinfo command
 
     @commands.command(pass_context=True)
     @commands.guild_only()

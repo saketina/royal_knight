@@ -1,9 +1,10 @@
-import disnake
-from disnake.ext import commands
-from random import choice
-import os
-import pyrebase
 import json
+import os
+from random import choice
+
+import disnake
+import pyrebase
+from disnake.ext import commands
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()

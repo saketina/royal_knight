@@ -1,14 +1,16 @@
-import disnake
-from disnake.ext import commands
+# TODO remove unnecesary imports
 
-from datetime import datetime
-import random
-import PIL
-from PIL import Image, ImageFont, ImageDraw, ImageOps
 import os
-import requests
+import random
+from datetime import datetime
 from io import BytesIO
 from random import choice
+
+import disnake
+import PIL
+import requests
+from disnake.ext import commands
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 class Welcome(commands.Cog):

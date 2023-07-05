@@ -1,16 +1,14 @@
-import disnake
-from disnake.utils import get
-from disnake.ext import commands
-from disnake.ext.commands import has_permissions, Paginator
-
-from disnake.ui import Button, View
-
 import datetime
-from datetime import datetime as dt
-
-import pyrebase
 import json
 import os
+from datetime import datetime as dt
+
+import disnake
+import pyrebase
+from disnake.ext import commands
+from disnake.ext.commands import Paginator, has_permissions
+from disnake.ui import Button, View
+from disnake.utils import get
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()

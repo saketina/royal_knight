@@ -1,7 +1,8 @@
+import random
+
 import disnake
 from disnake.ext import commands
 
-import random
 
 def opening_check(msg):
     allowed_users = [

@@ -1,10 +1,11 @@
+import asyncio
+import random
+import typing
+
 import disnake
 from disnake import Forbidden
 from disnake.ext import commands
 
-import typing
-import asyncio
-import random
 
 class Fun(commands.Cog):
 

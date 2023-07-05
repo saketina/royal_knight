@@ -1,12 +1,13 @@
+import asyncio
+import json
+import os
+import time
+
+import aiofiles
 import disnake
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
-import json
 
-import asyncio
-import aiofiles
-import time
-import os
 
 class Afk(commands.Cog):
     def __init__(self, client):

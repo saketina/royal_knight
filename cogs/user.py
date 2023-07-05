@@ -1,12 +1,13 @@
+import asyncio
+import os
+from io import BytesIO
+
 import disnake
+import requests
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
-
-import os
-import requests
 from PIL import Image
-from io import BytesIO
-import asyncio
+
 
 class User(commands.Cog):
 
