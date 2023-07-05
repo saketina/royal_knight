@@ -1,5 +1,7 @@
 import asyncio
+import datetime
 import os
+from datetime import datetime
 from io import BytesIO
 
 import disnake
@@ -9,7 +11,6 @@ from disnake.ext.commands import guild_only
 from PIL import Image
 
 # //TODO remove unneeded imports and lines of code
-# //TODO add badges displayed on profile
 
 class User(commands.Cog):
 
@@ -23,13 +24,26 @@ class User(commands.Cog):
 
         if not user:
             user = ctx.author
+        print(user.raw_status)
+        if user.raw_status == "online":
+            status_pic = "cogs/Assets/member_status/online.png"
+        elif user.raw_status == "idle":
+            status_pic = "cogs/Assets/member_status/idle.png"
+        elif user.raw_status == "dnd":
+            status_pic = "cogs/Assets/member_status/dnd.png"
+        elif user.raw_status == "offline":
+            status_pic = "cogs/Assets/member_status/offline.png"
+        else:
+            status_pic = "cogs/Assets/member_status/error.png"
+
+        
+        file = disnake.File(status_pic, filename="status.png")
 
         ProfileEmbed = disnake.Embed(
           color=disnake.Color.dark_red(),
+          timestamp=datetime.now()
           )
-        ProfileEmbed.set_author(
-        name= user
-        )
+        ProfileEmbed.set_author(name=user.display_name, icon_url= "attachment://status.png")
         ProfileEmbed.set_thumbnail(url = user.display_avatar)
 
         roleList = [r.mention for r in user.roles if r != ctx.guild.default_role]
@@ -60,7 +74,7 @@ class User(commands.Cog):
         ProfileEmbed.set_footer(
         text="User ID: " + str(user.id)
         )
-        await ctx.send(embed = ProfileEmbed)
+        await ctx.send(embed = ProfileEmbed, file=file)
 
     @commands.command(name="pfp", aliases=["av", "avatar"], pass_context=True)
     async def pfp(self, ctx, user: disnake.Member = None):
@@ -98,7 +112,7 @@ class User(commands.Cog):
         await ctx.send(file=file, embed=emb)
         # await ctx.send(file=file)
         try:
-            os.system(f"del /Q \"C:\\Users\\User\\Documents\\Discord Projects\\karma-master\\images\\generated\\{ctx.author.id}.png\"")
+            os.system(f"del /Q \"C:/Users/User/Documents/Discord Projects/karma-master/images/generated/{ctx.author.id}.png\"")
         except:
             os.system(f"rm -rf  images/generated/{ctx.author.id}.png")
 
