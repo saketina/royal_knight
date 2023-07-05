@@ -1,3 +1,0 @@
-rps:
-  when inputting wrong number it produces a key error in line 202
-  no member not found error output
