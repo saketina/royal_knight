@@ -15,6 +15,8 @@ import time
 import datetime
 from datetime import datetime
 
+# //TODO when bot is done remove [reload = True] from client setup
+
 #import logging
 # logging.basicConfig(level=logging.ERROR)
 cog_counter = 0
