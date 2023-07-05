@@ -6,13 +6,10 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions
-from disnake.ui import Button, View
 
 # //TODO remove unneeded imports and lines of code
 # //TODO add feature so its easy to add by role perms for commands
-# //TODO check if only ctx.author can use buttons
 # //TODO use try and except or GEH(global error handler) for errors
-# //TODO check for help message is variables are blank
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -96,29 +93,6 @@ class Moderation(commands.Cog):
                 )
             await ctx.send(embed=embed)
 
-    @commands.command()
-    async def count(self, ctx, user:disnake.User=None):
-        db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get().val()
-        warn_count = len(db_warns) - 1
-        warn_number = 1
-        warn = db_warns.get("1")
-        #warn = list(wrn)
-
-        date = warn.get("datetime")
-        moderator = warn.get("moderator")
-        mod_name = warn.get("moderator_name")
-        reason = warn.get("reason")
-
-        warns_embed = disnake.Embed(
-            title = f"{user.name}\'s Warnings",
-            color = disnake.Color.dark_red()
-        )
-        warns_embed.add_field(
-            name = f"{warn_number}/{warn_count}",
-            value = f"Moderator: `{mod_name}`\nModerator ping: <@!{moderator}>\nReason: `{reason}`\nAt: `{date}`"
-        )
-        await ctx.send(embed=warns_embed)
-
     @warn.error
     async def warn_handler(self, ctx, error):
         if isinstance(error, commands.NoPrivateMessage):
@@ -134,7 +108,7 @@ class Moderation(commands.Cog):
     async def purge(self, ctx, amount:int=None):
         if amount==None:
             emb = disnake.Embed(
-                title = "PURGE HELP",
+                title = "PURGE COMMAND",
                 description = "`k.purge [amount]`",
                 color = disnake.Color.dark_red()
                 )
