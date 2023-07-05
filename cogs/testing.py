@@ -13,7 +13,6 @@ from disnake.utils import get
 # //TODO remove unneeded imports and lines of code
 # //TODO transfer finished commands to appropriate cogs
 # //TODO transfer buttons to emojies for moderations
-# //TODO check for help message is variables are blank
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -55,6 +54,13 @@ class Testing(commands.Cog):
                 description = "``k.mute [member_id/@member] [duration] [reason]``",
                 color = disnake.Color.dark_red()
                 )
+            embed.add_field(
+                name="Duration Options",
+                value="``` d = day/s\n"
+                      " h = hour/s\n"
+                      " m = minute/s\n"
+                      " s = second/s```"
+            )
             await ctx.send(embed=embed)
         elif duration == None:
             duration = "28d"
@@ -227,7 +233,19 @@ class Testing(commands.Cog):
         except:
             pass
         if user == None:
-            await ctx.send("Please tell me who to check.")
+            embed = disnake.Embed(
+                title = "WARNINGS COMMAND",
+                description = "``k.mute [member_id/@member] [duration] [reason]``",
+                color = disnake.Color.dark_red()
+                )
+            embed.add_field(
+                name="Aliases",
+                value="``` Warns\n"
+                      " Check\n"
+                      " Moderations\n"
+                      " Warnings(default)```"
+            )
+            await ctx.send(embed=embed)
         else:
             db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get().val()
             db_bans = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).get().val()
