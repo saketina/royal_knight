@@ -3,9 +3,6 @@ import random
 import disnake
 from disnake.ext import commands
 
-# //TODO remove unneeded imports and lines of code
-# //TODO check for help message is variables are blank
-
 def opening_check(msg):
     allowed_users = [
         457948769216888833,    # Ansh

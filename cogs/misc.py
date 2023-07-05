@@ -1,15 +1,9 @@
 import asyncio
-import os
-from io import BytesIO
 
 import disnake
-import requests
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions
-from PIL import Image
 
-# //TODO remove unneeded imports and lines of code
-# //TODO check for help message is variables are blank
 
 class Misc(commands.Cog):
 
