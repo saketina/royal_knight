@@ -1,12 +1,11 @@
 import datetime
 import json
-import os
 from datetime import datetime as dt
 
 import disnake
 import pyrebase
 from disnake.ext import commands
-from disnake.ext.commands import Paginator, has_permissions
+from disnake.ext.commands import has_permissions
 from disnake.ui import Button, View
 from disnake.utils import get
 

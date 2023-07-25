@@ -1,16 +1,11 @@
-import asyncio
 import json
-import time
-import typing
 
-import aiofiles
 import disnake
 import pyrebase
-from disnake.ext import commands, tasks
-from disnake.ext.commands import guild_only, is_owner
+from disnake.ext import commands
+from disnake.ext.commands import is_owner
 
-# //TODO remove unneeded imports and lines of code
-# //TODO make commands dev locked
+## make cmd dev only
 
 firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))

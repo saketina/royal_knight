@@ -5,10 +5,8 @@ from datetime import datetime as dt
 import disnake
 import pyrebase
 from disnake.ext import commands, tasks
-from disnake.ext.commands import guild_only
 
-# //TODO remove unneeded imports and lines of code
-# //TODO optimize listeners so multiple listeners are in one decorator
+# //TODO remove unneeded lines of code
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()

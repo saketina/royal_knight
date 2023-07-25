@@ -1,11 +1,8 @@
 import json
-import os
 
 import disnake
 import pyrebase
 from disnake.ext import commands
-
-# //TODO remove unneeded imports and lines of code
 
 firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))
@@ -37,7 +34,7 @@ class Prefix(commands.Cog):
         prefixes = self.get_prefix(user)
         for pfix in prefixes:
             if msg.content.startswith(pfix):
-                msg.content = msg.content.replace(pfix, 'k.')
+                msg.content = msg.content.replace(pfix, 'k.', 1)
                 #msg.content = msg.content.replace("k. ", 'k.')
                 await self.client.process_commands(msg)
 

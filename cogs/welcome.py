@@ -11,7 +11,7 @@ from disnake.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 # //TODO remove unneeded imports and lines of code
-# //TODO figure out the welcome system
+# //TODO figure out the welcome system, how the images are drawn and selected
 
 class Welcome(commands.Cog):
     def __init__(self, bot):

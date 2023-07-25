@@ -6,7 +6,7 @@ import disnake
 from disnake import Forbidden
 from disnake.ext import commands
 
-# //TODO remove unneeded imports and lines of code
+# //TODO remove error handler and add try/except
 
 # //BUG rps is fucked idk where or when
 

@@ -7,7 +7,7 @@ import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions
 
-# //TODO remove unneeded imports and lines of code
+# //TODO remove unneeded lines of code
 # //TODO add feature so its easy to add by role perms for commands
 # //TODO use try and except or GEH(global error handler) for errors
 

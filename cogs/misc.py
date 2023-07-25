@@ -2,8 +2,6 @@ import asyncio
 
 import disnake
 from disnake.ext import commands
-from disnake.ext.commands import has_permissions
-
 
 class Misc(commands.Cog):
 
