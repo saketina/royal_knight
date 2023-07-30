@@ -8,7 +8,6 @@ firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))
 db = firebase.database()
 
-
 class Prefix(commands.Cog):
     def __init__(self, client):
         self.client = client
