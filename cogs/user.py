@@ -10,8 +10,8 @@ from disnake.ext import commands
 from disnake.ext.commands import guild_only
 from PIL import Image
 
-# //TODO add badges to profile command
-# //TODO add if Member is a booster or has nitro
+# //TODO PROFILE/add badges
+# //TODO PROFILE/add if Member is a booster or has nitro
 
 class User(commands.Cog):
 
@@ -113,7 +113,7 @@ class User(commands.Cog):
         await ctx.send(file=file, embed=emb)
         # await ctx.send(file=file)
         try:
-            os.system(f"del /Q \"C:/Users/User/Documents/Discord Projects/karma-master/images/generated/{ctx.author.id}.png\"")
+            os.system(f"erase images\generated\{ctx.author.id}.png")
         except:
             os.system(f"rm -rf  images/generated/{ctx.author.id}.png")
 
