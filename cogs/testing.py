@@ -9,10 +9,9 @@ from disnake.ext.commands import has_permissions
 from disnake.ui import Button, View
 from disnake.utils import get
 
-# //TODO remove unneeded imports and lines of code
-# //TODO transfer finished commands to appropriate cogs
-# //TODO transfer buttons to emojies for moderations
-# //TODO add attach proof(image) to warns module
+# //TODO ALL/transfer finished commands to appropriate cogs
+# //TODO ALL/transfer buttons to emojies
+# //TODO WARNS/add attach proof(image) to rest of the command(ban, mute, kick)
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -268,14 +267,16 @@ class Testing(commands.Cog):
                 button_kicks = Button(label="Kicks", disabled = True if db_kicks == None else False)
 
                 async def button_warns_callback(interaction):
-                    button_warns_delete = Button(label="Delete", style = disnake.ButtonStyle.red)
-                    button_warns_edit = Button(label="Edit")
-                    button_warns_exit = Button(label="Exit")
-                    button_warns_next = Button(label="Next", disabled = False)
-                    button_warns_previous = Button(label="Previous", disabled=True)
+                    button_warns_delete = Button(emoji="🚮", style = disnake.ButtonStyle.red)
+                    button_warns_edit = Button(emoji="✏")
+                    button_warns_exit = Button(emoji="❌")
+                    button_warns_next = Button(emoji="➡", disabled = False)
+                    button_warns_previous = Button(emoji="⬅", disabled=True)
+                    button_warns_proof = Button(emoji="📷")
 
                     if author_check(ctx, interaction):
                             moderation = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get().val()
+                            #print(moderation)
                             if db_warns != None:
                                 moderation.popitem(str("warns"))
 
@@ -284,6 +285,7 @@ class Testing(commands.Cog):
                                 #self.page_number[user.id] = 0
                                 page_number = 0
                                 self.pages = {}
+                                pages_num = []
                                 for key in moderation:
 
                                     warn = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).child(key).get().val()
@@ -310,14 +312,34 @@ class Testing(commands.Cog):
                                             f"Reason: ``{reason}``\n"
                                             f"At: ``{time}``"
                                     )
+                                    embed.set_image(url=warn["proof"])
 
                                     page_number += 1
                                     self.pages[page_number] = embed
 
+                                    pages_num.append(key)
+                                    
                                 self.pages_list[user.id] = self.pages
+                                #print(moderation)
                                 pages = self.pages_list[user.id]
+                                #print(pages_num)
+                                number = moderation.popitem(last=False)
+
                                 self.current_page = 1
 
+                                async def button_warns_proof_callback(interaction):
+                                    if interaction.author.id == ctx.author.id:
+                                        MyView.message = await interaction.response.edit_message(view=None)
+                                        await ctx.send("Please attach an image after this message.")
+                                        def check(m):
+                                            return m.author == ctx.author and m.channel == ctx.channel
+                                        msg = await self.client.wait_for("message", check=check)
+                                        temp = msg.attachments
+                                        num = self.current_page - 1 
+                                        db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).child(pages_num[num]).update({"proof": str(temp[0])})
+
+                                        await ctx.send(content="The attachment has been saved")
+                                
                                 async def button_warns_edit_callback(interaction):
                                     if interaction.author.id == ctx.author.id:
                                         await interaction.response.defer(with_message = False)
@@ -347,11 +369,13 @@ class Testing(commands.Cog):
                                                     f"Reason: ``{msg.content}``\n"
                                                     f"At: ``{time}``"
                                                     )
+                                        embed.set_image(url=warn["proof"])
+
                                         #edit_embed.set_footer(text = {dt.now()})
 
                                         db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).child(self.current_page).update({"reason": str(msg.content)})
-                                        await ctx.send("The moderation has been changed.")
-                                        await interaction.edit_original_response(embed = edit_embed, view = None)
+                                        await ctx.send(f"The reason has been changed to ``{msg.content}``.")
+                                        await interaction.edit_original_response(view = None)
 
                                 async def button_warns_delete_callback(interaction):
                                     if interaction.author.id == ctx.author.id:
@@ -390,17 +414,19 @@ class Testing(commands.Cog):
                                     # print("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
+
                                         if self.current_page == 1:
-                                            button_warns_previous = Button(label="Previous", disabled=True)
+                                            button_warns_previous = Button(emoji="⬅", disabled=True)
                                         else:
-                                            button_warns_previous = Button(label="Previous", disabled=False)
+                                            button_warns_previous = Button(emoji="⬅", disabled=False)
 
                                         button_warns_previous.callback=button_warns_previous_callback
                                         
-                                        view = MyView(timeout=30, interaction=[button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_callback, button_warns_previous_callback])
+                                        view = MyView(timeout=30, interaction=[button_warns_proof_callback, button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_callback, button_warns_previous_callback])
                                         view.add_item(button_warns_previous)
                                         view.add_item(button_warns_delete)
                                         view.add_item(button_warns_edit)
+                                        view.add_item(button_warns_proof)
                                         view.add_item(button_warns_exit)
                                         view.add_item(button_warns_next)
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
@@ -409,17 +435,19 @@ class Testing(commands.Cog):
                                     # print("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
+
                                         if self.current_page == 1:
-                                            button_warns_previous = Button(label="Previous", disabled=True)
+                                            button_warns_previous = Button(emoji="⬅", disabled=True)
                                         else:
-                                            button_warns_previous = Button(label="Previous", disabled=False)
+                                            button_warns_previous = Button(emoji="⬅", disabled=False)
 
                                         button_warns_previous.callback=button_warns_previous_previous_callback
                                         
-                                        view = MyView(timeout=30, interaction=[button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_next_callback, button_warns_previous_previous_callback])
+                                        view = MyView(timeout=30, interaction=[button_warns_proof_callback, button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_next_callback, button_warns_previous_previous_callback])
                                         view.add_item(button_warns_previous)
                                         view.add_item(button_warns_delete)
                                         view.add_item(button_warns_edit)
+                                        view.add_item(button_warns_proof)
                                         view.add_item(button_warns_exit)
                                         view.add_item(button_warns_next)
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
@@ -430,24 +458,25 @@ class Testing(commands.Cog):
                                         self.current_page += 1
 
                                         if self.current_page == page_number:
-                                            button_warns_next = Button(label="Next", disabled=True)
+                                            button_warns_next = Button(emoji="➡", disabled=True)
                                         elif self.current_page >= page_number:
-                                            button_warns_next = Button(label="Next", disabled=True)
+                                            button_warns_next = Button(emoji="➡", disabled=True)
                                         else:
-                                            button_warns_next = Button(label="Next", disabled=False)
+                                            button_warns_next = Button(emoji="➡", disabled=False)
 
                                         if self.current_page == 1:
-                                            button_warns_previous = Button(label="Previous", disabled=True)
+                                            button_warns_previous = Button(emoji="⬅", disabled=True)
                                         else:
-                                            button_warns_previous = Button(label="Previous", disabled=False)
+                                            button_warns_previous = Button(emoji="⬅", disabled=False)
 
                                         button_warns_next.callback=button_warns_next_callback
                                         button_warns_previous.callback=button_warns_previous_previous_callback
                                         
-                                        view = MyView(timeout=30, interaction=[button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_callback, button_warns_previous_previous_callback])
+                                        view = MyView(timeout=30, interaction=[button_warns_proof_callback, button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_callback, button_warns_previous_previous_callback])
                                         view.add_item(button_warns_previous)
                                         view.add_item(button_warns_delete)
                                         view.add_item(button_warns_edit)
+                                        view.add_item(button_warns_proof)
                                         view.add_item(button_warns_exit)
                                         view.add_item(button_warns_next)
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
@@ -458,48 +487,53 @@ class Testing(commands.Cog):
                                         self.current_page += 1
 
                                         if self.current_page == page_number:
-                                            button_warns_next = Button(label="Next", disabled=True)
+                                            button_warns_next = Button(emoji="➡", disabled=True)
                                         elif self.current_page >= page_number:
-                                            button_warns_next = Button(label="Next", disabled=True)
+                                            button_warns_next = Button(emoji="➡", disabled=True)
                                         else:
-                                            button_warns_next = Button(label="Next", disabled=False)
+                                            button_warns_next = Button(emoji="➡", disabled=False)
                                         
                                         if self.current_page == 1:
-                                            button_warns_previous = Button(label="Previous", disabled=True)
+                                            button_warns_previous = Button(emoji="⬅", disabled=True)
                                         else:
-                                            button_warns_previous = Button(label="Previous", disabled=False)
+                                            button_warns_previous = Button(emoji="⬅", disabled=False)
 
                                         button_warns_next.callback=button_warns_next_next_callback
                                         button_warns_previous.callback=button_warns_previous_previous_callback
                                         
-                                        view = MyView(timeout=30, interaction=[button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_next_callback, button_warns_previous_previous_callback])
+                                        view = MyView(timeout=30, interaction=[button_warns_proof_callback, button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_next_next_callback, button_warns_previous_previous_callback])
                                         view.add_item(button_warns_previous)
                                         view.add_item(button_warns_delete)
                                         view.add_item(button_warns_edit)
+                                        view.add_item(button_warns_proof)
                                         view.add_item(button_warns_exit)
                                         view.add_item(button_warns_next)
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
 
                                 if self.current_page == page_number:
-                                            button_warns_next = Button(label="Next", disabled=True)
+                                            button_warns_next = Button(emoji="➡", disabled=True)
                                 elif self.current_page >= page_number:
-                                    button_warns_next = Button(label="Next", disabled=True)
+                                    button_warns_next = Button(emoji="➡", disabled=True)
                                 else:
-                                    button_warns_next = Button(label="Next", disabled=False)
+                                    button_warns_next = Button(emoji="➡", disabled=False)
 
                                 button_warns_delete.callback = button_warns_delete_callback
                                 button_warns_edit.callback = button_warns_edit_callback
                                 button_warns_exit.callback = button_warns_exit_callback
+                                button_warns_proof.callback = button_warns_proof_callback
                                 button_warns_next.callback = button_warns_next_callback
                                 button_warns_previous.callback = button_warns_previous_callback
 
-                                view_warns = MyView(timeout=30, interaction=[button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_previous_callback])
+                                view_warns = MyView(timeout=30, interaction=[button_warns_proof_callback, button_warns_delete_callback, button_warns_edit_callback, button_warns_exit_callback, button_warns_previous_callback, button_warns_next_callback])
                                 view_warns.add_item(button_warns_previous)
                                 view_warns.add_item(button_warns_delete)
                                 view_warns.add_item(button_warns_edit)
+                                view_warns.add_item(button_warns_proof)
                                 view_warns.add_item(button_warns_exit)
                                 view_warns.add_item(button_warns_next)
-                                MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view_warns)
+                                MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_warns)
+                                async def on_error(self, error, item, interaction):
+                                    print(error)
                             else:
                                 print("There aren't any moderations")
 
@@ -1062,69 +1096,7 @@ class Testing(commands.Cog):
         await ctx.send(embed=pages[1])
         await ctx.send(embed=pages[2])
 
-    @commands.command(aliases=["wrns"], pass_context=True)
-    async def testing(self, ctx, user:disnake.User=None, inter: disnake.ApplicationCommandInteraction = None):
-        if user == None:
-            await ctx.send("Please tell me who to check.")
-        else:
-            db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get()
-            db_bans = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).get()
-            db_kicks = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).get()
-            db_moderations = [db_warns, db_bans, db_kicks]
-
-            if db_moderations != [None, None, None]:
-                warnings_embed = disnake.Embed(
-                    title = f"{user.name}\'s moderations",
-                    description = "1. Warns\n2. Bans\n3. Kicks",
-                    color = disnake.Color.dark_red()
-                )
-
-                button_warns = Button(label="Warns", disabled = True if db_warns == None else False)
-                button_bans = Button(label="Bans", disabled = True if db_bans == None else False)
-                button_kicks = Button(label="Kicks", disabled = True if db_kicks == None else False)
-
-                async def button_warns_callback(interaction):
-                    button_warns_delete = Button(label="Delete", style = disnake.ButtonStyle.red)
-                    button_warns_edit = Button(label="Edit")
-                    button_warns_exit = Button(label="Exit")
-                    button_warn_next = Button(label="Next")
-                    buton_warn_previous = Button(label="Previous")
-
-                    if interaction.author.id == ctx.author.id:
-                            db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get()
-
-                            db_list = list(db_warns)
-                            #print(db_list)
-                            db_list.pop()
-                            #print(db_list)
-                            db_first = db_list[0]
-                            warn = db_warns.get(db_first)
-                            warn_id = db_first
-
-                            mod_id = warn["moderator"]
-                            reason = warn["reason"]
-                            time = warn["datetime"]
-                            embeds == [
-                                warns_embed_1 == disnake.Embed(
-                                    title = f"{user.name}\'s Warnings",
-                                    color = disnake.Color.dark_red()
-                                    ),
-                                warns_embed_1 == disnake.Embed(
-                                    title = f"{user.name}\'s Warnings",
-                                    color = disnake.Color.dark_red()
-                                    )  
-                            ]
-                            embeds.add_field(
-                                name = f"{warn_number}/{warn_count}",
-                                value = f"Warn ID: ``{warn_id}``\n\n"
-                                        f"Mod ID: ``{mod_id}``\n"
-                                        f"Mod: <@!{mod_id}>\n\n"
-                                        f"Member ID: {user.id}\n"
-                                        f"Member: <@!{user.id}>\n"
-                                        f"Reason: ``{reason}``\n"
-                                        f"At: ``{time}``"
-                                )
-
+   
     @commands.command()
     async def staffteam(self, ctx, option=None, role: disnake.Role=None):
         members = disnake.Member
@@ -1155,6 +1127,14 @@ class Testing(commands.Cog):
             await ctx.send(embed=admin_embed)
         else:
             await ctx.send("\n".join(str(member) for member in role.members))
+
+    @commands.command()
+    async def content(self, ctx):
+        await ctx.send("Please send an image")
+        msg = await self.client.wait_for("message")
+        temp = msg.attachments
+        print(temp[0])
+        await ctx.send(temp[0])
 
 def setup(client):
     client.add_cog(Testing(client))

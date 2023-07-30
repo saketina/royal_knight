@@ -7,9 +7,8 @@ import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions
 
-# //TODO remove unneeded lines of code
-# //TODO add feature so its easy to add by role perms for commands
-# //TODO use try and except or GEH(global error handler) for errors
+# //TODO ALL/add feature so its easy to add by role perms for commands
+# //TODO ALL/use try and except or GEH(global error handler) for errors
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -50,7 +49,8 @@ class Moderation(commands.Cog):
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
                         "reason": reason,
-                        "datetime": dt_string
+                        "datetime": dt_string,
+                        "proof": ""
                     })
                 })
                 db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).set(data)
@@ -75,7 +75,8 @@ class Moderation(commands.Cog):
                     "moderator": str(ctx.author.id),
                     "moderator_name": str(ctx.author.display_name),
                     "reason": reason,
-                    "datetime": dt_string
+                    "datetime": dt_string,
+                    "proof": ""
                 })
                 data[wrn_amount]=new_warn
                 db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).set(data)
