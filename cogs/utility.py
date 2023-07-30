@@ -36,8 +36,45 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def serverinfo(self, ctx):
-        await ctx.send(ctx.guild.icon)
-        # //TODO finish serverinfo command
+        embed = disnake.Embed(
+            title = "Server Info",
+            description = f"Server Name: ``{ctx.guild.name}``",
+            color = disnake.Color.dark_red()
+        )
+        g = await self.client.fetch_guild(ctx.guild.id)
+        embed.add_field(
+            name="Member Info",
+            value=f"Member Count: ``{ctx.guild.member_count}``\n"
+                  f"Online Members: ``{g.approximate_presence_count}``\n"
+                  f"Members Boosting: ``{ctx.guild.premium_subscription_count}``\n",
+            inline=False
+        )
+        vc_list = ctx.guild.voice_channels
+        txt_list = ctx.guild.text_channels
+        
+        embed.add_field(
+            name="Channel Info",
+            value=f"Total VCs: ``{len(vc_list)}``\n"
+                  f"Total Text Channels: ``{len(txt_list)}``\n",
+            inline=False
+        )
+        created_at = ctx.guild.created_at.strftime("%d/%m/%Y")
+
+        embed.add_field(
+            name="General Info",
+            value=f"Created at: ``{created_at}``\n"
+                  f"Owner: ``{ctx.guild.owner}``\n"
+                  f"Preferred language: ``{ctx.guild.preferred_locale}``\n"
+                  f"Nitro Tier: ``{ctx.guild.premium_tier}``",
+            inline=True
+        )
+        embed.add_field(
+            name="Test",
+            value="Testing"
+        )
+        embed.set_thumbnail(ctx.guild.icon)
+        await ctx.send(embed=embed)
+        # //TODO SERVERINFO/finish command
 
     @commands.command(pass_context=True)
     @commands.guild_only()
