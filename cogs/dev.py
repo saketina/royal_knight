@@ -12,7 +12,7 @@ firebase = pyrebase.initialize_app(
 db = firebase.database()
 
 
-class Utility(commands.Cog):
+class Dev(commands.Cog):
     def __init__(self, client):
         self.client = client
 
