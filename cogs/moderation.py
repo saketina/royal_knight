@@ -172,7 +172,8 @@ class Moderation(commands.Cog):
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
                         "reason": rsn,
-                        "datetime": dt_string
+                        "datetime": dt_string,
+                        "proof": ""
                     })
                 })
                 db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).set(data)
@@ -197,7 +198,8 @@ class Moderation(commands.Cog):
                     "moderator": str(ctx.author.id),
                     "moderator_name": str(ctx.author.display_name),
                     "reason": rsn,
-                    "datetime": dt_string
+                    "datetime": dt_string,
+                    "proof": ""
                 })
                 data[bn_amount]=new_ban
                 db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).set(data)
@@ -213,7 +215,7 @@ class Moderation(commands.Cog):
                             f"Reason: **`{rsn}`**\n"
                             f"At: **``{dt_string}``**"
                 )
-            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
+            #await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
             await ctx.send(embed=embed)
             #await ctx.send(f"{member} was banned for {rsn}.")
 
@@ -257,7 +259,8 @@ class Moderation(commands.Cog):
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
                         "reason": rsn,
-                        "datetime": dt_string
+                        "datetime": dt_string,
+                        "proof": ""
                     })
                 })
                 db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).set(data)
@@ -282,7 +285,8 @@ class Moderation(commands.Cog):
                     "moderator": str(ctx.author.id),
                     "moderator_name": str(ctx.author.display_name),
                     "reason": rsn,
-                    "datetime": dt_string
+                    "datetime": dt_string,
+                    "proof": ""
                 })
                 data[kck_amount]=new_kick
                 db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).set(data)
@@ -299,7 +303,7 @@ class Moderation(commands.Cog):
                             f"At: **``{dt_string}``**"
                 )
                 #await ctx.send(embed=embed)
-            await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {rsn}.")
+            #await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {rsn}.")
             await ctx.send(embed=embed)
             #await ctx.send(f"{member} was kicked for {rsn}.")
 
