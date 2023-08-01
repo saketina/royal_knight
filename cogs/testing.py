@@ -380,29 +380,29 @@ class Testing(commands.Cog):
                                         button_warns_yes = Button(emoji="✅", style=disnake.ButtonStyle.green)
                                         button_warns_no = Button(emoji="❌", style=disnake.ButtonStyle.red)
 
-                                    async def button_warns_yes_callback(interaction):
-                                        if interaction.author.id == ctx.author.id:
-                                            await interaction.response.defer(with_message = False)
-                                            db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
-                                            await interaction.edit_original_response(content="The warn has been deleted 🚮", view=None)
-                                        else:
-                                            return
+                                        async def button_warns_yes_callback(interaction):
+                                            if interaction.author.id == ctx.author.id:
+                                                await interaction.response.defer(with_message = False)
+                                                db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
+                                                await interaction.edit_original_response(content="The warn has been deleted 🚮", view=None)
+                                            else:
+                                                return
 
-                                    async def button_warns_no_callback(interaction):
-                                        if interaction.author.id == ctx.author.id:
-                                            await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
-                                        else:
-                                            return
+                                        async def button_warns_no_callback(interaction):
+                                            if interaction.author.id == ctx.author.id:
+                                                await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
+                                            else:
+                                                return
 
-                                    button_warns_yes.callback = button_warns_yes_callback
-                                    button_warns_no.callback = button_warns_no_callback
+                                        button_warns_yes.callback = button_warns_yes_callback
+                                        button_warns_no.callback = button_warns_no_callback
 
-                                    view = MyView(timeout=30, interaction=[button_warns_yes_callback, button_warns_no_callback])
-                                    view.add_item(button_warns_yes)
-                                    view.add_item(button_warns_no)
+                                        view = MyView(timeout=30, interaction=[button_warns_yes_callback, button_warns_no_callback])
+                                        view.add_item(button_warns_yes)
+                                        view.add_item(button_warns_no)
 
-                                    MyView.message = await ctx.send("Are you sure?", view=view)
-                                    await interaction.response.edit_message(view=None)
+                                        MyView.message = await ctx.send("Are you sure?", view=view)
+                                        await interaction.response.edit_message(view=None)
 
                                 async def button_warns_exit_callback(interaction):
                                     if interaction.author.id == ctx.author.id:
@@ -655,29 +655,29 @@ class Testing(commands.Cog):
                                         button_bans_yes = Button(emoji="✅", style=disnake.ButtonStyle.green)
                                         button_bans_no = Button(emoji="❌", style=disnake.ButtonStyle.red)
 
-                                    async def button_bans_yes_callback(interaction):
-                                        if interaction.author.id == ctx.author.id:
-                                            await interaction.response.defer(with_message = False)
-                                            db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
-                                            await interaction.edit_original_response(content="The ban has been deleted 🚮", view=None)
-                                        else:
-                                            return
+                                        async def button_bans_yes_callback(interaction):
+                                            if interaction.author.id == ctx.author.id:
+                                                await interaction.response.defer(with_message = False)
+                                                db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
+                                                await interaction.edit_original_response(content="The ban has been deleted 🚮", view=None)
+                                            else:
+                                                return
 
-                                    async def button_bans_no_callback(interaction):
-                                        if interaction.author.id == ctx.author.id:
-                                            await interaction.response.edit_message(content="I didn\'t delete any ban", view=None)
-                                        else:
-                                            return
+                                        async def button_bans_no_callback(interaction):
+                                            if interaction.author.id == ctx.author.id:
+                                                await interaction.response.edit_message(content="I didn\'t delete any ban", view=None)
+                                            else:
+                                                return
 
-                                    button_bans_yes.callback = button_bans_yes_callback
-                                    button_bans_no.callback = button_bans_no_callback
+                                        button_bans_yes.callback = button_bans_yes_callback
+                                        button_bans_no.callback = button_bans_no_callback
 
-                                    view = MyView(timeout=30, interaction=[button_bans_yes_callback, button_bans_no_callback])
-                                    view.add_item(button_bans_yes)
-                                    view.add_item(button_bans_no)
+                                        view = MyView(timeout=30, interaction=[button_bans_yes_callback, button_bans_no_callback])
+                                        view.add_item(button_bans_yes)
+                                        view.add_item(button_bans_no)
 
-                                    MyView.message = await ctx.send("Are you sure?", view=view)
-                                    await interaction.response.edit_message(view=None)
+                                        MyView.message = await ctx.send("Are you sure?", view=view)
+                                        await interaction.response.edit_message(view=None)
 
                                 async def button_bans_exit_callback(interaction):
                                     if interaction.author.id == ctx.author.id:
@@ -929,29 +929,29 @@ class Testing(commands.Cog):
                                         button_kicks_yes = Button(emoji="✅", style=disnake.ButtonStyle.green)
                                         button_kicks_no = Button(emoji="❌", style=disnake.ButtonStyle.red)
 
-                                    async def button_kicks_yes_callback(interaction):
-                                        if interaction.author.id == ctx.author.id:
-                                            await interaction.response.defer(with_message = False)
-                                            db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
-                                            await interaction.edit_original_response(content="The kick has been deleted 🚮", view=None)
-                                        else:
-                                            return
+                                        async def button_kicks_yes_callback(interaction):
+                                            if interaction.author.id == ctx.author.id:
+                                                await interaction.response.defer(with_message = False)
+                                                db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).child(self.current_page).remove()
+                                                await interaction.edit_original_response(content="The kick has been deleted 🚮", view=None)
+                                            else:
+                                                return
 
-                                    async def button_kicks_no_callback(interaction):
-                                        if interaction.author.id == ctx.author.id:
-                                            await interaction.response.edit_message(content="I didn\'t delete any kick", view=None)
-                                        else:
-                                            return
+                                        async def button_kicks_no_callback(interaction):
+                                            if interaction.author.id == ctx.author.id:
+                                                await interaction.response.edit_message(content="I didn\'t delete any kick", view=None)
+                                            else:
+                                                return
 
-                                    button_kicks_yes.callback = button_kicks_yes_callback
-                                    button_kicks_no.callback = button_kicks_no_callback
+                                        button_kicks_yes.callback = button_kicks_yes_callback
+                                        button_kicks_no.callback = button_kicks_no_callback
 
-                                    view = MyView(timeout=30, interaction=[button_kicks_yes_callback, button_kicks_no_callback])
-                                    view.add_item(button_kicks_yes)
-                                    view.add_item(button_kicks_no)
+                                        view = MyView(timeout=30, interaction=[button_kicks_yes_callback, button_kicks_no_callback])
+                                        view.add_item(button_kicks_yes)
+                                        view.add_item(button_kicks_no)
 
-                                    MyView.message = await ctx.send("Are you sure?", view=view)
-                                    await interaction.response.edit_message(view=None)
+                                        MyView.message = await ctx.send("Are you sure?", view=view)
+                                        await interaction.response.edit_message(view=None)
 
                                 async def button_kicks_exit_callback(interaction):
                                     if interaction.author.id == ctx.author.id:
