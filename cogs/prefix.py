@@ -31,8 +31,15 @@ class Prefix(commands.Cog):
             return
         user = str(msg.author.id)
         prefixes = self.get_prefix(user)
+        #print(msg.content)
         for pfix in prefixes:
-            if msg.content.startswith(pfix):
+            check = pfix + "\u0020"
+            #print(str(check))
+            if msg.content.startswith(check):
+                msg.content = msg.content.replace(check, 'k.', 1)
+                #msg.content = msg.content.replace("k. ", 'k.')
+                await self.client.process_commands(msg)
+            elif msg.content.startswith(pfix):
                 msg.content = msg.content.replace(pfix, 'k.', 1)
                 #msg.content = msg.content.replace("k. ", 'k.')
                 await self.client.process_commands(msg)
