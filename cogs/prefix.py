@@ -4,6 +4,8 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 
+## //TODO: PREFIX_ADD create banned prefixes list
+
 firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -43,6 +45,11 @@ class Prefix(commands.Cog):
                 msg.content = msg.content.replace(pfix, 'k.', 1)
                 #msg.content = msg.content.replace("k. ", 'k.')
                 await self.client.process_commands(msg)
+            elif msg.content.startswith("k. "):
+                msg.content = msg.content.replace("k. ", 'k.', 1)
+                #msg.content = msg.content.replace("k. ", 'k.')
+                await self.client.process_commands(msg)
+            
 
     @commands.command()
     async def prefix(self, ctx, do="", prfx=""):
