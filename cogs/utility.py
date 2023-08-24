@@ -185,6 +185,28 @@ class Utility(commands.Cog):
                 color=disnake.Color.dark_red()
                 )
             await ctx.send(embed=embed)
+    
+    @commands.command()
+    async def timer(self, ctx, *, time: str = None):
+        time_units = {"s": 1, "m": 60, "h": 3600, "d": 86400}
+        total_time = 0
+        
+        for unit in time.split():
+            try:
+                value = int(unit[:-1])
+                unit = unit[-1].lower()
+                if unit in time_units:
+                    total_time += value*time_units[unit]
+                else:
+                    await ctx.send("Invalid time format, use 's' for seconds, 'm' for minutes, 'h' for hours, and 'd' for days.")
+                    return
+
+            except ValueError:
+                await ctx.send("Invalid time format ,use `'s'` for seconds, `'m'` for minutes, `'h'` for hours, and `'d'` for days.")
+                return
+        await ctx.send(f"Setting a timer for `{time}`")
+        await asyncio.sleep(total_time)
+        await ctx.send(f"{ctx.author.mention}, the timer is done!!!")
 
 def setup(client):
     client.add_cog(Utility(client))
