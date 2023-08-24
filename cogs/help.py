@@ -24,44 +24,21 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="CATEGORIES",
-            value="Fun\nModeration\nRoleplay\nUser\nUtility"
+            value="```Fun\nModeration\nRoleplay\nUser\nUtility\nMisc```"
             )
 
         await ctx.send(embed=emb)
 
-    @help.command(pass_context = True)
-    async def test(self, ctx):
-        emb = disnake.Embed(
-            title = "TITLE OF CATEGORY",
-            color = disnake.Color.dark_red()
-            )
-        emb.add_field(
-            name = "TITLE OF COMMAND 1",
-            value = "`COMMAND 1 USAGE`",
-            inline = True
-        )
-
-        emb.add_field(
-            name = "TITLE OF COMMAND 2",
-            value = "`COMMAND 2 USAGE`",
-            inline = False
-        )
-        await ctx.send(embed = emb)
-
     @help.command(pass_context=True)
     async def fun(self, ctx):
         emb = disnake.Embed(
+            title = "FUN COMMANDS",
             color = disnake.Color.dark_red()
             )
         emb.add_field(
-            name="FUN COMMANDS",
-            value="rockpaperscissors\n"
-                  "`Alias: rps`"
-            )
-        emb.add_field(
-            name="How to use",
-            value="`k.rps (@user)`",
-            inline=False
+            name="Rock Paper Scissors\n"
+                  "`Alias: rps`",
+            value="```k.rps (@user)```"
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
@@ -69,16 +46,12 @@ class Help(commands.Cog):
     @help.command(pass_context=True)
     async def misc(self, ctx):
         emb = disnake.Embed(
+            title = "MISC COMMANDS",
             color = disnake.Color.dark_red()
             )
         emb.add_field(
-            name="MISC COMMANDS",
-            value="Status\n"
-            )
-        emb.add_field(
-            name="How to use",
-            value="k.status [activity] [text]\n",
-            inline=False
+            name="Status",
+            value="```k.status [activity] [text]```"
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
@@ -122,58 +95,86 @@ class Help(commands.Cog):
     @help.command()
     async def moderation(self, ctx):
         emb = disnake.Embed(
+            title = "MODERATION COMMANDS",
             color = disnake.Color.dark_red()
+            )
+        emb.add_field(
+            name="Purge",
+            value="```k.purge [amount]```",
+            inline=False
+            )
+        emb.add_field(
+            name="Warn",
+            value="```k.warn [member_id/@member] [reason]```",
+            inline=False
+            )
+        emb.add_field(
+            name="Kick",
+            value="```k.kick [mention/user_id] (reason)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Ban",
+            value="```k.ban [mention/user_id] (reason)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Unban",
+            value="```k.unban [user_id]```",
+            inline=False
             )
         emb.set_footer(
             text=f"{ctx.author.name}",
             icon_url=ctx.author.display_avatar
-            )
-        emb.add_field(
-            name="MODERATION COMMANDS",
-            value="Ban\nKick\nPurge\nUnban\nWarn\n",
-            inline=False
             )
         await ctx.send(embed=emb)
 
     @help.command()
     async def user(self, ctx):
         emb = disnake.Embed(
+            title="USER COMMANDS",
             color = disnake.Color.dark_red()
+            )
+        emb.add_field(
+            name="Profile",
+            value="```k.[profile] (@user)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Prefix",
+            value="```k.[prefix] (add/remove)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Avatar\n`alias:av, pfp`",
+            value="```k.[avatar] (@user)```",
+            inline=False
             )
         emb.set_footer(
             text=f"{ctx.author.name}",
             icon_url=ctx.author.display_avatar
-            )
-        emb.add_field(
-            name="USER COMMANDS",
-            value="Profile\n"
-                  "Prefix\n"
-                  "Avatar(*av*, *pfp*)",
-            inline=False
-            )
-        emb.add_field(
-            name="How to use",
-            value="`k.[command] (@user)`",
-            inline=False
             )
         await ctx.send(embed=emb)
 
     @help.command(pass_context=True)
     async def utility(self, ctx):
         emb = disnake.Embed(
+            title="UTILITY COMMANDS",
             color = disnake.Color.dark_red()
             )
         emb.add_field(
-            name="UTILITY COMMANDS",
-            value="Ping\n"
-                  "Pingmessages\n"
-                  "Poll"
+            name="Ping",
+            value="```k.ping```",
+            inline=False
             )
         emb.add_field(
-            name="How to use",
-            value="`k.ping\n"
-                  "k.pingmessages\n"
-                  "k.poll [time] [question]`",
+            name="Pingmessages",
+            value="```k.pingmessages```",
+            inline=False
+            )
+        emb.add_field(
+            name="Poll",
+            value="```k.poll [time] [question]```",
             inline=False
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
