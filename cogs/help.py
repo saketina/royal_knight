@@ -22,7 +22,7 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="CATEGORIES",
-            value="```Fun\nModeration\nRoleplay\nUser\nUtility\nMisc```"
+            value="```\nFun\nModeration\nRoleplay\nUser\nUtility\nMisc```"
             )
 
         await ctx.send(embed=emb)
@@ -40,18 +40,42 @@ class Help(commands.Cog):
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
-
-    @help.command(pass_context=True)
-    async def misc(self, ctx):
+    
+    @help.command()
+    async def moderation(self, ctx):
         emb = disnake.Embed(
-            title = "MISC COMMANDS",
+            title = "MODERATION COMMANDS",
             color = disnake.Color.dark_red()
             )
         emb.add_field(
-            name="Status",
-            value="```k.status [activity] [text]```"
+            name="Purge",
+            value="```k.purge [amount]```",
+            inline=False
             )
-        emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
+        emb.add_field(
+            name="Warn",
+            value="```k.warn [member_id/@member] [reason]```",
+            inline=False
+            )
+        emb.add_field(
+            name="Kick",
+            value="```k.kick [mention/user_id] (reason)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Ban",
+            value="```k.ban [mention/user_id] (reason)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Unban",
+            value="```k.unban [user_id]```",
+            inline=False
+            )
+        emb.set_footer(
+            text=f"{ctx.author.name}",
+            icon_url=ctx.author.display_avatar
+            )
         await ctx.send(embed=emb)
 
     @help.command(pass_context=True)
@@ -87,43 +111,6 @@ class Help(commands.Cog):
             name="How to use",
             value="`k.[roleplay command] (@user)`",
             inline=False
-            )
-        await ctx.send(embed=emb)
-
-    @help.command()
-    async def moderation(self, ctx):
-        emb = disnake.Embed(
-            title = "MODERATION COMMANDS",
-            color = disnake.Color.dark_red()
-            )
-        emb.add_field(
-            name="Purge",
-            value="```k.purge [amount]```",
-            inline=False
-            )
-        emb.add_field(
-            name="Warn",
-            value="```k.warn [member_id/@member] [reason]```",
-            inline=False
-            )
-        emb.add_field(
-            name="Kick",
-            value="```k.kick [mention/user_id] (reason)```",
-            inline=False
-            )
-        emb.add_field(
-            name="Ban",
-            value="```k.ban [mention/user_id] (reason)```",
-            inline=False
-            )
-        emb.add_field(
-            name="Unban",
-            value="```k.unban [user_id]```",
-            inline=False
-            )
-        emb.set_footer(
-            text=f"{ctx.author.name}",
-            icon_url=ctx.author.display_avatar
             )
         await ctx.send(embed=emb)
 
@@ -174,6 +161,19 @@ class Help(commands.Cog):
             name="Poll",
             value="```k.poll [time] [question]```",
             inline=False
+            )
+        emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
+        await ctx.send(embed=emb)
+
+    @help.command(pass_context=True)
+    async def misc(self, ctx):
+        emb = disnake.Embed(
+            title = "MISC COMMANDS",
+            color = disnake.Color.dark_red()
+            )
+        emb.add_field(
+            name="Status",
+            value="```k.status [activity] [text]```"
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
