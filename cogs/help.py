@@ -1,8 +1,6 @@
 import disnake
 from disnake.ext import commands
 
-# //TODO sync help embeds to test help command(except rp cmds)
-
 class Help(commands.Cog):
     def __init__(self, client):
         self.client = client
