@@ -1,6 +1,9 @@
 import datetime
 import json
 from datetime import datetime as dt
+import os
+import random
+from random import choice
 
 import disnake
 import pyrebase
@@ -1104,18 +1107,39 @@ class Testing(commands.Cog):
             else:
                 await ctx.send("I see no moderations")
 
-    @commands.command()
-    async def test_button(self, ctx):
-        button = Button(label="button-kun")
+    @commands.command(pass_context=True)
+    async def test(self, ctx, member:disnake.Member=None):
+        if member is None or member == ctx.author:
+            target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
+        else:
+            target = member.mention
+            db_target = "OTHER"
 
-        async def button_callback(interaction):
-            print("Button-kun added!")
+        gifs = os.listdir(f"./RP/bite/")
+        if gifs == []:
+            return
 
-        button.callback = button_callback
+        rnd_gif = choice(gifs)
+        path_to_gif = f"./RP/bite/{rnd_gif}"
+        file = disnake.File(path_to_gif, filename="gif.gif")
 
-        view = MyView(timeout=10)
-        view.add_item(button)
-        await ctx.send(content="Testing...", view=view)
+        kiss_embed = disnake.Embed(
+            title="",
+            description=f"{ctx.author.mention} bit {target}",
+        )
+        kiss_embed.set_image(url="attachment://gif.gif")
+
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+        await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command()
     async def staffteam(self, ctx, option=None, role: disnake.Role=None):
