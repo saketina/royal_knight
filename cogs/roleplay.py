@@ -6,7 +6,6 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 
-# //TODO ALL/make counter for times used on someone and times used by someone
 # //TODO ALL/make different gifs displayed if ctx.author used the command on themselves
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
@@ -20,8 +19,11 @@ class Roleplay(commands.Cog):
     async def bite(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/bite/")
         if gifs == []:
@@ -37,14 +39,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def blush(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/blush/")
         if gifs == []:
@@ -60,14 +95,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def bonk(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/bonk/")
         if gifs == []:
@@ -83,14 +151,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def boop(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/boop/")
         if gifs == []:
@@ -106,14 +207,48 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+        print(self_num, other_num)
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def cry(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/cry/")
         if gifs == []:
@@ -129,14 +264,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def cuddle(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/cuddle/")
         if gifs == []:
@@ -152,14 +320,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def dance(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/dance/")
         if gifs == []:
@@ -175,14 +376,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def handhold(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/handhold/")
         if gifs == []:
@@ -198,14 +432,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def hug(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/hug/")
         if gifs == []:
@@ -221,14 +488,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def kill(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/kill/")
         if gifs == []:
@@ -244,14 +544,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def kiss(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/kiss/")
         if gifs == []:
@@ -267,14 +600,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def nom(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/nom/")
         if gifs == []:
@@ -290,14 +656,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def pat(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/pat/")
         if gifs == []:
@@ -313,14 +712,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def punch(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/punch/")
         if gifs == []:
@@ -336,14 +768,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def slap(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/slap/")
         if gifs == []:
@@ -359,14 +824,47 @@ class Roleplay(commands.Cog):
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
     async def smile(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
         else:
             target = member.mention
+            db_target = "OTHER"
 
         gifs = os.listdir(f"./RP/smile/")
         if gifs == []:
@@ -381,6 +879,36 @@ class Roleplay(commands.Cog):
             description=f"{ctx.author.mention} smiled at {target}",
         )
         kiss_embed.set_image(url="attachment://gif.gif")
+
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
