@@ -120,6 +120,7 @@ initial_cogs = [
     "cogs.anime",
     "cogs.counters",
     "cogs.fun",
+    "cogs.GAH",
     "cogs.help",
     "cogs.misc",
     "cogs.moderation",
