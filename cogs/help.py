@@ -1,3 +1,4 @@
+# //TODO search through commands and sync commands to respected categories
 import disnake
 from disnake.ext import commands
 
@@ -152,11 +153,11 @@ class Help(commands.Cog):
             value="```k.ping```",
             inline=False
             )
-        emb.add_field(
-            name="Pingmessages",
-            value="```k.pingmessages```",
-            inline=False
-            )
+        #emb.add_field(
+        #    name="Pingmessages",
+        #    value="```k.pingmessages```",
+        #    inline=False
+        #    )
         emb.add_field(
             name="Poll",
             value="```k.poll [time] [question]```",
