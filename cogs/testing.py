@@ -48,6 +48,7 @@ class Testing(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def mute(self, ctx, member:disnake.Member=None, duration=None, *, reason=None):
+        # //TODO MUTE/add checks if the member is muted or not
         if member == None:
             embed = disnake.Embed(
                 title = "MUTE COMMAND",
@@ -179,7 +180,7 @@ class Testing(commands.Cog):
                 )
 
                 time = datetime.timedelta(seconds=int(seconds), minutes=int(minutes), days=int(days), hours=int(hours))
-
+                # //TODO MUTE_ROLE add a way to dynamically set the role to db
                 try:
                     await member.add_roles(1125541804654215350)
                 except:
@@ -200,6 +201,7 @@ class Testing(commands.Cog):
 
     @commands.command()
     async def unmute(self, ctx, member:disnake.Member=None):
+        # //TODO UNMUTE/add checks if the member is muted or not
         if member == None:
             embed = disnake.Embed(
                 title = "UNMUTE COMMAND",
@@ -1107,40 +1109,6 @@ class Testing(commands.Cog):
             else:
                 await ctx.send("I see no moderations")
 
-    @commands.command(pass_context=True)
-    async def test(self, ctx, member:disnake.Member=None):
-        if member is None or member == ctx.author:
-            target = "themselves"
-            db_target = "SELF"
-            member = ctx.author
-        else:
-            target = member.mention
-            db_target = "OTHER"
-
-        gifs = os.listdir(f"./RP/bite/")
-        if gifs == []:
-            return
-
-        rnd_gif = choice(gifs)
-        path_to_gif = f"./RP/bite/{rnd_gif}"
-        file = disnake.File(path_to_gif, filename="gif.gif")
-
-        kiss_embed = disnake.Embed(
-            title="",
-            description=f"{ctx.author.mention} bit {target}",
-        )
-        kiss_embed.set_image(url="attachment://gif.gif")
-
-        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
-        if rp_db == None:
-            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
-        elif rp_db != None:
-            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
-            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
-        else:
-            await ctx.send("Rarest error ever, please contact developer!!!")
-        await ctx.send(embed=kiss_embed, file=file)
-
     @commands.command()
     async def staffteam(self, ctx, option=None, role: disnake.Role=None):
         members = disnake.Member
@@ -1171,14 +1139,6 @@ class Testing(commands.Cog):
             await ctx.send(embed=admin_embed)
         else:
             await ctx.send("\n".join(str(member) for member in role.members))
-
-    @commands.command()
-    async def content(self, ctx):
-        await ctx.send("Please send an image")
-        msg = await self.client.wait_for("message")
-        temp = msg.attachments
-        print(temp[0])
-        await ctx.send(temp[0])
 
 def setup(client):
     client.add_cog(Testing(client))
