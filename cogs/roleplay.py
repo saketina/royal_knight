@@ -67,7 +67,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -123,7 +123,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -179,7 +179,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -236,7 +236,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -348,7 +348,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -404,7 +404,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -460,7 +460,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -516,7 +516,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -572,7 +572,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -628,7 +628,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -684,7 +684,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -740,7 +740,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -796,7 +796,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -852,7 +852,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
@@ -908,7 +908,7 @@ class Roleplay(commands.Cog):
         else:
             self_time = "time"
 
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}   Themselves: {self_num} {self_time}")
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
 
         await ctx.send(embed=kiss_embed, file=file)
 
