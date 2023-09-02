@@ -1,4 +1,5 @@
 import json
+import os
 
 import disnake
 import pyrebase
@@ -16,8 +17,15 @@ class Dev(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    @commands.command()
+    @commands.is_owner()
+    async def cls(self, ctx):
+        os.system("cls")
+        await ctx.send("Cleared the terminal, Master.")
+
     
     @commands.command()
+    @commands.is_owner()
     async def delwarns(self, ctx, member:disnake.Member=None):
         if member != None:
             try:
@@ -54,7 +62,7 @@ class Dev(commands.Cog):
                 await ctx.send("There was an error. Please contact the dev.")
         else:
             await ctx.send("Please input a member.")
-
+    """
     @commands.command(pass_context=True)
     #@has_permissions(administrator=True)
     async def status(self, ctx, activity=None, *, text=None):
@@ -105,8 +113,10 @@ class Dev(commands.Cog):
             await ctx.send(embed=embed)
         else:
             await ctx.send("I didn\'t quite catch that.")
+    """
 
     @commands.command(pass_context=True)
+    @commands.is_owner()
     async def say(self, ctx, *, message):
         if message != None:
              
