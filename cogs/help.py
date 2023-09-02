@@ -23,7 +23,7 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="CATEGORIES",
-            value="```\nFun\nModeration\nRoleplay\nUser\nUtility\nMisc```"
+            value="```\nFun\nRoleplay\nUser\nUtility\nMisc```"
             )
 
         await ctx.send(embed=emb)
@@ -41,38 +41,42 @@ class Help(commands.Cog):
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
-    
     @help.command()
     async def moderation(self, ctx):
         emb = disnake.Embed(
             title = "MODERATION COMMANDS",
             color = disnake.Color.dark_red()
             )
-        emb.add_field(
-            name="Purge",
-            value="```k.purge [amount]```",
-            inline=False
-            )
+        #emb.add_field(
+        #    name="Purge",
+        #    value="```k.purge [amount]```",
+        #    inline=False
+        #    )
         emb.add_field(
             name="Warn",
             value="```k.warn [member_id/@member] [reason]```",
             inline=False
             )
         emb.add_field(
-            name="Kick",
-            value="```k.kick [mention/user_id] (reason)```",
-            inline=False
-            )
-        emb.add_field(
-            name="Ban",
-            value="```k.ban [mention/user_id] (reason)```",
-            inline=False
-            )
-        emb.add_field(
-            name="Unban",
-            value="```k.unban [user_id]```",
-            inline=False
-            )
+            name="Moderations\n`alias: warns, warnings, check`",
+            value="```k.moderations [@user/user id]```"
+
+        )
+        #emb.add_field(
+        #    name="Kick",
+        #    value="```k.kick [mention/user_id] (reason)```",
+        #    inline=False
+        #    )
+        #emb.add_field(
+        #    name="Ban",
+        #    value="```k.ban [mention/user_id] (reason)```",
+        #    inline=False
+        #    )
+        #emb.add_field(
+        #    name="Unban",
+        #    value="```k.unban [user_id]```",
+        #    inline=False
+        #    )
         emb.set_footer(
             text=f"{ctx.author.name}",
             icon_url=ctx.author.display_avatar
@@ -110,7 +114,7 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="How to use",
-            value="`k.[roleplay command] (@user)`",
+            value="```k.[roleplay command] (@user)```",
             inline=False
             )
         await ctx.send(embed=emb)

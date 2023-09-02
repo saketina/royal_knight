@@ -17,6 +17,7 @@ from datetime import datetime
 
 # //TODO when bot is done remove [reload = True] from client setup
 # //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
+# //TODO add birthday checker
 
 #import logging
 # logging.basicConfig(level=logging.ERROR)
@@ -39,7 +40,7 @@ client = commands.Bot(
     command_prefix=get_prefix,
     case_insensitive=True,
     intents=intents,
-    reload=True,
+    reload=False,
     status=disnake.Status.dnd
 )
 client.remove_command("help")
@@ -118,18 +119,18 @@ async def reload_error(ctx, error):
 initial_cogs = [
     #"cogs.afk",
     "cogs.anime",
-    "cogs.counters",
+    #"cogs.counters",
     "cogs.fun",
     "cogs.GAH",
     "cogs.help",
     "cogs.misc",
-    "cogs.moderation",
+    #"cogs.moderation",
     "cogs.prefix",
     "cogs.roleplay",
-    "cogs.testing",
+    #"cogs.testing",
     "cogs.user",
     "cogs.utility",
-    "cogs.welcome"
+    #"cogs.welcome"
 ]
 
 for cog in initial_cogs:
