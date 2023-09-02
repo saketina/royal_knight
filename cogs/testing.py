@@ -46,6 +46,28 @@ class Testing(commands.Cog):
         self.pages_list = {}
 
     @commands.command()
+    async def gif_test(self, ctx):
+        cmd = "bite", "blush"#, "bonk", "boop", "cry", "cuddle", "dance", "die", "handhold", "hug", "kill", "kiss", "nom", "pat", "punch", "slap", "smile"
+        for item in cmd:
+            gifs = os.listdir(f"./RP/{item}/")
+            if gifs == []:
+                return
+            gif_count = 0
+
+            for gif in gifs:
+                gif_count += 1
+                path_to_gif = f"./RP/{item}/{gif}"
+                file = disnake.File(path_to_gif, filename="gif.gif")
+
+                kiss_embed = disnake.Embed(
+                    title="",
+                    description=f"{item} {gif_count}",
+                )
+                kiss_embed.set_image(url="attachment://gif.gif")
+                await ctx.send(embed=kiss_embed, file=file)
+
+    """
+    @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def mute(self, ctx, member:disnake.Member=None, duration=None, *, reason=None):
         # //TODO MUTE/add checks if the member is muted or not
@@ -200,6 +222,7 @@ class Testing(commands.Cog):
                 await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.has_permissions(manage_messages=True)
     async def unmute(self, ctx, member:disnake.Member=None):
         # //TODO UNMUTE/add checks if the member is muted or not
         if member == None:
@@ -227,7 +250,7 @@ class Testing(commands.Cog):
 
             await member.timeout(duration=time)
             await ctx.send(f"{member.name} has been unmuted.")
-
+    """
     @commands.command(aliases=["warns", "check", "moderations"], pass_context=True)
     async def warnings(self, ctx, user:disnake.User=None):
         try:
@@ -237,7 +260,7 @@ class Testing(commands.Cog):
         if user == None:
             embed = disnake.Embed(
                 title = "WARNINGS COMMAND",
-                description = "``k.mute [member_id/@member] [duration] [reason]``",
+                description = "``k.moderations [@user/user id]``",
                 color = disnake.Color.dark_red()
                 )
             embed.add_field(
@@ -1108,7 +1131,7 @@ class Testing(commands.Cog):
                 MyView.message = await ctx.send(embed=warnings_embed, view=view_select)
             else:
                 await ctx.send("I see no moderations")
-
+    """
     @commands.command()
     async def staffteam(self, ctx, option=None, role: disnake.Role=None):
         members = disnake.Member
@@ -1139,7 +1162,7 @@ class Testing(commands.Cog):
             await ctx.send(embed=admin_embed)
         else:
             await ctx.send("\n".join(str(member) for member in role.members))
-
+    """
 def setup(client):
     client.add_cog(Testing(client))
     print("Cog: Testing - loaded")
