@@ -7,6 +7,8 @@ import pyrebase
 from disnake.ext import commands
 
 # //TODO ALL/make different gifs displayed if ctx.author used the command on themselves
+# //TODO resize gifs to 498x278
+# //TODO make it so each time another gif is used instead of repeating
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
