@@ -36,8 +36,8 @@ class Moderation(commands.Cog):
             await ctx.send("Please don\'t warn me.")
         elif member == ctx.author:
             await ctx.send("You can\'t warn yourself.")
-        elif member.guild_permissions.manage_messages == True:
-            await ctx.send("You can\'t warn that user.")
+        #elif member.guild_permissions.manage_messages == True:
+        #    await ctx.send("You can\'t warn that user.")
         else:
             f = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
             data = f
@@ -102,7 +102,7 @@ class Moderation(commands.Cog):
             return
         else:
             print(error)
-
+    
     @commands.command(pass_context=True)
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
@@ -348,7 +348,7 @@ class Moderation(commands.Cog):
             await ctx.send(content = "You don\'t have the required permissions to use this command.", delete_after = 10)
         else:
             print(error)
-
+    
 def setup(client):
     client.add_cog(Moderation(client))
     print(f"Cog: Moderation - loaded.")
