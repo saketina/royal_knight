@@ -8,7 +8,6 @@ from disnake.ext import commands
 
 # //TODO RPS/remove error handler and add try/except
 
-# //BUG rps is fucked idk where or when
 
 class Fun(commands.Cog):
 
