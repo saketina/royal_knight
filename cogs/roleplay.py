@@ -8,7 +8,7 @@ from disnake.ext import commands
 
 # //TODO ALL/make different gifs displayed if ctx.author used the command on themselves
 # //TODO resize gifs to 498x278
-# //TODO make it so each time another gif is used instead of repeating
+# //TODO ADD wave command
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -16,6 +16,22 @@ db = firebase.database()
 class Roleplay(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.bite_last = None
+        self.blush_last = None
+        self.bonk_last = None
+        self.boop_last = None
+        self.cry_last = None
+        self.cuddle_last = None
+        self.dance_last = None
+        self.handhold_last = None
+        self.hug_last = None
+        self.kill_last = None
+        self.kiss_last = None
+        self.nom_last = None
+        self.pat_last = None
+        self.punch_last = None
+        self.slap_last = None
+        self.smile_last = None
 
     @commands.command(pass_context=True)
     async def bite(self, ctx, member:disnake.Member=None):
@@ -32,6 +48,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.bite_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/bite/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -70,7 +90,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.bite_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -88,6 +108,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.blush_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/blush/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -126,7 +150,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.blush_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -144,6 +168,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.bonk_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/bonk/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -182,7 +210,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.bonk_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -200,6 +228,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.boop_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/boop/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -239,7 +271,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.boop_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -257,6 +289,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.cry_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/cry/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -295,7 +331,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.cry_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -313,6 +349,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.cuddle_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/cuddle/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -351,7 +391,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.cuddle_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -369,12 +409,68 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.dance_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/dance/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
         kiss_embed = disnake.Embed(
             title="",
             description=f"{ctx.author.mention} danced with {target}",
+        )
+        kiss_embed.set_image(url="attachment://gif.gif")
+
+        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+        if rp_db == None:
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+        elif rp_db != None:
+            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+        else:
+            await ctx.send("Rarest error ever, please contact developer!!!")
+
+        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
+
+        if other_num == None:
+            other_time = "times"
+            other_num = 0
+        elif other_num > 1:
+            other_time = "times"
+        else:
+            other_time = "time"
+            
+        if self_num == None:
+            self_time = "times"
+            self_num = 0
+        elif self_num > 1:
+            self_time = "times"
+        else:
+            self_time = "time"
+
+        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
+        self.dance_last = rnd_gif
+        await ctx.send(embed=kiss_embed, file=file)
+
+    @commands.command(pass_context=True)
+    async def fuck(self, ctx, member:disnake.Member=None):
+        if member is None or member == ctx.author:
+            target = "themselves"
+            db_target = "SELF"
+            member = ctx.author
+        else:
+            target = member.mention
+            db_target = "OTHER"
+
+
+        path_to_gif = f"./RP/fuck/fuck.gif"
+        file = disnake.File(path_to_gif, filename="gif.gif")
+
+        kiss_embed = disnake.Embed(
+            title="",
+            description=f"{ctx.author.mention} fucked with {target}",
         )
         kiss_embed.set_image(url="attachment://gif.gif")
 
@@ -425,6 +521,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.handhold_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/handhold/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -463,7 +563,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.handhold_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -481,6 +581,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.hug_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/hug/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -519,7 +623,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.hug_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -537,6 +641,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.kill_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/kill/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -575,7 +683,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.kill_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -593,6 +701,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.kiss_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/kiss/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -631,7 +743,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.kiss_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -649,6 +761,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.nom_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/nom/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -687,7 +803,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.nom_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -705,6 +821,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.pat_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/pat/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -743,7 +863,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.pat_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -761,6 +881,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.punch_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/punch/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -799,7 +923,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.punch_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -817,6 +941,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.slap_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/slap/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -855,7 +983,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.slap_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
     @commands.command(pass_context=True)
@@ -873,6 +1001,10 @@ class Roleplay(commands.Cog):
             return
 
         rnd_gif = choice(gifs)
+
+        while rnd_gif == self.smile_last:
+            rnd_gif = choice(gifs)
+        
         path_to_gif = f"./RP/smile/{rnd_gif}"
         file = disnake.File(path_to_gif, filename="gif.gif")
 
@@ -911,7 +1043,7 @@ class Roleplay(commands.Cog):
             self_time = "time"
 
         kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-
+        self.smile_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
 def setup(client):
