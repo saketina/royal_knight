@@ -1,5 +1,4 @@
 import json
-
 import disnake
 import pyrebase
 from disnake.ext import commands
@@ -14,93 +13,85 @@ class Prefix(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    def get_prefix(self, uid):
-        pfxs = db.child("PREFIX").child(uid).get().val()
-        if pfxs == None:
-            pfxs = []
-        return list(pfxs)
+    def get_user_prefixes(self, user_id):
+        prefixes = db.child("PREFIX").child(user_id).get().val()
+        if prefixes == None:
+            prefixes = []
+        return list(prefixes)
 
-    def add_prefix(self, uid, pf):
-        pfxs = db.child("PREFIX").child(uid).get().val()
-        if pfxs == None:
-            pfxs = []
-        pfxs.append(pf)
-        db.child("PREFIX").child(uid).set(pfxs)
+    def add_user_prefix(self, user_id, new_prefix):
+        prefixes = self.get_user_prefixes(user_id)
+        if new_prefix not in prefixes and new_prefix != "k.":
+            prefixes.append(new_prefix)
+            db.child("PREFIX").child(user_id).set(prefixes)
 
     @commands.Cog.listener()
     async def on_message(self, msg):
         if msg.author.bot:
             return
-        user = str(msg.author.id)
-        prefixes = self.get_prefix(user)
-        #print(msg.content)
-        for pfix in prefixes:
-            check = pfix + "\u0020"
-            #print(str(check))
+        user_id = str(msg.author.id)
+        user_prefixes = self.get_user_prefixes(user_id)
+
+        # Check is space is after prefix
+        if msg.content.startswith("k. "):
+            msg.content = msg.content.replace("k. ", 'k.', 1)
+            await self.client.process_commands(msg)
+        elif msg.content.startswith("K. "):
+            msg.content = msg.content.replace("K. ", 'k.', 1)
+            await self.client.process_commands(msg)
+        
+        # Check for custom prefixes
+        for prefix in user_prefixes:
+            check = prefix + '\u0020'
             if msg.content.startswith(check):
                 msg.content = msg.content.replace(check, 'k.', 1)
-                #msg.content = msg.content.replace("k. ", 'k.')
                 await self.client.process_commands(msg)
-            elif msg.content.startswith(pfix):
-                msg.content = msg.content.replace(pfix, 'k.', 1)
-                #msg.content = msg.content.replace("k. ", 'k.')
+            elif msg.content.startswith(prefix):
+                msg.content = msg.content.replace(prefix, 'k.', 1)
                 await self.client.process_commands(msg)
-            elif msg.content.startswith("k. "):
-                msg.content = msg.content.replace("k. ", 'k.', 1)
-                #msg.content = msg.content.replace("k. ", 'k.')
-                await self.client.process_commands(msg)
-            
 
     @commands.command()
-    async def prefix(self, ctx, do="", prfx=""):
-        user = str(ctx.author.id)
-        pfxs = db.child("PREFIX").child(user).get().val()
+    async def prefix(self, ctx, action="", new_prefix=""):
+        user_id = str(ctx.author.id)
+        user_prefixes = self.get_user_prefixes(user_id)
 
-        if do == "add" and prfx != "":
-            if pfxs == None and prfx != "k.":
-                self.add_prefix(user, prfx)
-                await ctx.send(f"> added custom prefix - `{prfx}`")
-            elif prfx not in pfxs and prfx != "k.":
-                self.add_prefix(user, prfx)
-                await ctx.send(f"> added custom prefix - `{prfx}`")
+        if action == "add" and new_prefix:
+            if new_prefix not in user_prefixes and new_prefix != "k.":
+                self.add_user_prefix(user_id, new_prefix)
+                await ctx.send(f"> added custom prefix - `{new_prefix}`")
             else:
                 await ctx.send("That prefix is already in the list.")
 
-        elif do == "remove" and prfx != "":
-            if pfxs == None:
-                pfxs = []
-            if prfx not in pfxs:
-                await ctx.send("That prefix isn\'t in your prefix list.")
+        elif action == "remove" and new_prefix:
+            if new_prefix not in user_prefixes:
+                await ctx.send("That prefix isn't in your prefix list.")
             else:
-                del pfxs[pfxs.index(prfx)]
-                db.child("PREFIX").child(user).set(pfxs)
-                await ctx.send(f"> removed custom prefix - `{prfx}`")
+                user_prefixes.remove(new_prefix)
+                db.child("PREFIX").child(user_id).set(user_prefixes)
+                await ctx.send(f"> removed custom prefix - `{new_prefix}`")
+
         else:
-            e = disnake.Embed(
-                title="CUSTOM PREFIXES",
-                description="add : add a custom prefix\n"
-                            "remove : remove a custom prefix\n\n"
-                            "Examples\n"
-                            "`k.prefix add <your prefix>`\n"
-                            "`k.prefix remove <your prefix>`",
+            prefixes_text = "\n".join(user_prefixes) if user_prefixes else "You haven't set any prefixes yet."
+            embed = disnake.Embed(
+                title="Custom Prefixes",
+                description="Add or remove custom prefixes for bot commands.",
                 color=disnake.Color.dark_red()
-                )
-            ypfx = ""
-            all_pfx = self.get_prefix(str(ctx.author.id))
-            if all_pfx == []:
-                ypfx = "You haven\'t set any prefixes yet."
-            for each in all_pfx:
-                ypfx += each+"\n"
-            e.add_field(
-                name="YOUR PREFIXES",
-                value=ypfx
-                )
-            await ctx.send(embed=e)
+            )
+            embed.add_field(
+                name="Your Prefixes",
+                value=prefixes_text
+            )
+            embed.add_field(
+                name="Usage",
+                value="`k.prefix add <your_prefix>`\n`k.prefix remove <your_prefix>`",
+                inline=False
+            )
+            await ctx.send(embed=embed)
 
     @prefix.error
     async def prefix_error(self, ctx, error):
         if isinstance(error, commands.CommandInvokeError):
-            await ctx.send("I can\'t find that in the list.")
+            await ctx.send("I can't find that in the list.")
         else:
             print(error)
 

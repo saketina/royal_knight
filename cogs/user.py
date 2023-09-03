@@ -77,45 +77,19 @@ class User(commands.Cog):
         )
         await ctx.send(embed = ProfileEmbed, file=file)
 
-    @commands.command(name="pfp", aliases=["av", "avatar"], pass_context=True)
-    async def pfp(self, ctx, user: disnake.Member = None):
+    @commands.command(aliases=["av", "avatar"], pass_context=True)
+    async def pfp(self, ctx, member: disnake.Member = None):
+        if member is None:
+            member = ctx.author
 
-        if not user:
-            user = ctx.author
-
-        members = ctx.message.mentions
-        if members == []:
-            members = [ctx.author]
-        imgs = []
-
-        for mem in members:
-            url = requests.get(mem.display_avatar)
-            im = Image.open(BytesIO(url.content)).resize((500, 500))
-            imgs.append(im)
-        s = len(imgs)
-        bg = Image.new(mode="RGBA", size=(500*s, 500))
-        i = 0
-        for x in range(0, s):
-            try:
-                bg.paste(imgs[i], (500*x, 0))
-                i += 1
-            except Exception as e:
-                print(e, i)
-                pass
-        bg.save(f'images/generated/{ctx.author.id}.png', quality=10)
-        file = disnake.File(f"images/generated/{ctx.author.id}.png", filename='pic.jpg')
-        emb = disnake.Embed(
-            title=f"{user.display_name}\'s avatar",
-            description=f"",
+        avatar_url = member.display_avatar
+        avatar_embed = disnake.Embed(
+            title=f"{member}'s Avatar",
             color=disnake.Color.dark_red()
-            )
-        emb.set_image(url="attachment://pic.jpg")
-        await ctx.send(file=file, embed=emb)
-        # await ctx.send(file=file)
-        try:
-            os.system(f"erase images\generated\{ctx.author.id}.png")
-        except:
-            os.system(f"rm -rf  images/generated/{ctx.author.id}.png")
+        )
+        avatar_embed.set_image(url=avatar_url)
+
+        await ctx.send(embed=avatar_embed)
 
 def setup(client):
     client.add_cog(User(client))

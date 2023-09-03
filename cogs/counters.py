@@ -26,17 +26,11 @@ class Counters(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await asyncio.sleep(1)
-        if self.update_vc.is_running() == False:
-            #print("Counters - Starting loop: update_vc")
+        if not self.update_vc.is_running():
             self.update_vc.start()
-        else:
-            return
-        if self.reset.is_running() == False:
-            #print("Counters - Starting loop: reset\n")
+
+        if not self.reset.is_running():
             self.reset.start()
-        else:
-            return
 
     @tasks.loop(hours=1.0, reconnect = True)
     async def reset(self):
@@ -48,18 +42,20 @@ class Counters(commands.Cog):
         joinCounter = await self.client.fetch_channel(member_counter_id)
 
         if hour == 0:
-            db.child("COUNTERS").child("MEMBERS_JOINED").set(0)
-            db.child("COUNTERS").child("MESSAGES_SENT").set(0)
-            self.msg_buffer = 1
+            try:
+                db.child("COUNTERS").child("MEMBERS_JOINED").set(0)
+                db.child("COUNTERS").child("MESSAGES_SENT").set(0)
+                self.msg_buffer = 1
 
-            await msgCounter.edit(name="Msgs Today • 0")
-            await joinCounter.edit(name="Joined Today • 0")
+                await msgCounter.edit(name="Msgs Today • 0")
+                await joinCounter.edit(name="Joined Today • 0")
+            except Exception as e:
+                print(f"Error in reset task: {e}")
 
-            # print(f"\nCounters: reset at - {time}")
 
     @tasks.loop(minutes=2.0, reconnect = True)
     async def update_vc(self):
-        await asyncio.sleep(1)
+        #await asyncio.sleep(1)
         guild = self.client.get_guild(guild_id)
         channel = guild.get_channel(vc_counter_id)
         count = 0
@@ -67,7 +63,7 @@ class Counters(commands.Cog):
             for member in vc.members:
                 if not member.bot:
                     count += 1
-        await asyncio.sleep(1)
+        #await asyncio.sleep(1)
         #print(f"VC: {count}")
         await channel.edit(name=f"VC members • {count}")
 
@@ -76,34 +72,59 @@ class Counters(commands.Cog):
         await asyncio.sleep(2)
         if member.bot:
             return
-
+        """
         if member.guild.id == guild_id:
             joinCounter = await self.client.fetch_channel(member_counter_id)
-            await asyncio.sleep(1)
-            p = db.child("COUNTERS").child("MEMBERS_JOINED").get().val() + 1
-            await asyncio.sleep(1)
+            #await asyncio.sleep(1)
+            #p = db.child("COUNTERS").child("MEMBERS_JOINED").get().val() + 1
+            #await asyncio.sleep(1)
+            p = db.child("COUNTERS").child("MEMBERS_JOINED").transaction(
+                lambda current_value: (current_value or 0) + 1
+            ).val
             await joinCounter.edit(name=f"Joined Today • {p}")
-            db.child("COUNTERS").child("MEMBERS_JOINED").set(p)
+            #db.child("COUNTERS").child("MEMBERS_JOINED").set(p)
             #print("Added: +1")
+        """
+        if member.guild.id == guild_id:
+            joinCounter = await self.client.fetch_channel(member_counter_id)
+            try:
+                p = db.child("COUNTERS").child("MEMBERS_JOINED").transaction(
+                    lambda current_value: (current_value or 0) + 1
+                ).val
+                await joinCounter.edit(name=f"Joined Today • {p}")
+            except Exception as e:
+                print(f"Error in on_member_join: {e}")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        await asyncio.sleep(2)
+        #await asyncio.sleep(2)
         if member.bot:
             return
-
+        """
         if member.guild.id == guild_id:
             joinCounter = await self.client.fetch_channel(member_counter_id)
-            await asyncio.sleep(1)
-            p = db.child("COUNTERS").child("MEMBERS_JOINED").get().val() - 1
-            await asyncio.sleep(1)
+            #await asyncio.sleep(1)
+            #p = db.child("COUNTERS").child("MEMBERS_JOINED").get().val() - 1
+            #await asyncio.sleep(1)
+            p = db.child("COUNTERS").child("MEMBERS_JOINED").transaction(
+                lambda current_value: (current_value or 0) + 1
+            ).val
             await joinCounter.edit(name=f"Joined Today • {p}")
-            db.child("COUNTERS").child("MEMBERS_JOINED").set(p)
+            #db.child("COUNTERS").child("MEMBERS_JOINED").set(p)
             #print("Removed: -1")
+        """
+        if member.guild.id == guild_id:
+            joinCounter = await self.client.fetch_channel(member_counter_id)
+            try:
+                p = db.child("COUNTERS").child("MEMBERS_JOINED").transaction(
+                    lambda current_value: (current_value or 0) - 1
+                ).val
+                await joinCounter.edit(name=f"Joined Today • {p}")
+            except Exception as e:
+                print(f"Error in on_member_remove: {e}")
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        await asyncio.sleep(2)
         msgCounter = await self.client.fetch_channel(message_counter_id)
 
         try:
@@ -114,12 +135,14 @@ class Counters(commands.Cog):
 
                 #print(f"Messages: {self.msg_buffer}")
                 if self.msg_buffer >= 10:
-                    msgs = db.child("COUNTERS").child("MESSAGES_SENT").get().val()
-                    msgs += self.msg_buffer
-                    self.msg_buffer = 1
-                    db.child("COUNTERS").child("MESSAGES_SENT").set(msgs)
-                    await asyncio.sleep(1)
-                    await msgCounter.edit(name=f"Msgs Today • {msgs}")
+                    try:
+                        msgs = db.child("COUNTERS").child("MESSAGES_SENT").get().val()
+                        msgs += self.msg_buffer
+                        self.msg_buffer = 1
+                        db.child("COUNTERS").child("MESSAGES_SENT").set(msgs)
+                        await msgCounter.edit(name=f"Msgs Today • {msgs}")
+                    except Exception as e:
+                        print(f"Error in on_message: {e}")
                 else:
                     self.msg_buffer += 1
         except AttributeError:
