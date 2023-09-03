@@ -4,7 +4,7 @@ import disnake
 from decouple import config
 
 from disnake.ext import commands
-from disnake.ext.commands import is_owner
+from disnake.ext.commands import is_owner, has_permissions
 
 import traceback
 import sys
@@ -40,7 +40,7 @@ client = commands.Bot(
     command_prefix=get_prefix,
     case_insensitive=True,
     intents=intents,
-    reload=False,
+    reload=True,
     status=disnake.Status.dnd
 )
 client.remove_command("help")
@@ -57,77 +57,19 @@ async def on_ready():
         f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
     )
 
-
-@client.command(pass_context=True)
-@is_owner()
-async def load(ctx, cog):
-    try:
-        client.load_extension(f"cogs.{cog}")
-        await ctx.send(f"Cog: **{cog}** has been loaded!")
-    except commands.ExtensionAlreadyLoaded:
-        await ctx.send(f"Error: **{cog}** is already loaded.")
-    except Exception as e:
-        print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-
-
-@load.error
-async def load_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Error: Please enter a cog.")
-
-
-@client.command(pass_context=True)
-@is_owner()
-async def unload(ctx, cog):
-    try:
-        client.unload_extension(f"cogs.{cog}")
-        await ctx.send(f"Cog: **{cog}** has been unloaded!")
-    except commands.ExtensionNotLoaded:
-        await ctx.send(f"Error: **{cog}** is not loaded.")
-    except Exception as e:
-        print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-
-
-@unload.error
-async def unload_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Please enter a cog.")
-
-
-@client.command(pass_context=True)
-@is_owner()
-async def reload(ctx, cog):
-    try:
-        client.reload_extension(f"cogs.{cog}")
-        await ctx.send(f"Cog: **{cog}** has been reloaded!")
-    except commands.ExtensionNotLoaded:
-        await ctx.send(f"Error: **{cog}** is not loaded.")
-    except Exception as e:
-        print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-
-
-@reload.error
-async def reload_error(ctx, error):
-    try:
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Please enter a cog.")
-    except commands.ExtensionNotLoaded:
-        await ctx.send(f"Cog: **{cog}** has not been loaded.")
-    except Exception as e:
-        print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-
 initial_cogs = [
     #"cogs.afk",
+    "cogs.admin",
     "cogs.anime",
     #"cogs.counters",
     "cogs.fun",
     "cogs.GAH",
     "cogs.help",
     "cogs.misc",
-    #"cogs.moderation",
+    "cogs.moderation",
     "cogs.prefix",
     "cogs.roleplay",
-    #"cogs.testing",
+    "cogs.testing",
     "cogs.user",
     "cogs.utility",
     #"cogs.welcome"
