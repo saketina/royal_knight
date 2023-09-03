@@ -27,6 +27,8 @@ class Admin(commands.Cog):
                 await ctx.send(f"Cog: **{cog}** has been loaded!")
             except commands.ExtensionAlreadyLoaded:
                 await ctx.send(f"Error: **{cog}** is already loaded.")
+            except commands.ExtensionNotFound:
+                await ctx.send(f"I could not find **{cog}**")
             except Exception as e:
                 print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
 
@@ -39,6 +41,8 @@ class Admin(commands.Cog):
                 await ctx.send(f"Cog: **{cog}** has been unloaded!")
             except commands.ExtensionNotLoaded:
                 await ctx.send(f"Error: **{cog}** is not loaded.")
+            except commands.ExtensionNotFound:
+                await ctx.send(f"I could not find **{cog}**")
             except Exception as e:
                 print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
         else:
@@ -63,6 +67,8 @@ class Admin(commands.Cog):
                 await ctx.send(f"Cog: **{cog}** has been reloaded!")
             except commands.ExtensionNotLoaded:
                 await ctx.send(f"Error: **{cog}** is not loaded.")
+            except commands.ExtensionNotFound:
+                await ctx.send(f"I could not find **{cog}**")
             except Exception as e:
                 print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
         else:
