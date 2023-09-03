@@ -21,7 +21,7 @@ class Dev(commands.Cog):
     @commands.is_owner()
     async def cls(self, ctx):
         os.system("cls")
-        await ctx.send("Cleared the terminal, Master.")
+        await ctx.send("Cleared the terminal, Daddy.")
 
     
     @commands.command()
