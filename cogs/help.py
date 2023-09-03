@@ -182,11 +182,6 @@ class Help(commands.Cog):
             value="```k.ping```",
             inline=False
             )
-        #emb.add_field(
-        #    name="Pingmessages",
-        #    value="```k.pingmessages```",
-        #    inline=False
-        #    )
         emb.add_field(
             name="Poll",
             value="```k.poll [time] [question]```",

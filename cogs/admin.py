@@ -2,6 +2,7 @@ import disnake
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions
 
+
 class Admin(commands.Cog):
     def __init__(self, client):
         self.client = client

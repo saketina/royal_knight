@@ -1,9 +1,10 @@
 # //TODO finish global error handler
 # //TODO transfer error handlers to GAH
 # //TODO add MISSING PERMISSIONS handler for muted cmd(happens when user tries to unmute themselves + they arent muted)
-import disnake
-import traceback
 import sys
+import traceback
+
+import disnake
 from disnake.ext import commands
 
 

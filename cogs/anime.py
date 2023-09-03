@@ -3,6 +3,7 @@ import random
 import disnake
 from disnake.ext import commands
 
+
 def opening_check(msg):
     allowed_users = [
         457948769216888833,    # Ansh
