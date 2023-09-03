@@ -10,6 +10,8 @@ from disnake.ext.commands import has_permissions
 # //TODO ALL/add feature so its easy to add by role perms for commands
 # //TODO ALL/use try and except or GEH(global error handler) for errors
 
+# //TODO Add a notes tab for moderations similar to reason
+
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
 
@@ -320,7 +322,7 @@ class Moderation(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.guild_only()
-    @commands.has_permissions(ban_members=True)
+    @commands.has_permissions(administrator=True)
     async def unban(self, ctx, id: int = None):
         if id == None:
             emb = disnake.Embed(
@@ -345,7 +347,8 @@ class Moderation(commands.Cog):
         elif isinstance(error, commands.CommandInvokeError):
             await ctx.send(content = "I can\'t find that member.", delete_after = 10)
         elif isinstance(error, commands.MissingPermissions):
-            await ctx.send(content = "You don\'t have the required permissions to use this command.", delete_after = 10)
+            return
+            #await ctx.send(content = "You don\'t have the required permissions to use this command.", delete_after = 10)
         else:
             print(error)
     
