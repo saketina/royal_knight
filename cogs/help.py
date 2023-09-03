@@ -23,9 +23,33 @@ class Help(commands.Cog):
             )
         emb.add_field(
             name="CATEGORIES",
-            value="```\nFun\nRoleplay\nUser\nUtility\nMisc```"
+            value="```\nAdmin\nFun\nModeration\nRoleplay\nUser\nUtility\nMisc```"
             )
 
+        await ctx.send(embed=emb)
+
+    @help.command(pass_context=True)
+    async def admin(self, ctx):
+        emb = disnake.Embed(
+            title = "ADMIN COMMANDS",
+            color = disnake.Color.dark_red()
+            )
+        emb.add_field(
+            name="Load",
+            value="```k.load <category_name>```",
+            inline=False
+            )
+        emb.add_field(
+            name="Unload",
+            value="```k.unload <category_name>```",
+            inline=False
+            )
+        emb.add_field(
+            name="Reload",
+            value="```k.reload <category_name>```",
+            inline=False
+            )
+        emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
 
     @help.command(pass_context=True)
@@ -41,17 +65,18 @@ class Help(commands.Cog):
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
+
     @help.command()
     async def moderation(self, ctx):
         emb = disnake.Embed(
             title = "MODERATION COMMANDS",
             color = disnake.Color.dark_red()
             )
-        #emb.add_field(
-        #    name="Purge",
-        #    value="```k.purge [amount]```",
-        #    inline=False
-        #    )
+        emb.add_field(
+            name="Purge",
+            value="```k.purge [amount]```",
+            inline=False
+            )
         emb.add_field(
             name="Warn",
             value="```k.warn [member_id/@member] [reason]```",
@@ -62,21 +87,21 @@ class Help(commands.Cog):
             value="```k.moderations [@user/user id]```"
 
         )
-        #emb.add_field(
-        #    name="Kick",
-        #    value="```k.kick [mention/user_id] (reason)```",
-        #    inline=False
-        #    )
-        #emb.add_field(
-        #    name="Ban",
-        #    value="```k.ban [mention/user_id] (reason)```",
-        #    inline=False
-        #    )
-        #emb.add_field(
-        #    name="Unban",
-        #    value="```k.unban [user_id]```",
-        #    inline=False
-        #    )
+        emb.add_field(
+            name="Kick",
+            value="```k.kick [mention/user_id] (reason)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Ban",
+            value="```k.ban [mention/user_id] (reason)```",
+            inline=False
+            )
+        emb.add_field(
+            name="Unban",
+            value="```k.unban [user_id]```",
+            inline=False
+            )
         emb.set_footer(
             text=f"{ctx.author.name}",
             icon_url=ctx.author.display_avatar
