@@ -57,6 +57,9 @@ class CommandErrorHandler(commands.Cog):
             if ctx.command.qualified_name == 'tag list':  # Check if the command being invoked is 'tag list'
                 await ctx.send('I could not find that member. Please try again.')
 
+        elif isinstance(error, commands.MissingPermissions):
+            return
+
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
             print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
