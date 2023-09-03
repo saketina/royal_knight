@@ -217,7 +217,7 @@ class Moderation(commands.Cog):
                             f"Reason: **`{rsn}`**\n"
                             f"At: **``{dt_string}``**"
                 )
-            #await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
+            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
             await ctx.send(embed=embed)
             #await ctx.send(f"{member} was banned for {rsn}.")
 
@@ -305,7 +305,7 @@ class Moderation(commands.Cog):
                             f"At: **``{dt_string}``**"
                 )
                 #await ctx.send(embed=embed)
-            #await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {rsn}.")
+            await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {rsn}.")
             await ctx.send(embed=embed)
             #await ctx.send(f"{member} was kicked for {rsn}.")
 
