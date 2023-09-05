@@ -34,7 +34,7 @@ class CommandErrorHandler(commands.Cog):
             if cog._get_overridden_method(cog.cog_command_error) is not None:
                 return
 
-        ignored = (commands.CommandNotFound, )
+        ignored = (commands.CommandNotFound)
 
         # Allows us to check for original exceptions raised and sent to CommandInvokeError.
         # If nothing is found. We keep the exception passed to on_command_error.
@@ -43,25 +43,58 @@ class CommandErrorHandler(commands.Cog):
         # Anything in ignored will return and prevent anything happening.
         if isinstance(error, ignored):
             return
+        
+        if isinstance(error, commands.MissingPermissions):
+            print("should be here")
+            try:
+                await ctx.send(f"I\'m missing permissions for this!\nPermissions missing:{commands.BotMissingPermissions.missing_permissions}")
+            except disnake.Forbidden:
+                print("done goofeds")
+                #await ctx.author.send(f"I\'m missing permissions for this!\nPermissions missing:{error.missing_permissions}")
 
-        if isinstance(error, commands.DisabledCommand):
+        elif isinstance(error, commands.CommandInvokeError):
+            print("should not be here")
+            if ctx.command.qualified_name == "unban":
+                await ctx.send(content = "I can\'t find that member.", delete_after = 10)
+            else:
+                await ctx.send("I didn\'t quite catch that.")
+
+        elif isinstance(error, commands.CheckFailure):
+            return
+
+        # For this error handler we check if the command has been disabled
+        elif isinstance(error, commands.DisabledCommand):
             await ctx.send(f'{ctx.command} has been disabled.')
 
+        # For this error handler we check if someone has DMs off
         elif isinstance(error, commands.NoPrivateMessage):
             try:
                 await ctx.author.send(f'{ctx.command} can not be used in Private Messages.')
             except disnake.HTTPException:
                 pass
 
-        # For this error example we check to see where it came from...
-        elif isinstance(error, commands.BadArgument):
-            if ctx.command.qualified_name == 'tag list':  # Check if the command being invoked is 'tag list'
-                await ctx.send('I could not find that member. Please try again.')
-
         elif isinstance(error, commands.MissingPermissions):
-            return
+            try:
+                await ctx.send(f"I\'m missing permissions for this!\nPermissions missing:{commands.MissingPermissions(missing_permissions=error.missing_permissions)}")
+            except:
+                await ctx.author.send(f"I\'m missing permissions for this!\nPermissions missing:{commands.missing_permissions}")
+        elif isinstance(error, commands.MemberNotFound):
+            if ctx.command.qualified_name == "ban":
+                await ctx.send(content = "I couldn\'t find that person", delete_after = 10)
+        
+        elif isinstance(error, commands.UserNotFound):
+            if ctx.command.qualified_name == "ban":
+                await ctx.send(content = "I couldn\'t find that person", delete_after = 10)
+
+        # For this error example we check to see where it came from...
+        if isinstance(error, commands.BadArgument):
+            if ctx.command.qualified_name == "purge":
+                await ctx.send(content = "Please input only numbers.", delete_after = 10)
+            elif ctx.command.qualified_name == "unban":
+                await ctx.send(content = "Please input only the members id.", delete_after = 10)
 
         else:
+            print("this is the else statement")
             # All other Errors not returned come here. And we can just print the default TraceBack.
             print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
             traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
