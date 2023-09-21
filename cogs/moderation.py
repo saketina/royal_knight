@@ -197,6 +197,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
     async def ban(self, ctx, member:disnake.User=None, *, reason=None):
         try:
@@ -272,13 +273,14 @@ class Moderation(commands.Cog):
                 await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
                 await ctx.send(embed=embed)
         except Forbidden:
-            if disnake.Permissions().ban_members == False:
+            if member.Permissions().ban_members == False:
                 await ctx.send("I don\'t have the required permissions to do that.\nPlease give me either `ban` permissions or `administrator`")
             else:
                 await ctx.send("You can\'t ban that user.")
 
     @commands.command()
     @commands.guild_only()
+    @commands.bot_has_permissions(kick_members=True)
     @commands.check(moderation_check)
     async def kick(self, ctx, member:disnake.Member=None, *, reason=None):
         try:
