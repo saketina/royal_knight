@@ -43,21 +43,19 @@ class CommandErrorHandler(commands.Cog):
         # Anything in ignored will return and prevent anything happening.
         if isinstance(error, ignored):
             return
-        
-        if isinstance(error, commands.MissingPermissions):
-            print("should be here")
-            try:
-                await ctx.send(f"I\'m missing permissions for this!\nPermissions missing:{commands.BotMissingPermissions.missing_permissions}")
-            except disnake.Forbidden:
-                print("done goofeds")
-                #await ctx.author.send(f"I\'m missing permissions for this!\nPermissions missing:{error.missing_permissions}")
 
-        elif isinstance(error, commands.CommandInvokeError):
-            print("should not be here")
+        if isinstance(error, commands.CommandInvokeError):
+            #print("should not be here")
             if ctx.command.qualified_name == "unban":
                 await ctx.send(content = "I can\'t find that member.", delete_after = 10)
             else:
                 await ctx.send("I didn\'t quite catch that.")
+
+        elif isinstance(error, commands.BotMissingPermissions):
+            if ctx.command.qualified_name == "unban":
+                await ctx.send(BotMissingPermissions.missing_permissions)
+            elif ctx.command.qualified_name == "kick":
+                await ctx.send(BotMissingPermissions.missing_permissions)
 
         elif isinstance(error, commands.CheckFailure):
             return
@@ -87,17 +85,24 @@ class CommandErrorHandler(commands.Cog):
                 await ctx.send(content = "I couldn\'t find that person", delete_after = 10)
 
         # For this error example we check to see where it came from...
-        if isinstance(error, commands.BadArgument):
+        elif isinstance(error, commands.BadArgument):
             if ctx.command.qualified_name == "purge":
                 await ctx.send(content = "Please input only numbers.", delete_after = 10)
             elif ctx.command.qualified_name == "unban":
                 await ctx.send(content = "Please input only the members id.", delete_after = 10)
 
+        elif isinstance(error, disnake.Forbidden):
+            #print("should be here")
+            #print(error.code)
+            if error.code == 50013:
+                #print("done goofeds")
+                await ctx.author.send("I seem to be missing permissions to speak in that channel, please contact an administrator")
+                return
+
         else:
-            print("this is the else statement")
             # All other Errors not returned come here. And we can just print the default TraceBack.
-            print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
-            traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            print('Ignoring exception in command {}:'.format(ctx.command), error, file=sys.stderr)
+            #traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 def setup(client):
     client.add_cog(CommandErrorHandler(client))
