@@ -1,5 +1,7 @@
 import json
 import os
+import psutil
+import platform
 
 import disnake
 import pyrebase
@@ -27,6 +29,26 @@ class Dev(commands.Cog):
             return
         except Exception as e:
             print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+
+    @commands.command()
+    @commands.is_owner()
+    async def system_info(self, ctx):
+        # Get system information
+        system_info = {
+            "Operating System": platform.system(),
+            "Release Version": platform.release(),
+            "CPU Usage": f"{psutil.cpu_percent()}%",
+            "RAM Usage": f"{psutil.virtual_memory().percent}%",
+            "Disk Usage": f"{psutil.disk_usage('/').percent}%",
+        }
+
+        # Create an embed to display the information
+        embed = disnake.Embed(title="System Information", color=disnake.Color.blue())
+
+        for key, value in system_info.items():
+            embed.add_field(name=key, value=value, inline=False)
+
+        await ctx.send(embed=embed)
 
     
     @commands.command()
@@ -76,6 +98,7 @@ class Dev(commands.Cog):
     @commands.command(pass_context=True)
     @commands.is_owner()
     async def say(self, ctx, *, message):
+        await ctx.message.delete()
         try:
             if message != None:
                 
@@ -84,7 +107,7 @@ class Dev(commands.Cog):
                 else:
                     msg = "You can\'t make me say that"
                 
-                await ctx.message.delete()
+                
                 await ctx.send(msg)
             else: 
                 await ctx.send("Please tell me what to say")
@@ -96,7 +119,7 @@ class Dev(commands.Cog):
         
     @commands.command(name='eval', pass_context=True)
     @commands.is_owner()
-    async def eval_command(self, ctx, *, expr):
+    async def eval(self, ctx, *, expr):
         try:
             if 'await ' in expr:
                 new_expr = expr.replace('await ', '')
@@ -107,7 +130,7 @@ class Dev(commands.Cog):
         except commands.NotOwner:
             return
         except Exception as e:
-            print(e.__traceback__)
+            raise e
             await ctx.send("Didn't work.")
 
     @commands.command(name="toggle", pass_context=True)
