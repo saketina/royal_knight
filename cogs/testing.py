@@ -11,6 +11,8 @@ from disnake.ext import commands
 from disnake.ext.commands import has_permissions
 from disnake.ui import Button, View
 from disnake.utils import get
+from PIL import Image
+from io import BytesIO
 
 # //TODO ALL/transfer finished commands to appropriate cogs
 
@@ -44,6 +46,35 @@ class Testing(commands.Cog):
         self.current_page = 0
         self.pages = {}
         self.pages_list = {}
+
+    @commands.command()
+    async def gif_redo(self, ctx):
+        rp = os.listdir("./RP_OLD")
+        for command in rp:
+            all_gifs = os.listdir(f"./RP_OLD/{command}")
+            counter = 0
+            for g in all_gifs:
+                counter += 1
+                """
+                gif = Image.open(f"./RP_OLD/{command}/{g}")
+                selected_gif = gif.resize((500, 264))
+                #gif_bytes = selected_gif.tobytes()
+                path = f"./RP/{command}/{command}({counter}).gif"
+                selected_gif.save(path, format="GIF", save_all=True)
+                """
+
+                gif_image = Image.open(f"./RP_OLD/{command}/{g}")
+                image_bytes = BytesIO()
+                gif_image.resize((500, 264))
+                gif_image.tobytes()
+                gif_image.save(image_bytes, format="GIF", save_all=True)
+                image_bytes.seek(0)
+                #print(image_bytes)
+                path = f"./RP/{command}/{command}({counter}).gif"
+                #image_bytes.save(path, format="GIF", save_all=True)
+                BytesIO.write(gif_image)
+                gif_image.close()
+        print("done")
 
     @commands.command()
     async def gif_test(self, ctx):
