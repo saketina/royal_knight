@@ -170,18 +170,18 @@ class Roleplay(commands.Cog):
             gifs = self.gifs[ctx.command.qualified_name] = loaded_gifs
             #print("gifs preloaded in command/bite")
             
-        #rnd_gif = choice(self.gifs(ctx.command.name))
-        #print(self.gifs)
+        rnd_gif = choice(loaded_gifs)
+        print(self.gifs)
 
         try:
             last = self.rp_last[ctx.command.qualified_name]
         except:
             last = ""
 
-        #while rnd_gif == last:
-        #    rnd_gif = choice(self.gifs)
+        while rnd_gif == last:
+            rnd_gif = choice(self.gifs)
 
-        gif_im = loaded_gifs[0]
+        gif_im = rnd_gif
         #image_byt = ""
         image_byt = BytesIO()
         #gif_im.resize((500, 264))
