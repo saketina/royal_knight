@@ -98,7 +98,7 @@ class Dev(commands.Cog):
     @commands.command(pass_context=True)
     @commands.is_owner()
     async def say(self, ctx, *, message):
-        await ctx.message.delete()
+        #await ctx.message.delete()
         try:
             if message != None:
                 
@@ -116,6 +116,10 @@ class Dev(commands.Cog):
         except Exception as e:
             print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
 
+    @say.before_invoke
+    async def say_before(self, ctx):
+        await ctx.message.delete()
+        print("deleted message before invoke")
         
     @commands.command(name='eval', pass_context=True)
     @commands.is_owner()
