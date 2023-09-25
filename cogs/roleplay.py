@@ -191,7 +191,7 @@ class Roleplay(commands.Cog):
         #print(image_byt)
 
         
-        file = disnake.File(image_byt, filename="gif.gif")
+        file = disnake.File(rb=image_byt, filename="gif.gif")
 
         kiss_embed = disnake.Embed(
             title="",
