@@ -44,6 +44,13 @@ class Test(commands.Cog):
         self.rp_last = None
         #self.gifs = {}  # Dictionary to store paths of GIFs
 
+    def send_embed(self, title=None, description=None):
+        embed = disnake.Embed(
+            title=title,
+            description=description,
+            color=disnake.Color.dark_red()
+        )
+
     def load_gifs(self, gif_folder):
         loaded_gifs = {}  # Create a dictionary to store paths of GIFs
 
