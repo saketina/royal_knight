@@ -50,7 +50,7 @@ def per_cmd_loader(folder):
         #image_byt = ""
         #image_byt = BytesIO()
         gif_im.resize((500, 264))
-        gif_im.tobytes()
+        #gif_im.tobytes()
         #gif_im.save(image_byt, format="GIF", save_all=True)
         #image_byt.seek(0)
         #print(gif_im)
@@ -169,71 +169,73 @@ class Roleplay(commands.Cog):
             #print(f"loaded gifs in {ctx.command.qualified_name}")
             gifs = self.gifs[ctx.command.qualified_name] = loaded_gifs
             #print("gifs preloaded in command/bite")
+
+        async with ctx.typing():
+            rnd_gif = choice(loaded_gifs)
+            #print(self.gifs)
+
+            try:
+                last = self.rp_last[ctx.command.qualified_name]
+            except:
+                last = ""
+
+            while rnd_gif == last:
+                rnd_gif = choice(self.gifs)
+
+            gif_im = rnd_gif
+            #image_byt = ""
+            image_byt = BytesIO()
+            #gif_im.resize((500, 264))
+            #gif_im.tobytes()
+            #print(gif_im)
+            gif = gif_im.save(image_byt, format="GIF", save_all=True)
+            image_byt.seek(0)
+            #print(image_byt)
+
             
-        rnd_gif = choice(loaded_gifs)
-        print(self.gifs)
+            file = disnake.File(image_byt, filename="gif.gif")
 
-        try:
-            last = self.rp_last[ctx.command.qualified_name]
-        except:
-            last = ""
+            kiss_embed = disnake.Embed(
+                title="",
+                description=f"{ctx.author.mention} bit {target}",
+            )
+            kiss_embed.set_image(url="attachment://gif.gif")
 
-        while rnd_gif == last:
-            rnd_gif = choice(self.gifs)
+            rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
+            if rp_db == None:
+                db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
+            elif rp_db != None:
+                p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
+                db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
+            else:
+                await ctx.send("Rarest error ever, please contact developer!!!")
 
-        gif_im = rnd_gif
-        #image_byt = ""
-        image_byt = BytesIO()
-        #gif_im.resize((500, 264))
-        #gif_im.tobytes()
-        gif = gif_im.save(image_byt, format="GIF", save_all=True)
-        image_byt.seek(0)
-        #print(image_byt)
+            self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
+            other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
 
-        
-        file = disnake.File(rb=image_byt, filename="gif.gif")
+            if other_num == None:
+                other_time = "times"
+                other_num = 0
+            elif other_num > 1:
+                other_time = "times"
+            else:
+                other_time = "time"
+                
+            if self_num == None:
+                self_time = "times"
+                self_num = 0
+            elif self_num > 1:
+                self_time = "times"
+            else:
+                self_time = "time"
 
-        kiss_embed = disnake.Embed(
-            title="",
-            description=f"{ctx.author.mention} bit {target}",
-        )
-        kiss_embed.set_image(url="attachment://gif.gif")
-
-        rp_db = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val()
-        if rp_db == None:
-            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(1)
-        elif rp_db != None:
-            p = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).get().val() + 1
-            db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child(db_target).set(p)
-        else:
-            await ctx.send("Rarest error ever, please contact developer!!!")
-
-        self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
-        other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
-
-        if other_num == None:
-            other_time = "times"
-            other_num = 0
-        elif other_num > 1:
-            other_time = "times"
-        else:
-            other_time = "time"
-            
-        if self_num == None:
-            self_time = "times"
-            self_num = 0
-        elif self_num > 1:
-            self_time = "times"
-        else:
-            self_time = "time"
-
-        kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
-        self.rp_last: ctx.command.name=gif
+            kiss_embed.set_footer(text=f"Others: {other_num} {other_time}\nThemselves: {self_num} {self_time}")
+            self.rp_last: ctx.command.name=gif
         await ctx.send(embed=kiss_embed, file=file)
         image_byt.close()
         #rnd_gif.close()
         end_time = time.monotonic()
-        print(f"bite\n{timedelta(seconds = end_time - start_time)}")
+        print(f"{ctx.command.qualified_name}\n{timedelta(seconds = end_time - start_time)}")
 
     @commands.command(pass_context=True)
     async def blush(self, ctx, member:disnake.Member=None):
