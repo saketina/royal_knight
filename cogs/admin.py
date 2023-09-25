@@ -9,7 +9,8 @@ class Admin(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
-    async def load(self, ctx, cog=None):
+    async def load(self, ctx, input=None):
+        cog = input.lower()
         if cog == None:
             emb = disnake.Embed(
                 title="Load command help",
@@ -34,7 +35,8 @@ class Admin(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
-    async def unload(self, ctx, cog=None):
+    async def unload(self, ctx, input=None):
+        cog = input.lower()
         if cog != None:
             try:
                 self.client.unload_extension(f"cogs.{cog}")
@@ -60,7 +62,8 @@ class Admin(commands.Cog):
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
-    async def reload(self, ctx, cog=None):
+    async def reload(self, ctx, input=None):
+        cog = input.lower()
         if cog != None:
             try:
                 self.client.reload_extension(f"cogs.{cog}")
