@@ -630,7 +630,7 @@ class Testing(commands.Cog):
                                     reason = ban["reason"]
                                     
                                     embed = disnake.Embed(
-                                        title=f"{user.name}\'s Warnings",
+                                        title=f"{user.name}\'s Bans",
                                         color=disnake.Color.dark_red()
                                     )
                                     embed.add_field(
