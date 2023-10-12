@@ -106,9 +106,6 @@ class CommandErrorHandler(commands.Cog):
 
 def setup(client):
     client.add_cog(CommandErrorHandler(client))
-
-def setup(client):
-    client.add_cog(CommandErrorHandler(client))
     print(f"Cog: GAH - loaded.")
 
 def teardown(client):
