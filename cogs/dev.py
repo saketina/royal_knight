@@ -98,7 +98,7 @@ class Dev(commands.Cog):
     @commands.command(pass_context=True)
     @commands.is_owner()
     async def say(self, ctx, *, message):
-        # await ctx.message.delete()
+        #await ctx.message.delete()
         try:
             if message != None:
                 
