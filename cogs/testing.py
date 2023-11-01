@@ -1162,11 +1162,16 @@ class Testing(commands.Cog):
                 MyView.message = await ctx.send(embed=warnings_embed, view=view_select)
             else:
                 await ctx.send("I see no moderations")
-    """
+    
     @commands.command()
-    async def staffteam(self, ctx, option=None, role: disnake.Role=None):
+    async def staffteam(self, ctx, option=None):
         members = disnake.Member
-        admin = get(ctx.guild.roles, id=966478164924710932)
+        owner = get(ctx.guild.roles, id=706540593865556071)
+        co_owner = get(ctx.guild.roles, id=687228928565444800)
+        admin = get(ctx.guild.roles, id=706161806426767470)
+        head_mod = get(ctx.guild.roles, id=801614132771160095)
+        mod = get(ctx.guild.roles, id=747680315257913384)
+        trial = get(ctx.guild.roles, id=870431101955493999)
         if option == None:
             staff_help = disnake.Embed(
                 title= "Command help",
@@ -1182,18 +1187,44 @@ class Testing(commands.Cog):
             )
             await ctx.send(embed=staff_help)
         elif option=="open":
-            admin_embed = disnake.Embed(
+            embed = disnake.Embed(
                 title="Staff Team",
                 color=disnake.Color.dark_red()
             )
-            admin_embed.add_field(
-                name="Admin",
-                value="\n".join(str(member.mention) for member in admin.members)
+            embed.add_field(
+                name="Owners",
+                value="\n".join(str(member.mention) for member in owner.members),
+                inline=False
             )
-            await ctx.send(embed=admin_embed)
+            embed.add_field(
+                name="Co-Owners",
+                value="\n".join(str(member.mention) for member in co_owner.members),
+                inline=False
+            )
+            embed.add_field(
+                name="Admins",
+                value="\n".join(str(member.mention) for member in admin.members),
+                inline=False
+            )
+            embed.add_field(
+                name="Head moderators",
+                value="\n".join(str(member.mention) for member in head_mod.members),
+                inline=False
+            )
+            embed.add_field(
+                name="Moderators",
+                value="\n".join(str(member.mention) for member in mod.members),
+                inline=False
+            )
+            embed.add_field(
+                name="Trial moderators",
+                value="\n".join(str(member.mention) for member in trial.members),
+                inline=False
+            )
+            await ctx.send(embed=embed)
         else:
             await ctx.send("\n".join(str(member) for member in role.members))
-    """
+    
 def setup(client):
     client.add_cog(Testing(client))
     print("Cog: Testing - loaded")
