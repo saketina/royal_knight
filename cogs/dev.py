@@ -95,31 +95,7 @@ class Dev(commands.Cog):
         except Exception as e:
             print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
 
-    @commands.command(pass_context=True)
-    @commands.is_owner()
-    async def say(self, ctx, *, message):
-        #await ctx.message.delete()
-        try:
-            if message != None:
-                
-                if str(ctx.guild.default_role) not in message and "@here" not in message:
-                    msg = message
-                else:
-                    msg = "You can\'t make me say that"
-                
-                
-                await ctx.send(msg)
-            else: 
-                await ctx.send("Please tell me what to say")
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-
-    @say.before_invoke
-    async def say_before(self, ctx):
-        await ctx.message.delete()
-        print("deleted message before invoke")
+    
         
     @commands.command(name='eval', pass_context=True)
     @commands.is_owner()
@@ -136,30 +112,6 @@ class Dev(commands.Cog):
         except Exception as e:
             raise e
             await ctx.send("Didn't work.")
-
-    @commands.command(name="toggle", pass_context=True)
-    @commands.is_owner()
-    async def toggle(self, ctx, *, command):
-        try:
-            command = self.client.get_command(command)
-
-            if command is None:
-                embed = disnake.Embed(title="ERROR", description="I can't find a command with that name!", color=0xff0000)
-                await ctx.send(embed=embed)
-
-            elif ctx.command == command:
-                embed = disnake.Embed(title="ERROR", description="You cannot disable this command.", color=0xff0000)
-                await ctx.send(embed=embed)
-
-            else:
-                command.enabled = not command.enabled
-                ternary = "enabled" if command.enabled else "disabled"
-                embed = disnake.Embed(title="Toggle", description=f"I have {ternary} {command.qualified_name} for you!", color=0xff00c8)
-                await ctx.send(embed=embed)
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
 
     @commands.command(pass_context=True)
     @commands.is_owner()
