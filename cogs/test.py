@@ -7,6 +7,7 @@ from PIL import Image
 from io import BytesIO
 
 gif_storage={}
+sniped_messages = {}
 
 def per_cmd_loader(folder):
     loaded_gifs = {}
@@ -161,5 +162,6 @@ class Test(commands.Cog):
                     raise e
             return
             ## BUG: this piece of shit works idk how or why, the gifs are moving but on the original rp cmd the embeds arent moving at all
+
 def setup(bot):
     bot.add_cog(Test(bot))
