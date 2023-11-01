@@ -10,11 +10,99 @@ firebase = pyrebase.initialize_app(
     json.load(open("firebase_config.json", "r")))
 db = firebase.database()
 
+sniped_messages = {}
 
 class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    @commands.command(pass_context=True)
+    async def say(self, ctx, *, message=None):
+        #await ctx.message.delete()
+        try:
+            if message != None:
+                
+                if str(ctx.guild.default_role) not in message and "@here" not in message:
+                    msg = message
+                else:
+                    msg = "You can\'t make me say that"
+                
+                
+                await ctx.send(msg)
+            else: 
+                await ctx.send("Please tell me what to say")
+        except commands.NotOwner:
+            return
+        except Exception as e:
+            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+
+    @say.before_invoke
+    async def say_before(self, ctx):
+        await ctx.message.delete()
+        print("deleted message before invoke")
+    
+    @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        sniped_messages[message.channel.id] = (message.content, message.author, message.author.display_avatar.url)
+
+    @commands.command(
+        name="snipe",
+        description="Retrieve the last deleted message in this channel."
+    )
+    async def snipe(self, ctx):
+        channel_id = ctx.channel.id
+        if channel_id in sniped_messages:
+            message, author, avatar_url = sniped_messages[channel_id]
+            embed = disnake.Embed(title="Sniped", description=message, color=disnake.Color.dark_red())
+            embed.set_author(name=author.display_name, icon_url=author.display_avatar.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send(
+                embed=disnake.Embed(title="Sniped", description=f"{ctx.author.mention}: There are **no deleted messages** cached on **this server**", color=disnake.Color.dark_red())
+            )    
+    
+    @commands.command()
+    async def recommend(self, ctx):
+        await ctx.send("Say anything you wish to be added to the bot. It might take a while...")
+        def check(m):
+            return m.author == ctx.author and m.channel == ctx.channel
+        msg = await self.client.wait_for("message", check=check)
+         
+        bug_channel = self.client.get_channel(1169246467182055444)
+        
+        embed = disnake.Embed(
+            title="New recommendation!",
+            description=f"From: {ctx.author}\nID: {ctx.author.id}",
+            color = disnake.Color.red()
+        )
+        embed.add_field(
+            name="Recommendation description",
+            value=msg.content
+        )
+        await bug_channel.send(embed=embed)
+        await ctx.send("Thank you for your recommendation!")
+
+    @commands.command()
+    async def bug(self, ctx):
+        await ctx.send("Please tell me about the bug, i will contact the developer regarding your problem.")
+        def check(m):
+            return m.author == ctx.author and m.channel == ctx.channel
+        msg = await self.client.wait_for("message", check=check)
+         
+        bug_channel = self.client.get_channel(965416777838391336)
+        
+        embed = disnake.Embed(
+            title="New bug!",
+            description=f"From: {ctx.author}\nID: {ctx.author.id}",
+            color = disnake.Color.red()
+        )
+        embed.add_field(
+            name="Bug description",
+            value=msg.content
+        )
+        await bug_channel.send(embed=embed)
+        await ctx.send("Thank you for your help!\nHave a nice day.")
+        
     @commands.slash_command(name = "hello", description="Greets the user.")
     async def hello(self, ctx):
         await ctx.send("Hello! Pleased to meet you.")
@@ -80,7 +168,7 @@ class Utility(commands.Cog):
     @commands.guild_only()
     async def poll(self, ctx, *, question = None):
         if question != None:
-            time=20
+            time=25
             yes_mark="✅"
             no_mark="❎"
             poll_embed = disnake.Embed(
@@ -97,8 +185,9 @@ class Utility(commands.Cog):
             vote_yes = []
             vote_no = []
             vote = {'yes': [], 'no': []}
-            bot = await self.client.fetch_user(850019720648589352)
-            bot_name = bot.display_name
+
+            bot_id = self.client.user.id
+            print(bot_id)
 
             await poll_message.add_reaction(yes_mark)
             await poll_message.add_reaction(no_mark)
@@ -112,6 +201,8 @@ class Utility(commands.Cog):
                     reactions = await reaction.users().flatten()
 
                     for member in reactions:
+                        if member.display_name == bot_id:
+                            return
                         vote_yes.append(member.display_name)
                         yx = slice(0, 1)
 
@@ -119,6 +210,8 @@ class Utility(commands.Cog):
                     reactions = await reaction.users().flatten()
 
                     for member in reactions:
+                        if member.id == bot_id:
+                            return
                         vote_no.append(member.display_name)
                         nx = slice(0, 1)
 

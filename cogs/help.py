@@ -36,6 +36,10 @@ class Help(commands.Cog):
             color = disnake.Color.dark_red()
             )
         emb.add_field(
+            name="Toggle",
+            value="```k.toggle <command_name>```"
+        )
+        emb.add_field(
             name="Load",
             value="```k.load <category_name>```",
             inline=False
@@ -179,6 +183,10 @@ class Help(commands.Cog):
             color = disnake.Color.dark_red()
             )
         emb.add_field(
+            name="Bug",
+            value="```k.bug```"
+        )
+        emb.add_field(
             name="Ping",
             value="```k.ping```",
             inline=False
@@ -188,6 +196,21 @@ class Help(commands.Cog):
             value="```k.poll [time] [question]```",
             inline=False
             )
+        emb.add_field(
+            name="Recommend",
+            value="```k.recommend```",
+            inline=False
+        )
+        emb.add_field(
+            name="Say",
+            value="```k.say [text]```",
+            inline=False
+        )
+        emb.add_field(
+            name="Snipe",
+            value="```k.snipe```",
+            inline=False
+        )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
 
