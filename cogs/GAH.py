@@ -59,6 +59,16 @@ class CommandErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.CheckFailure):
             return
+        
+        # For this error handler we check if the user has truly set a role in args
+        elif isinstance(error, commands.RoleNotFound):
+            await ctx.send(error)
+        
+        elif isinstance(error, commands.MemberNotFound):
+            await ctx.send(error)
+        
+        elif isinstance(error, commands.UserNotFound):
+            await ctx.send(error)
 
         # For this error handler we check if the command has been disabled
         elif isinstance(error, commands.DisabledCommand):
