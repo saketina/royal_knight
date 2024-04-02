@@ -5,7 +5,6 @@ from datetime import datetime
 from io import BytesIO
 
 import disnake
-import requests
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
 from PIL import Image
