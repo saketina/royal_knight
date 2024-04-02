@@ -77,6 +77,59 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
         
+    # // TODO add checks if roles exist in list(multiple-role-sys)
+    # // TODO when check is complete store roles unable to process to another list and output them to the user
+    @commands.command()
+    @commands.guild_only()
+    async def role(self, ctx, action=None, command=None, *roles:disnake.Role):
+        command_list = ["ban", "unban", "kick", "mute", "unmute", "warn", "purge"]
+
+        if action == "add":
+            pass
+        elif action == "remove":
+            pass
+        else:
+            return
+        if command and roles == None:
+            embed = disnake.Embed(
+                title = "insert help cmd",
+                description = "work in progress...",
+                color = disnake.Color.dark_red()
+            )
+            await ctx.send(embed=embed)
+        elif command not in command_list:
+            await ctx.send("Command not found...")
+        elif action == "add":
+            if len(roles) == 1:
+                temp = db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).get().val()
+                print(temp)
+                if temp == None:
+                    db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).set(roles[0].id)
+                elif roles[0].id == temp:
+                    await ctx.send(f"Role already set to {command}.")
+                    return
+                else:
+                    temp.append(roles[0].id)
+                    db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).set(temp)
+                await ctx.send(f"Roles set to {command}")
+            else:
+                await ctx.send("started list = multiple")
+                temp = []
+                for role in roles:
+                    temp.append(role.id)
+                db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).set(temp)
+                await ctx.send(f"Roles set to {command}")
+        elif action == "remove":
+            f = db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).get().val()
+            if f != None:
+                for role in roles:
+                    f.pop(role.id)
+                db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).set(temp)
+                await ctx.send(f"Roles removed from {command}")
+            else:
+                await ctx.send("No roles to remove.")
+        else:
+            await ctx.send(f"Sum ting wong")
 
     @commands.command()
     @commands.guild_only()
@@ -199,7 +252,8 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
-    async def ban(self, ctx, member:disnake.Member=None, *, reason=None):
+    # // TODO add check if user is banned
+    async def ban(self, ctx, member:disnake.User=None, *, reason=None):
         try:
             if member==None:
                 emb = disnake.Embed(
@@ -238,9 +292,8 @@ class Moderation(commands.Cog):
                         color = disnake.Color.dark_red()
                         )
                     embed.add_field(
-                        name = "New Ban",
-                        value = f"Ban ID: ``{bn_amount}``\n"
-                                f"Moderator: {ctx.author.mention}\n"
+                        name = "Ban info",
+                        value = f"Moderator: {ctx.author.mention}\n"
                                 f"Reason: **``{rsn}``**\n"
                                 f"At: **``{dt_string}``**",
                         inline = True
@@ -264,9 +317,8 @@ class Moderation(commands.Cog):
                         color = disnake.Color.dark_red()
                     )
                     embed.add_field(
-                        name = f"New Ban",
-                        value = f"Ban ID: ``{bn_amount}``\n"
-                                f"Moderator: {ctx.author.mention}\n"
+                        name = f"Ban Info",
+                        value = f"Moderator: {ctx.author.mention}\n"
                                 f"Reason: **`{rsn}`**\n"
                                 f"At: **``{dt_string}``**"
                     )
@@ -321,9 +373,8 @@ class Moderation(commands.Cog):
                         color = disnake.Color.dark_red()
                         )
                     embed.add_field(
-                        name = "New Kick",
-                        value = f"Kick ID: ``{kck_amount}``\n"
-                                f"Moderator: {ctx.author.mention}\n"
+                        name = "Kick info",
+                        value = f"Moderator: {ctx.author.mention}\n"
                                 f"Reason: **``{rsn}``**\n"
                                 f"At: **``{dt_string}``**",
                         inline = True
@@ -348,9 +399,8 @@ class Moderation(commands.Cog):
                         color = disnake.Color.dark_red()
                     )
                     embed.add_field(
-                        name = f"New Kick",
-                        value = f"Kick ID: ``{kck_amount}``\n"
-                                f"Moderator: {ctx.author.mention}\n"
+                        name = f"Kick Info",
+                        value = f"Moderator: {ctx.author.mention}\n"
                                 f"Reason: **`{rsn}`**\n"
                                 f"At: **``{dt_string}``**"
                     )
