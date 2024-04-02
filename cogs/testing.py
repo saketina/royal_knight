@@ -1162,68 +1162,174 @@ class Testing(commands.Cog):
                 MyView.message = await ctx.send(embed=warnings_embed, view=view_select)
             else:
                 await ctx.send("I see no moderations")
+
+    @commands.command()
+    ## TODO FEATURE-ADD staff: create, promote, update, demote
+    ## TODO link to database
+    async def staff(self, ctx, option=None):
+        auth_roles = []
+        for role in ctx.author.roles:
+            auth_roles.append(role.id)
+
+        if 706162869783363725 not in auth_roles:
+            return
+        else:
+            ## staff profile here
+            embed = disnake.Embed(
+                title= f"{ctx.author.nick}'s staff profile",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="Staff info",
+                value="Staff since: forever"
+            )
+            embed.set_author(
+                name=ctx.author.nick,
+                icon_url=ctx.author.avatar
+            )
+            await ctx.send(embed=embed)
     
     @commands.command()
     async def staffteam(self, ctx, option=None):
         members = disnake.Member
-        owner = get(ctx.guild.roles, id=706540593865556071)
-        co_owner = get(ctx.guild.roles, id=687228928565444800)
-        admin = get(ctx.guild.roles, id=706161806426767470)
-        head_mod = get(ctx.guild.roles, id=801614132771160095)
-        mod = get(ctx.guild.roles, id=747680315257913384)
-        trial = get(ctx.guild.roles, id=870431101955493999)
+        role = ctx.guild.get_role(706162869783363725)
+        role_list = [
+            ctx.guild.get_role(706540593865556071), ## owner
+            ctx.guild.get_role(687228928565444800), ## co-owner
+            ctx.guild.get_role(706161806426767470), ## admin
+            ctx.guild.get_role(801614132771160095), ## head mod
+            ctx.guild.get_role(747680315257913384), ## mod
+            ctx.guild.get_role(870431101955493999), ## trial
+        ]
+        #print(role_list)
+        
         if option == None:
-            staff_help = disnake.Embed(
-                title= "Command help",
-                description="``k.staffteam [option]``",
-                color=disnake.Color.dark_red()
-            )
-
-            staff_help.add_field(
-                name="Options",
-                value="``Update\n"
-                      "Open\n"
-                      "Remove``\n"
-            )
-            await ctx.send(embed=staff_help)
-        elif option=="open":
+            def returnNotMatches(a, b):
+                temp=[]
+                for x in a:
+                    if x in b:
+                        pass
+                    else:
+                        temp.append(x)
+                return temp
             embed = disnake.Embed(
                 title="Staff Team",
                 color=disnake.Color.dark_red()
             )
             embed.add_field(
                 name="Owners",
-                value="\n".join(str(member.mention) for member in owner.members),
+                value="\n".join(str(member.mention) for member in role_list[0].members),
                 inline=False
             )
             embed.add_field(
                 name="Co-Owners",
-                value="\n".join(str(member.mention) for member in co_owner.members),
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[1].members, role_list[0].members)),
                 inline=False
             )
             embed.add_field(
                 name="Admins",
-                value="\n".join(str(member.mention) for member in admin.members),
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[2].members, role_list[1].members)),
                 inline=False
             )
             embed.add_field(
                 name="Head moderators",
-                value="\n".join(str(member.mention) for member in head_mod.members),
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[3].members, role_list[2].members)),
                 inline=False
             )
             embed.add_field(
                 name="Moderators",
-                value="\n".join(str(member.mention) for member in mod.members),
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[4].members, role_list[3].members)),
                 inline=False
             )
             embed.add_field(
                 name="Trial moderators",
-                value="\n".join(str(member.mention) for member in trial.members),
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[5].members, role_list[4].members)),
                 inline=False
             )
             await ctx.send(embed=embed)
+            
+        elif option=="help":
+            staff_help = disnake.Embed(
+                title= "Command help",
+                description="``k.staffteam [option]``",
+                color=disnake.Color.dark_red()
+            )
+            staff_help.add_field(
+                name="Options",
+                value="``help\nowners\nco-owners\nadmins\nhmods\nmods\ntrials``"
+            )
+            await ctx.send(embed=staff_help)
+        elif option=="owners":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="Owners",
+                value="\n".join(str(member.mention) for member in role_list[0].members),
+                inline=False
+            )
+        elif option=="co-owners":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="Co-Owners",
+                value="\n".join(str(member.mention) for member in role_list[1].members),
+                inline=False
+            )
+        elif option=="admins":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="Admins",
+                value="\n".join(str(member.mention) for member in role_list[2].members),
+                inline=False
+            )
+        elif option=="hmods":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="Head Moderators",
+                value="\n".join(str(member.mention) for member in role_list[3].members),
+                inline=False
+            )
+        elif option=="mods":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="Moderators",
+                value="\n".join(str(member.mention) for member in role_list[4].members),
+                inline=False
+            )
+        elif option=="trials":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="Trial Moderators",
+                value="\n".join(str(member.mention) for member in role_list[0].members),
+                inline=False
+            )
         else:
-            await ctx.send("\n".join(str(member) for member in role.members))
+            staff_help = disnake.Embed(
+                title= "Command help",
+                description="``k.staffteam [option]``",
+                color=disnake.Color.dark_red()
+            )
+            staff_help.add_field(
+                name="Options",
+                value="``help\nowners\nco-owners\nadmins\nhmods\nmods\ntrials``"
+            )
+            await ctx.send(embed=staff_help)
     
 def setup(client):
     client.add_cog(Testing(client))

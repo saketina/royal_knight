@@ -10,15 +10,14 @@ from disnake.ext import commands
 from disnake.ext.commands import guild_only
 from PIL import Image
 
-# //TODO PROFILE/add badges
-# //TODO PROFILE/add if Member is a booster or has nitro
-
 class User(commands.Cog):
 
     def __init__(self, client):
         self.client=client
 
-
+    # //TODO PROFILE/add badges
+    # //TODO PROFILE/add if Member is a booster or has nitro
+    # //TODO PROFILE/add checks if member is on mobile or on pc
     @commands.command(pass_context=True)
     @commands.guild_only()
     async def profile(self, ctx, user: disnake.Member = None):

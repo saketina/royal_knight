@@ -22,12 +22,6 @@ cog_counter = 0
 
 intents = disnake.Intents.all()
 
-intents.members = True
-intents.guilds = True
-intents.message_content = True
-intents.messages = True
-
-
 def get_prefix(client, message):
     prefixes = ["k.", "K.", "<@850019720648589352>"]
     return commands.when_mentioned_or(*prefixes)(client, message)
@@ -57,7 +51,7 @@ async def on_ready():
 initial_cogs = [
     #"cogs.afk",
     "cogs.admin",
-    "cogs.anime",
+    #"cogs.anime",
     #"cogs.counters",
     "cogs.fun",
     "cogs.gah",
@@ -88,7 +82,7 @@ if cog_counter >= len(initial_cogs):
         os.system("cls")
     except:
         os.system("clear")
-    os.system("title Karma Bot: STARTED")
+    os.system("title Royal Bot: STARTED")
 else:
     print("\nLoading one or more cogs failed...\n")
     time.sleep(5)
@@ -96,6 +90,6 @@ else:
         os.system("cls")
     except:
         os.system("clear")
-    os.system("title Karma Bot: ERROR IN A COG")
+    os.system("title Royal Bot: ERROR IN A COG")
 
 client.run(config("token"), reconnect=True)
