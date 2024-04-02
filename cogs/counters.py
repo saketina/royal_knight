@@ -126,6 +126,11 @@ class Counters(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         msgCounter = await self.client.fetch_channel(message_counter_id)
+        if message.content == "80085":
+            await message.channel.send("Wow! You found them.")
+            await asyncio.sleep(4)
+            await message.channel.send("Sadly not in real life...")
+            pass
 
         try:
             if not isinstance(message, disnake.DMChannel):

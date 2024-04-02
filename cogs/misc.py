@@ -9,13 +9,6 @@ class Misc(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if message.content == "80085":
-            await message.channel.send("Wow! You found them.")
-            await asyncio.sleep(4)
-            await message.channel.send("Sadly not in real life...")
-
     @commands.command(pass_context=True)
     #@has_permissions(administrator=True)
     async def status(self, ctx, activity=None, *, text=None):
