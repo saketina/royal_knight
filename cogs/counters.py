@@ -6,7 +6,6 @@ import disnake
 import pyrebase
 from disnake.ext import commands, tasks
 
-
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
 

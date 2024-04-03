@@ -1,9 +1,9 @@
 import json
 import os
-import psutil
 import platform
 
 import disnake
+import psutil
 import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import is_owner

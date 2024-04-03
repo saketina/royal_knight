@@ -1,16 +1,15 @@
 import json
 import os
+import time
+from datetime import timedelta
+from io import BytesIO
 from random import choice
 
 import disnake
+import PIL
 import pyrebase
 from disnake.ext import commands
 from PIL import Image
-import PIL
-from io import BytesIO
-
-import time
-from datetime import timedelta
 
 # //TODO ALL/make different gifs displayed if ctx.author used the command on themselves
 # //TODO resize gifs to 498x278
