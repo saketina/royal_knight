@@ -12,7 +12,7 @@ from disnake.ext import commands
 
 # TODO Add a notes tab for moderations similar to reason
 
-firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
+firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")

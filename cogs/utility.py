@@ -7,7 +7,7 @@ from disnake.ext import commands
 from disnake.ext.commands import guild_only
 
 firebase = pyrebase.initialize_app(
-    json.load(open("firebase_config.json", "r")))
+    json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 sniped_messages = {}

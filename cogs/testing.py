@@ -16,7 +16,7 @@ from io import BytesIO
 
 # TODO ALL/transfer finished commands to appropriate cogs
 
-firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
+firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")

@@ -7,7 +7,7 @@ from disnake.ext import commands
 ## TODO: PREFIX_ADD create banned prefixes list
 
 firebase = pyrebase.initialize_app(
-    json.load(open("firebase_config.json", "r")))
+    json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 class Prefix(commands.Cog):

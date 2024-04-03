@@ -15,7 +15,7 @@ from PIL import Image
 # TODO resize gifs to 498x278
 # TODO ADD wave, sip, shoot command
 
-firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
+firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 def load_gif(command, last_gif):
