@@ -1,4 +1,4 @@
-# //TODO search through commands and sync commands to respected categories
+# TODO search through commands and sync commands to respected categories
 
 import disnake
 from disnake.ext import commands

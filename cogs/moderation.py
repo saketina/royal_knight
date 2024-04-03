@@ -7,10 +7,10 @@ import pyrebase
 from disnake import Forbidden
 from disnake.ext import commands
 
-# //TODO ALL/add feature so its easy to add by role perms for commands
-# //TODO ALL/use try and except or GEH(global error handler) for errors
+# TODO ALL/add feature so its easy to add by role perms for commands
+# TODO ALL/use try and except or GEH(global error handler) for errors
 
-# //TODO Add a notes tab for moderations similar to reason
+# TODO Add a notes tab for moderations similar to reason
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -77,8 +77,8 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
         
-    # // TODO add checks if roles exist in list(multiple-role-sys)
-    # // TODO when check is complete store roles unable to process to another list and output them to the user
+    # TODO add checks if roles exist in list(multiple-role-sys)
+    # TODO when check is complete store roles unable to process to another list and output them to the user
     @commands.command()
     @commands.guild_only()
     async def role(self, ctx, action=None, command=None, *roles:disnake.Role):
@@ -252,7 +252,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
-    # // TODO add check if user is banned
+    # TODO add check if user is banned
     async def ban(self, ctx, member:disnake.User=None, *, reason=None):
         try:
             if member==None:

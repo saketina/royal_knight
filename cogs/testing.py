@@ -14,7 +14,7 @@ from disnake.utils import get
 from PIL import Image
 from io import BytesIO
 
-# //TODO ALL/transfer finished commands to appropriate cogs
+# TODO ALL/transfer finished commands to appropriate cogs
 
 firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
 db = firebase.database()
@@ -101,7 +101,7 @@ class Testing(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def mute(self, ctx, member:disnake.Member=None, duration=None, *, reason=None):
-        # //TODO MUTE/add checks if the member is muted or not
+        # TODO MUTE/add checks if the member is muted or not
         if member == None:
             embed = disnake.Embed(
                 title = "MUTE COMMAND",
@@ -233,7 +233,7 @@ class Testing(commands.Cog):
                 )
 
                 time = datetime.timedelta(seconds=int(seconds), minutes=int(minutes), days=int(days), hours=int(hours))
-                # //TODO MUTE_ROLE add a way to dynamically set the role to db
+                # TODO MUTE_ROLE add a way to dynamically set the role to db
                 try:
                     await member.add_roles(1125541804654215350)
                 except:
@@ -255,7 +255,7 @@ class Testing(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def unmute(self, ctx, member:disnake.Member=None):
-        # //TODO UNMUTE/add checks if the member is muted or not
+        # TODO UNMUTE/add checks if the member is muted or not
         if member == None:
             embed = disnake.Embed(
                 title = "UNMUTE COMMAND",

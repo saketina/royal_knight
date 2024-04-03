@@ -6,7 +6,7 @@ import disnake
 from disnake import Forbidden
 from disnake.ext import commands
 
-# //TODO RPS/remove error handler and add try/except
+# TODO RPS/remove error handler and add try/except
 
 
 class Fun(commands.Cog):

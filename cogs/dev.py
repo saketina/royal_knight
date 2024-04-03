@@ -11,7 +11,7 @@ from disnake.ext.commands import is_owner
 ## make cmd dev only
 
 firebase = pyrebase.initialize_app(
-    json.load(open("firebase_config.json", "r")))
+    json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 

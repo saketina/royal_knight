@@ -162,7 +162,7 @@ class Utility(commands.Cog):
         )
         embed.set_thumbnail(ctx.guild.icon)
         await ctx.send(embed=embed)
-        # //TODO SERVERINFO/finish command
+        # TODO SERVERINFO/finish command
 
     @commands.command(pass_context=True)
     @commands.guild_only()
