@@ -48,70 +48,7 @@ class Dev(commands.Cog):
         for key, value in system_info.items():
             embed.add_field(name=key, value=value, inline=False)
 
-        await ctx.send(embed=embed)
-
-    
-    @commands.command()
-    @commands.is_owner()
-    async def delmods(self, ctx, member:disnake.Member=None):
-        try:
-            if member != None:
-                try:
-                    db_warns = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
-                    if db_warns != None:
-                        button_yes = Button(label="Yes", style=disnake.ButtonStyle.green)
-                        button_no = Button(label="No", style=disnake.ButtonStyle.red)
-
-                        async def button_yes_callback(interaction):
-                            if interaction.author.id == ctx.author.id:
-                                db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).remove()
-                                await interaction.response.edit_message(content="All warns have been deleted", view=None)
-                            else:
-                                return
-
-                        async def button_no_callback(interaction):
-                            if interaction.author.id == ctx.author.id:
-                                await interaction.response.edit_message(content="I didn\'t delete any warn", view=None)
-                            else:
-                                return
-
-                        button_yes.callback = button_yes_callback
-                        button_no.callback = button_no_callback
-
-                        view = View(timeout=30)
-                        view.add_item(button_yes)
-                        view.add_item(button_no)
-                        msg = await ctx.send("Are you sure?", view=view)
-
-
-                    else:
-                        await ctx.send("There aren\'t any moderations to delete")
-                except:
-                    await ctx.send("There was an error. Please contact the dev.")
-            else:
-                await ctx.send("Please input a member.")
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-
-    
-        
-    @commands.command(name='eval', pass_context=True)
-    @commands.is_owner()
-    async def eval(self, ctx, *, expr):
-        try:
-            if 'await ' in expr:
-                new_expr = expr.replace('await ', '')
-                ans = await eval(new_expr)
-            else:
-                ans = eval(expr)
-            await ctx.send(f"Answer: {ans}")
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            raise e
-            await ctx.send("Didn't work.")
+        await ctx.send(embed=embed)    
 
     @commands.command(pass_context=True)
     @commands.is_owner()
