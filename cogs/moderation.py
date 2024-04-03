@@ -83,22 +83,22 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     async def role(self, ctx, action=None, command=None, *roles:disnake.Role):
         command_list = ["ban", "unban", "kick", "mute", "unmute", "warn", "purge"]
-
-        if action == "add":
-            pass
-        elif action == "remove":
-            pass
-        else:
-            return
-        if command and roles == None:
-            embed = disnake.Embed(
+        
+        help_embed = disnake.Embed(
                 title = "insert help cmd",
                 description = "work in progress...",
                 color = disnake.Color.dark_red()
             )
+
+        if action != "add" or action != "remove":
+            await ctx.send(embed=help_embed)
+            
+        if command and roles == None:
             await ctx.send(embed=embed)
+            
         elif command not in command_list:
             await ctx.send("Command not found...")
+            
         elif action == "add":
             if len(roles) == 1:
                 temp = db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).get().val()
@@ -119,6 +119,7 @@ class Moderation(commands.Cog):
                     temp.append(role.id)
                 db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).set(temp)
                 await ctx.send(f"Roles set to {command}")
+                
         elif action == "remove":
             f = db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).get().val()
             if f != None:
@@ -126,8 +127,10 @@ class Moderation(commands.Cog):
                     f.pop(role.id)
                 db.child("SETUP").child(ctx.guild.id).child("MODERATION").child(command.lower()).set(temp)
                 await ctx.send(f"Roles removed from {command}")
+                
             else:
                 await ctx.send("No roles to remove.")
+                
         else:
             await ctx.send(f"Sum ting wong")
 
@@ -253,7 +256,7 @@ class Moderation(commands.Cog):
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
     # TODO add check if user is banned
-    async def ban(self, ctx, member:disnake.User=None, *, reason=None):
+    async def ban(self, ctx, member:disnake.User=None, *, reason="For no reason"):
         try:
             if member==None:
                 emb = disnake.Embed(
@@ -267,11 +270,6 @@ class Moderation(commands.Cog):
             elif member==ctx.author:
                 await ctx.send(content = "You can\'t ban yourself", delete_after = 10)
             else:
-                if reason==None:
-                    rsn="no reason"
-                else:
-                    rsn=reason
-
                 f = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).get().val()
                 data = f
                 if data == None:
@@ -281,7 +279,7 @@ class Moderation(commands.Cog):
                         1:({
                             "moderator": str(ctx.author.id),
                             "moderator_name": str(ctx.author.display_name),
-                            "reason": rsn,
+                            "reason": reason,
                             "datetime": dt_string,
                             "proof": ""
                         })
@@ -294,7 +292,7 @@ class Moderation(commands.Cog):
                     embed.add_field(
                         name = "Ban info",
                         value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **``{rsn}``**\n"
+                                f"Reason: **``{reason}``**\n"
                                 f"At: **``{dt_string}``**",
                         inline = True
                         )
@@ -305,7 +303,7 @@ class Moderation(commands.Cog):
                     new_ban = ({
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
-                        "reason": rsn,
+                        "reason": reason,
                         "datetime": dt_string,
                         "proof": ""
                     })
@@ -319,10 +317,10 @@ class Moderation(commands.Cog):
                     embed.add_field(
                         name = f"Ban Info",
                         value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **`{rsn}`**\n"
+                                f"Reason: **`{reason}`**\n"
                                 f"At: **``{dt_string}``**"
                     )
-                await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {rsn}.")
+                await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
                 await ctx.send(embed=embed)
         except Forbidden:
             bot = ctx.guild.get_member(self.client.user.id)
@@ -336,7 +334,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(kick_members=True)
     @commands.check(moderation_check)
-    async def kick(self, ctx, member:disnake.Member=None, *, reason=None):
+    async def kick(self, ctx, member:disnake.Member=None, *, reason="No reason"):
         try:
             if member==None:
                 emb = disnake.Embed(
@@ -348,11 +346,6 @@ class Moderation(commands.Cog):
             elif member==ctx.author:
                 await ctx.send(content = "You can\'t kick yourself", delete_after = 10)
             else:
-                if reason==None:
-                    rsn="no reason"
-                else:
-                    rsn=reason
-
                 f = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).get().val()
                 data = f
                 if data == None:
@@ -362,7 +355,7 @@ class Moderation(commands.Cog):
                         1:({
                             "moderator": str(ctx.author.id),
                             "moderator_name": str(ctx.author.display_name),
-                            "reason": rsn,
+                            "reason": reason,
                             "datetime": dt_string,
                             "proof": ""
                         })
@@ -375,7 +368,7 @@ class Moderation(commands.Cog):
                     embed.add_field(
                         name = "Kick info",
                         value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **``{rsn}``**\n"
+                                f"Reason: **``{reason}``**\n"
                                 f"At: **``{dt_string}``**",
                         inline = True
                         )
@@ -387,7 +380,7 @@ class Moderation(commands.Cog):
                     new_kick = ({
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
-                        "reason": rsn,
+                        "reason": reason,
                         "datetime": dt_string,
                         "proof": ""
                     })
@@ -401,13 +394,13 @@ class Moderation(commands.Cog):
                     embed.add_field(
                         name = f"Kick Info",
                         value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **`{rsn}`**\n"
+                                f"Reason: **`{reason}`**\n"
                                 f"At: **``{dt_string}``**"
                     )
                     #await ctx.send(embed=embed)
-                await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {rsn}.")
+                await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {reason}.")
                 await ctx.send(embed=embed)
-                #await ctx.send(f"{member} was kicked for {rsn}.")
+                #await ctx.send(f"{member} was kicked for {reason}.")
         except Forbidden:
             if disnake.Permissions().kick_members == False:
                 await ctx.send("I don\'t have the required permissions to do that.\nPlease give me either `kick` permissions or `administrator`")
