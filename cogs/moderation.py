@@ -8,7 +8,6 @@ from disnake import Forbidden
 from disnake.ext import commands
 
 # TODO ALL/add feature so its easy to add by role perms for commands
-# TODO ALL/use try and except or GEH(global error handler) for errors
 
 # TODO Add a notes tab for moderations similar to reason
 
@@ -69,7 +68,7 @@ def moderation_check(ctx):
 
             return False
     except AttributeError:
-        return
+        pass
 
 
 
@@ -138,93 +137,76 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.check(moderation_check)
     async def warn(self, ctx, member:disnake.Member=None, *, reason:str=None):
-        try:
-            if member == None:
-                embed = disnake.Embed(
-                    title = "WARN COMMAND",
-                    description = "``k.warn [member_id/@member] [reason]``",
-                    color = disnake.Color.dark_red()
-                    )
-                await ctx.send(embed=embed)
-            elif reason == None:
-                await ctx.send("Please give me a reason.")
-            elif member.id == self.client.user.id:
-                await ctx.send("Please don\'t warn me.")
-            elif member == ctx.author:
-                await ctx.send("You can\'t warn yourself.")
-            #elif member.guild_permissions.manage_messages == True:
-            #    await ctx.send("You can\'t warn that user.")
-            else:
-                f = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
-                data = f
-                if data == None:
-                    wrn_amount = 1
-                    data = ({
-                        "warns": 1,
-                        1:({
-                            "moderator": str(ctx.author.id),
-                            "moderator_name": str(ctx.author.display_name),
-                            "reason": reason,
-                            "datetime": dt_string,
-                            "proof": ""
-                        })
-                    })
-                    db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).set(data)
-                    embed = disnake.Embed(
-                        title = f"{member.name} has been warned",
-                        color = disnake.Color.dark_red()
-                        )
-                    embed.add_field(
-                        name = "Warn",
-                        value = f"Warn ID: ``{wrn_amount}``\n"
-                                f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **``{reason}``**\n"
-                                f"At: **``{dt_string}``**",
-                        inline = True
-                        )
-                    #await ctx.send(embed=embed)
-                else:
-                    wrn_amount = data.get("warns")
-                    wrn_amount += 1
-                    data["warns"]=wrn_amount
-                    new_warn = ({
+        if member == None:
+            embed = disnake.Embed(
+                title = "WARN COMMAND",
+                description = "``k.warn [member_id/@member] [reason]``",
+                color = disnake.Color.dark_red()
+                )
+            await ctx.send(embed=embed)
+        elif reason == None:
+            await ctx.send("Please give me a reason.")
+        elif member.id == self.client.user.id:
+            await ctx.send("Please don\'t warn me.")
+        elif member == ctx.author:
+            await ctx.send("You can\'t warn yourself.")
+        elif member.guild_permissions.manage_messages == True:
+            await ctx.send("You can\'t warn that user.")
+        else:
+            f = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
+            data = f
+            if data == None:
+                wrn_amount = 1
+                data = ({
+                    "warns": 1,
+                    1:({
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
                         "reason": reason,
                         "datetime": dt_string,
                         "proof": ""
                     })
-                    data[wrn_amount]=new_warn
-                    db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).set(data)
-
-                    embed = disnake.Embed(
-                        title = f"{member.name} has been warned",
-                        color = disnake.Color.dark_red()
+                })
+                db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).set(data)
+                embed = disnake.Embed(
+                    title = f"{member.name} has been warned",
+                    color = disnake.Color.dark_red()
                     )
-                    embed.add_field(
-                        name = f"New Warn",
-                        value = f"Warn ID: ``{wrn_amount}``\n"
-                                f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **`{reason}`**\n"
-                                f"At: **``{dt_string}``**"
+                embed.add_field(
+                    name = "Warn",
+                    value = f"Warn ID: ``{wrn_amount}``\n"
+                            f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **``{reason}``**\n"
+                            f"At: **``{dt_string}``**",
+                    inline = True
                     )
-                await ctx.send(embed=embed)
-        except Forbidden:
-            await ctx.send("You can\'t moderate on that user.")
-
-    @warn.error
-    async def warn_handler(self, ctx, error):
-        try:
-            if isinstance(error, commands.NoPrivateMessage):
-                return
-            elif isinstance(error, commands.MissingPermissions):
-                return
-            elif isinstance(error, commands.CheckFailure):
-                return
+                #await ctx.send(embed=embed)
             else:
-                print(error)
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+                wrn_amount = data.get("warns")
+                wrn_amount += 1
+                data["warns"]=wrn_amount
+                new_warn = ({
+                    "moderator": str(ctx.author.id),
+                    "moderator_name": str(ctx.author.display_name),
+                    "reason": reason,
+                    "datetime": dt_string,
+                    "proof": ""
+                })
+                data[wrn_amount]=new_warn
+                db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).set(data)
+
+                embed = disnake.Embed(
+                    title = f"{member.name} has been warned",
+                    color = disnake.Color.dark_red()
+                )
+                embed.add_field(
+                    name = f"New Warn",
+                    value = f"Warn ID: ``{wrn_amount}``\n"
+                            f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **`{reason}`**\n"
+                            f"At: **``{dt_string}``**"
+                )
+            await ctx.send(embed=embed)
     
     @commands.command()
     @commands.guild_only()
@@ -255,166 +237,149 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
-    # TODO add check if user is banned
+    # ! BUG not checking if user is banned
     async def ban(self, ctx, member:disnake.User=None, *, reason="For no reason"):
-        try:
-            if member==None:
-                emb = disnake.Embed(
-                    title = "BAN HELP",
-                    description = "`k.ban [mention/user_id] (reason)`",
-                    color = disnake.Color.dark_red()
-                    )
-                await ctx.send(embed=emb)
-            elif member.id == self.client.user.id:
-                await ctx.send("Please don\'t ban me.")
-            elif member==ctx.author:
-                await ctx.send(content = "You can\'t ban yourself", delete_after = 10)
-            else:
-                f = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).get().val()
-                data = f
-                if data == None:
-                    bn_amount = 1
-                    data = ({
-                        "bans": 1,
-                        1:({
-                            "moderator": str(ctx.author.id),
-                            "moderator_name": str(ctx.author.display_name),
-                            "reason": reason,
-                            "datetime": dt_string,
-                            "proof": ""
-                        })
-                    })
-                    db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).set(data)
-                    embed = disnake.Embed(
-                        title = f"{member.name} has been banned.",
-                        color = disnake.Color.dark_red()
-                        )
-                    embed.add_field(
-                        name = "Ban info",
-                        value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **``{reason}``**\n"
-                                f"At: **``{dt_string}``**",
-                        inline = True
-                        )
-                else:
-                    bn_amount = data.get("bans")
-                    bn_amount += 1
-                    data["bans"]=bn_amount
-                    new_ban = ({
+        if member==None:
+            emb = disnake.Embed(
+                title = "BAN HELP",
+                description = "`k.ban [mention/user_id] (reason)`",
+                color = disnake.Color.dark_red()
+                )
+            await ctx.send(embed=emb)
+        elif member.id == self.client.user.id:
+            await ctx.send("Please don\'t ban me.")
+        elif member==ctx.author:
+            await ctx.send(content = "You can\'t ban yourself", delete_after = 10)
+        else:
+            f = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).get().val()
+            data = f
+            if data == None:
+                bn_amount = 1
+                data = ({
+                    "bans": 1,
+                    1:({
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
                         "reason": reason,
                         "datetime": dt_string,
                         "proof": ""
                     })
-                    data[bn_amount]=new_ban
-                    db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).set(data)
-
-                    embed = disnake.Embed(
-                        title = f"{member.name} has been banned.",
-                        color = disnake.Color.dark_red()
+                })
+                db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).set(data)
+                embed = disnake.Embed(
+                    title = f"{member.name} has been banned.",
+                    color = disnake.Color.dark_red()
                     )
-                    embed.add_field(
-                        name = f"Ban Info",
-                        value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **`{reason}`**\n"
-                                f"At: **``{dt_string}``**"
+                embed.add_field(
+                    name = "Ban info",
+                    value = f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **``{reason}``**\n"
+                            f"At: **``{dt_string}``**",
+                    inline = True
                     )
-                await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
-                await ctx.send(embed=embed)
-        except Forbidden:
-            bot = ctx.guild.get_member(self.client.user.id)
-            print(bot.guild_permissions.ban_members)
-            if bot.guild_permissions.ban_members == False:
-                await ctx.send("I don\'t have the required permissions to do that.\nPlease give me either `ban` permissions or `administrator`")
             else:
-                await ctx.send("You can\'t ban that user.")
+                bn_amount = data.get("bans")
+                bn_amount += 1
+                data["bans"]=bn_amount
+                new_ban = ({
+                    "moderator": str(ctx.author.id),
+                    "moderator_name": str(ctx.author.display_name),
+                    "reason": reason,
+                    "datetime": dt_string,
+                    "proof": ""
+                })
+                data[bn_amount]=new_ban
+                db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).set(data)
+
+                embed = disnake.Embed(
+                    title = f"{member.name} has been banned.",
+                    color = disnake.Color.dark_red()
+                )
+                embed.add_field(
+                    name = f"Ban Info",
+                    value = f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **`{reason}`**\n"
+                            f"At: **``{dt_string}``**"
+                )
+            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
+            await ctx.send(embed=embed)
 
     @commands.command()
     @commands.guild_only()
     @commands.bot_has_permissions(kick_members=True)
     @commands.check(moderation_check)
     async def kick(self, ctx, member:disnake.Member=None, *, reason="No reason"):
-        try:
-            if member==None:
-                emb = disnake.Embed(
-                    title = "KICK HELP",
-                    description = "`k.kick [mention/user_id] (reason)`",
-                    color = disnake.Color.dark_red()
-                    )
-                await ctx.send(embed=emb)
-            elif member==ctx.author:
-                await ctx.send(content = "You can\'t kick yourself", delete_after = 10)
-            else:
-                f = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).get().val()
-                data = f
-                if data == None:
-                    kck_amount = 1
-                    data = ({
-                        "kicks": 1,
-                        1:({
-                            "moderator": str(ctx.author.id),
-                            "moderator_name": str(ctx.author.display_name),
-                            "reason": reason,
-                            "datetime": dt_string,
-                            "proof": ""
-                        })
-                    })
-                    db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).set(data)
-                    embed = disnake.Embed(
-                        title = f"{member.name} has been kicked",
-                        color = disnake.Color.dark_red()
-                        )
-                    embed.add_field(
-                        name = "Kick info",
-                        value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **``{reason}``**\n"
-                                f"At: **``{dt_string}``**",
-                        inline = True
-                        )
-                    #await ctx.send(embed=embed)
-                else:
-                    kck_amount = data.get("kicks")
-                    kck_amount += 1
-                    data["kicks"]=kck_amount
-                    new_kick = ({
+        if member==None:
+            emb = disnake.Embed(
+                title = "KICK HELP",
+                description = "`k.kick [mention/user_id] (reason)`",
+                color = disnake.Color.dark_red()
+                )
+            await ctx.send(embed=emb)
+        elif member==ctx.author:
+            await ctx.send(content = "You can\'t kick yourself", delete_after = 10)
+        else:
+            f = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).get().val()
+            data = f
+            if data == None:
+                kck_amount = 1
+                data = ({
+                    "kicks": 1,
+                    1:({
                         "moderator": str(ctx.author.id),
                         "moderator_name": str(ctx.author.display_name),
                         "reason": reason,
                         "datetime": dt_string,
                         "proof": ""
                     })
-                    data[kck_amount]=new_kick
-                    db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).set(data)
-
-                    embed = disnake.Embed(
-                        title = f"{member.name} has been kicked",
-                        color = disnake.Color.dark_red()
+                })
+                db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).set(data)
+                embed = disnake.Embed(
+                    title = f"{member.name} has been kicked",
+                    color = disnake.Color.dark_red()
                     )
-                    embed.add_field(
-                        name = f"Kick Info",
-                        value = f"Moderator: {ctx.author.mention}\n"
-                                f"Reason: **`{reason}`**\n"
-                                f"At: **``{dt_string}``**"
+                embed.add_field(
+                    name = "Kick info",
+                    value = f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **``{reason}``**\n"
+                            f"At: **``{dt_string}``**",
+                    inline = True
                     )
-                    #await ctx.send(embed=embed)
-                await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {reason}.")
-                await ctx.send(embed=embed)
-                #await ctx.send(f"{member} was kicked for {reason}.")
-        except Forbidden:
-            if disnake.Permissions().kick_members == False:
-                await ctx.send("I don\'t have the required permissions to do that.\nPlease give me either `kick` permissions or `administrator`")
-                return
+                #await ctx.send(embed=embed)
             else:
-                await ctx.send("You can\'t kick that user.")
-                return
+                kck_amount = data.get("kicks")
+                kck_amount += 1
+                data["kicks"]=kck_amount
+                new_kick = ({
+                    "moderator": str(ctx.author.id),
+                    "moderator_name": str(ctx.author.display_name),
+                    "reason": reason,
+                    "datetime": dt_string,
+                    "proof": ""
+                })
+                data[kck_amount]=new_kick
+                db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).set(data)
+
+                embed = disnake.Embed(
+                    title = f"{member.name} has been kicked",
+                    color = disnake.Color.dark_red()
+                )
+                embed.add_field(
+                    name = f"Kick Info",
+                    value = f"Moderator: {ctx.author.mention}\n"
+                            f"Reason: **`{reason}`**\n"
+                            f"At: **``{dt_string}``**"
+                )
+                #await ctx.send(embed=embed)
+            await ctx.guild.kick(member, reason=f"By {ctx.author} was kicked for {reason}.")
+            await ctx.send(embed=embed)
+            #await ctx.send(f"{member} was kicked for {reason}.")
 
     @commands.command()
     @commands.guild_only()
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
     async def unban(self, ctx, id: int = None):
-        #try:
         if id == None:
             emb = disnake.Embed(
                 title = "UNBAN HELP",
@@ -428,12 +393,7 @@ class Moderation(commands.Cog):
             user = await self.client.fetch_user(id)
             await ctx.guild.unban(user)
             await ctx.send(f"{user} has been unbanned.")
-        #except Forbidden:
-        #    await ctx.send(f"I\'m missing permissions for this!\n{commands.MissingPermissions(missing_permissions=error.missing_permissions)}")
-        #except Forbidden:
-        #    await ctx.send(f"I\'m missing permissions for this!\n{disnake.ext.commands.MissingPermissions.missing_permissions()}")
         
-
 def setup(client):
     client.add_cog(Moderation(client))
     print(f"Cog: Moderation - loaded.")

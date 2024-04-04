@@ -8,8 +8,6 @@ import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import is_owner
 
-## make cmd dev only
-
 firebase = pyrebase.initialize_app(
     json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
@@ -22,13 +20,8 @@ class Dev(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def cls(self, ctx):
-        try:
-            os.system("cls")
-            await ctx.send("Cleared the terminal, Daddy.")
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+        os.system("cls")
+        await ctx.send("Cleared the terminal, Daddy.")
 
     @commands.command()
     @commands.is_owner()
@@ -53,40 +46,18 @@ class Dev(commands.Cog):
     @commands.command(pass_context=True)
     @commands.is_owner()
     async def leave(self, ctx, *, guildinput):
-        try:
-            try:
-                guildid = int(guildinput)
-            except:
-                await ctx.send("Invalid guild: failed to convert to int")
-
-            try:
-                guild = self.client.get_guild(guildid)
-            except:
-                await ctx.send("Invalid guild")
-
-            try:
-                await guild.leave()
-                await ctx.send(f"left {guild.name}")
-            except:
-                await ctx.send("Error leaving")
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+        guildid = int(guildinput)
+        guild = self.client.get_guild(guildid)
+        await guild.leave()
 
     @commands.command(pass_context=True)
     @commands.is_owner()
     async def servers(self, ctx):
-        try:
-            await ctx.send(f"{len(self.client.guilds)}")
-            listofids = []
-            for guild in self.client.guilds:
-                listofids.append(guild.id)
-            await ctx.send(listofids)
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+        await ctx.send(f"{len(self.client.guilds)}")
+        listofids = []
+        for guild in self.client.guilds:
+            listofids.append(guild.id)
+        await ctx.send(listofids)
 
 def setup(client):
     client.add_cog(Dev(client))
