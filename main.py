@@ -12,9 +12,7 @@ from decouple import config
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions, is_owner
 
-# //TODO when bot is done remove [reload = True] from client setup
 # //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
-# //TODO add birthday checker
 
 #import logging
 # logging.basicConfig(level=logging.ERROR)

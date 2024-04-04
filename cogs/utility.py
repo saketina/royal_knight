@@ -12,34 +12,29 @@ db = firebase.database()
 
 sniped_messages = {}
 
+# ! FEATURE_ADD add birthday checker
+
 class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
 
     @commands.command(pass_context=True)
     async def say(self, ctx, *, message=None):
-        #await ctx.message.delete()
-        try:
-            if message != None:
-                
-                if str(ctx.guild.default_role) not in message and "@here" not in message:
-                    msg = message
-                else:
-                    msg = "You can\'t make me say that"
-                
-                
-                await ctx.send(msg)
-            else: 
-                await ctx.send("Please tell me what to say")
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+        if message != None:
+            
+            if str(ctx.guild.default_role) not in message and "@here" not in message:
+                msg = message
+            else:
+                msg = "You can\'t make me say that"
+            
+            
+            await ctx.send(msg)
+        else: 
+            await ctx.send("Please tell me what to say")
 
     @say.before_invoke
     async def say_before(self, ctx):
         await ctx.message.delete()
-        print("deleted message before invoke")
     
     @commands.Cog.listener()
     async def on_message_delete(self, message):
@@ -297,6 +292,8 @@ class Utility(commands.Cog):
             except ValueError:
                 await ctx.send("Invalid time format ,use `'s'` for seconds, `'m'` for minutes, `'h'` for hours, and `'d'` for days.")
                 return
+            finally:
+                pass
         await ctx.send(f"Setting a timer for `{time}`")
         await asyncio.sleep(total_time)
         await ctx.send(f"{ctx.author.mention}, the timer is done!!!")
