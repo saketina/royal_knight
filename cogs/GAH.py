@@ -142,7 +142,7 @@ class CommandErrorHandler(commands.Cog):
             print("on gah EOF")
             # All other Errors not returned come here. And we can just print the default TraceBack.
             print('Ignoring exception in command {}:'.format(ctx.command), error, file=sys.stderr)
-            #traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 def setup(client):
     client.add_cog(CommandErrorHandler(client))
