@@ -863,7 +863,7 @@ class Testing(commands.Cog):
                                 view_bans.add_item(button_bans_proof)
                                 view_bans.add_item(button_bans_exit)
                                 view_bans.add_item(button_bans_next)
-                                MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_bans)
+                                MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_bans) # ! BUG under this line is an error when trying to open up panel
                                 async def on_error(self, error, item, interaction):
                                     print(error)
                             else:
@@ -1167,27 +1167,20 @@ class Testing(commands.Cog):
     ## TODO FEATURE-ADD staff: create, promote, update, demote
     ## TODO link to database
     async def staff(self, ctx, option=None):
-        auth_roles = []
-        for role in ctx.author.roles:
-            auth_roles.append(role.id)
-
-        if 706162869783363725 not in auth_roles:
-            return
-        else:
-            ## staff profile here
-            embed = disnake.Embed(
-                title= f"{ctx.author.nick}'s staff profile",
-                color=disnake.Color.dark_red()
-            )
-            embed.add_field(
-                name="Staff info",
-                value="Staff since: forever"
-            )
-            embed.set_author(
-                name=ctx.author.nick,
-                icon_url=ctx.author.avatar
-            )
-            await ctx.send(embed=embed)
+        ## staff profile here
+        embed = disnake.Embed(
+            title= f"{ctx.author.nick}'s staff profile",
+            color=disnake.Color.dark_red()
+        )
+        embed.add_field(
+            name="Staff info",
+            value="Staff since: forever"
+        )
+        embed.set_author(
+            name=ctx.author.nick,
+            icon_url=ctx.author.avatar
+        )
+        await ctx.send(embed=embed)
     
     @commands.command()
     async def staffteam(self, ctx, option=None):
