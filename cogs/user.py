@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 import os
-from datetime import datetime
+from datetime import datetime, date
 from io import BytesIO
 
 import disnake
@@ -43,8 +43,14 @@ class User(commands.Cog):
           )
         ProfileEmbed.set_author(name=user.display_name, icon_url= "attachment://status.png")
         ProfileEmbed.set_thumbnail(url = user.display_avatar)
+        char_count = 0
 
-        roleList = [r.mention for r in user.roles if r != ctx.guild.default_role]
+        #roleList = [r.mention & char_count += len(r.mention) for r in user.roles if r != ctx.guild.default_role]
+        roleList = []
+        for r in user.roles:
+            if r != ctx.guild.default_role:
+                roleList.append(r.mention)
+                char_count =+ len(r.mention)
         roleList.reverse()
 
         if roleList != []:
@@ -53,24 +59,28 @@ class User(commands.Cog):
             rolesAddon = "None"
 
         ProfileEmbed.add_field(
-        name="Roles",
+        name=f"Roles ({len(roleList)})",
         value=rolesAddon,
         inline=False
         )
         
         joined_at = user.joined_at.strftime("%b %d, %Y, %T")
         
+        days_join = datetime.now() - user.joined_at.replace(tzinfo=None)
+        
         ProfileEmbed.add_field(
         name="Joined at",
-        value=f"{joined_at}",
+        value=f"{joined_at} ({days_join.days} day\'s ago)",
         inline=True
         )
         
         created_at = user.created_at.strftime("%b %d, %Y, %T")
         
+        days_created = datetime.now() - user.created_at.replace(tzinfo=None)
+        
         ProfileEmbed.add_field(
         name="Created at",
-        value=f"{created_at}",
+        value=f"{created_at} ({days_created.days} day\'s ago)",
         inline=False
         )
 
@@ -81,6 +91,8 @@ class User(commands.Cog):
             
         if user.bot == True:
             user_bot = "🤖"
+        elif user.system == True:
+            user_bot = "**Discord staff**"
         else:
             user_bot = "😎"
         
