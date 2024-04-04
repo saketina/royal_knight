@@ -104,8 +104,10 @@ class Utility(commands.Cog):
     
     @commands.command(pass_context=True)
     async def ping(self, ctx):
-        if round(self.client.latency * 1000) >= 155:
+        if round(self.client.latency * 1000) >= 200:
             color = disnake.Color.red()
+        elif round(self.client.latency * 1000) >= 100:
+            color = disnake.Color.yellow()
         else:
             color = disnake.Color.green()
 
