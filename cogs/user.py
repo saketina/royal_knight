@@ -15,8 +15,7 @@ class User(commands.Cog):
         self.client=client
 
     # TODO PROFILE/add badges
-    # TODO PROFILE/add if Member is a booster or has nitro
-    # TODO PROFILE/add checks if member is on mobile or on pc
+    # TODO PROFILE/add total messages, most used channel, etc...
     @commands.command(pass_context=True)
     @commands.guild_only()
     async def profile(self, ctx, user: disnake.Member = None):
@@ -49,7 +48,7 @@ class User(commands.Cog):
         roleList.reverse()
 
         if roleList != []:
-            rolesAddon = "> " + '\n > '.join(roleList)
+            rolesAddon = '\n'.join(roleList)
         else:
             rolesAddon = "None"
 
@@ -58,21 +57,66 @@ class User(commands.Cog):
         value=rolesAddon,
         inline=False
         )
+        
         joined_at = user.joined_at.strftime("%b %d, %Y, %T")
+        
         ProfileEmbed.add_field(
         name="Joined at",
         value=f"{joined_at}",
-        inline=False
+        inline=True
         )
+        
         created_at = user.created_at.strftime("%b %d, %Y, %T")
+        
         ProfileEmbed.add_field(
         name="Created at",
         value=f"{created_at}",
         inline=False
         )
-        ProfileEmbed.set_footer(
-        text="User ID: " + str(user.id)
+
+        if user.is_on_mobile() == True:
+            device = "mobile"
+        else:
+            device = "PC"
+            
+        if user.bot == True:
+            user_bot = "🤖"
+        else:
+            user_bot = "😎"
+        
+        if ctx.guild.get_role(698297658137116793) in user.roles:
+            booster = "Yes\n"
+        else:
+            booster = "No\n"
+
+        if user.premium_since == None:
+            premium_time = "Not boosting"
+        else:
+            premium_time = user.premium_since
+        
+        if booster == "Yes":
+            boosting_since = f"Boosting since: {premium_time.strftime("%d %B %Y")}\n"
+        else:
+            boosting_since = ""
+            
+        if user.voice == None:
+            voice_state = ""
+        else:
+            user_voice = user.voice
+            voice_state = f"In voice channel: <#{user_voice.channel.id}>"
+            
+        ProfileEmbed.add_field(
+            name="General info",
+            value=f"Device: {device}\n"
+                  f"Type: {user_bot}\n"
+                  f"Booster: {booster}{boosting_since}{voice_state}",
+            inline=True
         )
+        ProfileEmbed.set_footer(
+        text="User ID: " + str(user.id),
+        icon_url = user.role_icon
+        )
+        
         await ctx.send(embed = ProfileEmbed, file=file)
 
     @commands.command(aliases=["av", "avatar"], pass_context=True)
