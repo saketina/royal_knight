@@ -16,59 +16,63 @@ db = firebase.database()
 
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")
 
+staff_roles = 743724904033288293, 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
+
 ban_roles = 687228928565444800,706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384
 unban_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095
 kick_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999
-mute_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999
-unmute_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384
-warn_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999
+mute_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
+unmute_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 896472583212507206
+warn_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
+
+def staff_check(member):
+    for role in member.roles:
+        if role.id in staff_roles:
+            return True
 
 def moderation_check(ctx):
-    try:
-        if ctx.command.name == "ban":
-            for role in ctx.author.roles:
-                if role.id in ban_roles:
-                    return True
+    if ctx.command.name == "ban":
+        for role in ctx.author.roles:
+            if role.id in ban_roles:
+                return True
 
-            return False
-        elif ctx.command.name == "unban":
-            for role in ctx.author.roles:
-                if role.id in unban_roles:
-                    return True
+        return False
+    elif ctx.command.name == "unban":
+        for role in ctx.author.roles:
+            if role.id in unban_roles:
+                return True
 
-            return False
-        elif ctx.command.name == "kick":
-            for role in ctx.author.roles:
-                if role.id in kick_roles:
-                    return True
+        return False
+    elif ctx.command.name == "kick":
+        for role in ctx.author.roles:
+            if role.id in kick_roles:
+                return True
 
-            return False
-        elif ctx.command.name == "mute":
-            for role in ctx.author.roles:
-                if role.id in mute_roles:
-                    return True
+        return False
+    elif ctx.command.name == "mute":
+        for role in ctx.author.roles:
+            if role.id in mute_roles:
+                return True
 
-            return False
-        elif ctx.command.name == "unmute":
-            for role in ctx.author.roles:
-                if role.id in unmute_roles:
-                    return True
+        return False
+    elif ctx.command.name == "unmute":
+        for role in ctx.author.roles:
+            if role.id in unmute_roles:
+                return True
 
-            return False
-        elif ctx.command.name == "warn":
-            for role in ctx.author.roles:
-                if role.id in warn_roles:
-                    return True
+        return False
+    elif ctx.command.name == "warn":
+        for role in ctx.author.roles:
+            if role.id in warn_roles:
+                return True
 
-            return False
-        elif ctx.command.name == "purge":
-            for role in ctx.author.roles:
-                if role.id in warn_roles:
-                    return True
+        return False
+    elif ctx.command.name == "purge":
+        for role in ctx.author.roles:
+            if role.id in warn_roles:
+                return True
 
-            return False
-    except AttributeError:
-        pass
+        return False
 
 
 
@@ -93,7 +97,7 @@ class Moderation(commands.Cog):
             await ctx.send(embed=help_embed)
             
         if command and roles == None:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=help_embed)
             
         elif command not in command_list:
             await ctx.send("Command not found...")
@@ -150,7 +154,7 @@ class Moderation(commands.Cog):
             await ctx.send("Please don\'t warn me.")
         elif member == ctx.author:
             await ctx.send("You can\'t warn yourself.")
-        elif member.guild_permissions.manage_messages == True:
+        elif staff_check(member) == True:
             await ctx.send("You can\'t warn that user.")
         else:
             f = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
@@ -246,6 +250,8 @@ class Moderation(commands.Cog):
                 color = disnake.Color.dark_red()
                 )
             await ctx.send(embed=emb)
+        elif staff_check(ctx.guild.get_member(member.id)) == True:
+            await ctx.send("You can\'t ban that user.")
         elif member.id == self.client.user.id:
             await ctx.send("Please don\'t ban me.")
         elif member==ctx.author:
@@ -301,7 +307,7 @@ class Moderation(commands.Cog):
                             f"Reason: **`{reason}`**\n"
                             f"At: **``{dt_string}``**"
                 )
-            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
+            #await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
             await ctx.send(embed=embed)
 
     @commands.command()
@@ -316,6 +322,8 @@ class Moderation(commands.Cog):
                 color = disnake.Color.dark_red()
                 )
             await ctx.send(embed=emb)
+        elif staff_check(member) == True:
+            await ctx.send("You can\'t kick that user.")
         elif member==ctx.author:
             await ctx.send(content = "You can\'t kick yourself", delete_after = 10)
         else:
