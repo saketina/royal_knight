@@ -19,7 +19,7 @@ class User(commands.Cog):
     @commands.command(pass_context=True)
     @commands.guild_only()
     async def profile(self, ctx, user: disnake.Member = None):
-
+        await ctx.trigger_typing()
         if not user:
             user = ctx.author
         #print(user.raw_status)
@@ -44,17 +44,30 @@ class User(commands.Cog):
         ProfileEmbed.set_author(name=user.display_name, icon_url= "attachment://status.png")
         ProfileEmbed.set_thumbnail(url = user.display_avatar)
         char_count = 0
+        char_overload = False
 
         #roleList = [r.mention & char_count += len(r.mention) for r in user.roles if r != ctx.guild.default_role]
         roleList = []
+        TempList = []
+  
         for r in user.roles:
             if r != ctx.guild.default_role:
-                roleList.append(r.mention)
-                char_count =+ len(r.mention)
-        roleList.reverse()
+                TempList.append(r.mention)
+        TempList.reverse()
+        for i in TempList:
+            if char_count <= 800:
+                roleList.append(i)
+                char_count += len(r.mention)
+            else:
+                char_overload = True
+                
+        if char_overload == True:
+            roleList.append("**`and a lot more...`**")
+        else:
+            pass
 
         if roleList != []:
-            rolesAddon = '\n'.join(roleList)
+            rolesAddon = "> " + '\n > '.join(roleList)
         else:
             rolesAddon = "None"
 
