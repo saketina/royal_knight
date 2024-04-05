@@ -1,5 +1,4 @@
 
-# TODO error handler transfer: counters, fun, test, testing
 # TODO add MISSING PERMISSIONS handler for muted cmd(happens when user tries to unmute themselves + they arent muted)
 import sys
 import traceback
@@ -114,6 +113,12 @@ class CommandErrorHandler(commands.Cog):
         elif isinstance(error, commands.NotOwner):
             print("on gah - NotOwner")
             return
+        
+        elif isinstance(error, AttributeError):
+            if ctx.command.qualified_name == "ban":
+                await ctx.send("User not found.")
+            else:
+                pass
 
         elif isinstance(error, commands.MissingPermissions):
             print("on gah - MissingPermissions")
