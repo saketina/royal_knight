@@ -1193,8 +1193,9 @@ class Testing(commands.Cog):
             ctx.guild.get_role(801614132771160095), ## head mod
             ctx.guild.get_role(747680315257913384), ## mod
             ctx.guild.get_role(870431101955493999), ## trial
+            ctx.guild.get_role(896472583212507206)
         ]
-        #print(role_list)
+        print(option)
         
         if option == None:
             def returnNotMatches(a, b):
@@ -1239,6 +1240,11 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in returnNotMatches(role_list[5].members, role_list[4].members)),
                 inline=False
             )
+            embed.add_field(
+                name="Helpers",
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[6].members, role_list[5].members)),
+                inline=False
+            )
             await ctx.send(embed=embed)
             
         elif option=="help":
@@ -1249,7 +1255,7 @@ class Testing(commands.Cog):
             )
             staff_help.add_field(
                 name="Options",
-                value="``help\nowners\nco-owners\nadmins\nhmods\nmods\ntrials``"
+                value="``help\nowners\nco-owners\nadmins\nhmods\nmods\ntrials\nhelpers``"
             )
             await ctx.send(embed=staff_help)
         elif option=="owners":
@@ -1262,6 +1268,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[0].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="co-owners":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1272,6 +1279,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[1].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="admins":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1282,6 +1290,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[2].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="hmods":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1292,6 +1301,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[3].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="mods":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1302,6 +1312,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[4].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="trials":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1309,9 +1320,20 @@ class Testing(commands.Cog):
             )
             embed.add_field(
                 name="Trial Moderators",
-                value="\n".join(str(member.mention) for member in role_list[0].members),
+                value="\n".join(str(member.mention) for member in role_list[5].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
+        elif option=="helpers":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                title="Helpers",
+                value="\n".join(str(member.mention) for member in role_list[6].members)
+            )
+            await ctx.send(embed=embed)
         else:
             staff_help = disnake.Embed(
                 title= "Command help",
