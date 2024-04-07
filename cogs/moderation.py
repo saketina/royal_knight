@@ -31,47 +31,50 @@ def staff_check(member):
             return True
 
 def moderation_check(ctx):
-    if ctx.command.name == "ban":
-        for role in ctx.author.roles:
-            if role.id in ban_roles:
-                return True
+    try:
+        if ctx.command.name == "ban":
+            for role in ctx.author.roles:
+                if role.id in ban_roles:
+                    return True
 
-        return False
-    elif ctx.command.name == "unban":
-        for role in ctx.author.roles:
-            if role.id in unban_roles:
-                return True
+            return False
+        elif ctx.command.name == "unban":
+            for role in ctx.author.roles:
+                if role.id in unban_roles:
+                    return True
 
-        return False
-    elif ctx.command.name == "kick":
-        for role in ctx.author.roles:
-            if role.id in kick_roles:
-                return True
+            return False
+        elif ctx.command.name == "kick":
+            for role in ctx.author.roles:
+                if role.id in kick_roles:
+                    return True
 
-        return False
-    elif ctx.command.name == "mute":
-        for role in ctx.author.roles:
-            if role.id in mute_roles:
-                return True
+            return False
+        elif ctx.command.name == "mute":
+            for role in ctx.author.roles:
+                if role.id in mute_roles:
+                    return True
 
-        return False
-    elif ctx.command.name == "unmute":
-        for role in ctx.author.roles:
-            if role.id in unmute_roles:
-                return True
+            return False
+        elif ctx.command.name == "unmute":
+            for role in ctx.author.roles:
+                if role.id in unmute_roles:
+                    return True
 
-        return False
-    elif ctx.command.name == "warn":
-        for role in ctx.author.roles:
-            if role.id in warn_roles:
-                return True
+            return False
+        elif ctx.command.name == "warn":
+            for role in ctx.author.roles:
+                if role.id in warn_roles:
+                    return True
 
-        return False
-    elif ctx.command.name == "purge":
-        for role in ctx.author.roles:
-            if role.id in warn_roles:
-                return True
+            return False
+        elif ctx.command.name == "purge":
+            for role in ctx.author.roles:
+                if role.id in warn_roles:
+                    return True
 
+            return False
+    except AttributeError:
         return False
 
 
