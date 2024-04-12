@@ -77,16 +77,18 @@ if cog_counter >= len(initial_cogs):
     time.sleep(5)
     try:
         os.system("cls")
+        os.system("title Royal Knight: STARTED")
     except:
         os.system("clear")
-    os.system("title Royal Bot: STARTED")
+        os.system("Set TERM_TITLE= Royal Knight: STARTED")
 else:
     print("\nLoading one or more cogs failed...\n")
     time.sleep(5)
     try:
         os.system("cls")
+        os.system("title Royal Knight: ERROR IN A COG")
     except:
         os.system("clear")
-    os.system("title Royal Bot: ERROR IN A COG")
+        os.system("Set TERM_TITLE= Royal Knight: ERROR IN A COG")
 
 client.run(config("token"), reconnect=True)
