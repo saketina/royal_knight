@@ -91,4 +91,5 @@ else:
         os.system("clear")
         os.system("Set TERM_TITLE= Royal Knight: ERROR IN A COG")
 
+
 client.run(config("token"), reconnect=True)
