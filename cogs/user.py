@@ -120,7 +120,7 @@ class User(commands.Cog):
             premium_time = user.premium_since
         
         if booster == "Yes":
-            boosting_since = f"Boosting since: {premium_time.strftime("%d %B %Y")}\n"
+            boosting_since = f"Boosting since: ()\n".format(premium_time.strftime("%d %B %Y"))
         else:
             boosting_since = ""
             
