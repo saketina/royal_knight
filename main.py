@@ -18,7 +18,7 @@ import settings
 
 # //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
 
-logger = settings.logging.getLogger("")
+logger = settings.logging.getLogger("bot")
 
 def run():
 
