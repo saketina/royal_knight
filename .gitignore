@@ -1,5 +1,6 @@
 config.py
 __pycache__
+.python-version
 .idea
 .vscode
 .env
