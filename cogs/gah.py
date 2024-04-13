@@ -53,11 +53,11 @@ class CommandErrorHandler(commands.Cog):
         
         elif isinstance(error, commands.ExtensionAlreadyLoaded):
             print("on gah - ExtensionAlreadyLoaded")
-            await ctx.send(f"Error: **{cog.qualified_name}** is already loaded.")
+            await ctx.send(f"Error: **{ctx.args[-1]}** is already loaded.")
         
         elif isinstance(error, commands.ExtensionNotLoaded):
             print("on gah - ExtensionNotLoaded")
-            await ctx.send(f"Error: **{cog.qualified_name}** is not loaded.")
+            await ctx.send(f"Error: **{ctx.args[-1]}** is not loaded.")
 
         elif isinstance(error, commands.BotMissingPermissions):
             print("on gah - BotMissingPerms")
@@ -140,6 +140,12 @@ class CommandErrorHandler(commands.Cog):
             # All other Errors not returned come here. And we can just print the default TraceBack.
             print('Ignoring exception in command {}:'.format(ctx.command), error, file=sys.stderr)
             traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            embed = disnake.Embed(
+                title=f"Error in command {ctx.command.qualified_name}",
+                description=error,
+                color=disnake.Color.red()
+            )
+            await ctx.send("Please send this to the developer.", embed=embed)
 
 def setup(client):
     client.add_cog(CommandErrorHandler(client))
