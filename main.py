@@ -83,7 +83,7 @@ if cog_counter >= len(initial_cogs):
         subprocess.run(["cls", "title Royal Knight: STARTED"])
     except os.error:
         os.system("clear")
-        os.system("Set TERM_TITLE= Royal Knight: STARTED")
+        os.system("set TERM_TITLE= Royal Knight: STARTED")
 else:
     print("\nLoading one or more cogs failed...\n")
     time.sleep(5)
