@@ -92,7 +92,7 @@ def run():
             os.system("cls")
             os.system("title Royal Knight: ERROR IN A COG")
 
-    client.run(config("token"), reconnect=True)
+    client.run(config("token"), reconnect=True, root_logger=True)
 
 if __name__ == "__main__":
     run()
