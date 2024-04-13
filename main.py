@@ -75,19 +75,19 @@ for cog in initial_cogs:
 if cog_counter >= len(initial_cogs):
     print("All cogs imported succesfully", file=sys.stderr)
     time.sleep(5)
-    #try:
-    os.system("cls")
-    os.system("title Royal Knight: STARTED")
-    #except "sh":
-       # os.system("clear")
-       # os.system("Set TERM_TITLE= Royal Knight: STARTED")
+    try:
+        os.system("cls")
+        os.system("title Royal Knight: STARTED")
+    except os.error:
+        os.system("clear")
+        os.system("Set TERM_TITLE= Royal Knight: STARTED")
 else:
     print("\nLoading one or more cogs failed...\n")
     time.sleep(5)
     try:
         os.system("cls")
         os.system("title Royal Knight: ERROR IN A COG")
-    except "sh":
+    except os.error:
         os.system("clear")
         os.system("Set TERM_TITLE= Royal Knight: ERROR IN A COG")
 
