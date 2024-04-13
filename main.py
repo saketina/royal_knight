@@ -18,7 +18,7 @@ import settings
 
 # //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
 
-logger = settings.logging.GetLogger("")
+logger = settings.logging.getLogger("")
 
 cog_counter = 0
 
