@@ -78,7 +78,7 @@ if cog_counter >= len(initial_cogs):
     print("All cogs imported succesfully", file=sys.stderr)
     time.sleep(5)
     try:
-        subprocess.run(["clear", "set TERM_TITLE= Royal Knight: STARTED"], check=True)
+        subprocess.run(["cls", "set TERM_TITLE= Royal Knight: STARTED"], check=True)
         #subprocess.run(["cls", "title Royal Knight: STARTED"])
     except:
         os.system("cls")
@@ -89,7 +89,7 @@ else:
     time.sleep(5)
     try:
         #subprocess.run(["cls", "title Royal Knight: STARTED"], check=True)
-        subprocess.run(["clear", "set TERM_TITLE= Royal Knight: ERROR IN A COG"], check=True)
+        subprocess.run(["cls", "set TERM_TITLE= Royal Knight: ERROR IN A COG"], check=True)
     except:
         os.system("cls")
         os.system("title Royal Knight: ERROR IN A COG")
