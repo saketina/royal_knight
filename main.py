@@ -69,7 +69,7 @@ for cog in initial_cogs:
         cog_counter += 1
         # print(cog_counter)
     except Exception as e:
-        #print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+        print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
         print(f"{e}")
 
 if cog_counter >= len(initial_cogs):
