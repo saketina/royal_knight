@@ -14,10 +14,12 @@ from decouple import config
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions, is_owner
 
+import settings
+
 # //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
 
-#import logging
-# logging.basicConfig(level=logging.ERROR)
+logger = settings.logging.GetLogger("")
+
 cog_counter = 0
 
 intents = disnake.Intents.all()
@@ -44,7 +46,7 @@ async def on_ready():
     else:
         response = "server"
     await client.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching, name=f"{len(client.guilds)} {response}"), status=disnake.Status.dnd)
-    print(
+    logger.info(
         f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
     )
 
@@ -94,4 +96,4 @@ else:
         os.system("cls")
         os.system("title Royal Knight: ERROR IN A COG")
 
-client.run(config("token"), reconnect=True)
+client.run(config("token"), reconnect=True, root_logger=True)
