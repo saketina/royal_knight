@@ -78,7 +78,7 @@ if cog_counter >= len(initial_cogs):
     try:
         os.system("cls")
         os.system("title Royal Knight: STARTED")
-    except OSError:
+    except "sh":
         os.system("clear")
         os.system("Set TERM_TITLE= Royal Knight: STARTED")
 else:
@@ -87,7 +87,7 @@ else:
     try:
         os.system("cls")
         os.system("title Royal Knight: ERROR IN A COG")
-    except OSError:
+    except "sh":
         os.system("clear")
         os.system("Set TERM_TITLE= Royal Knight: ERROR IN A COG")
 
