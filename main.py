@@ -20,80 +20,77 @@ import settings
 
 logger = settings.logging.getLogger("")
 
-cog_counter = 0
+def run():
 
-intents = disnake.Intents.all()
+    cog_counter = 0
 
-def get_prefix(client, message):
-    prefixes = ["k.", "K.", "<@850019720648589352>"]
-    return commands.when_mentioned_or(*prefixes)(client, message)
+    intents = disnake.Intents.all()
 
-
-client = commands.Bot(
-    command_prefix=get_prefix,
-    case_insensitive=True,
-    intents=intents,
-    reload=True,
-    status=disnake.Status.dnd
-)
-client.remove_command("help")
+    def get_prefix(client, message):
+        prefixes = ["k.", "K.", "<@850019720648589352>"]
+        return commands.when_mentioned_or(*prefixes)(client, message)
 
 
-@client.event
-async def on_ready():
-    if len(client.guilds) > 1:
-        response = "servers"
-    else:
-        response = "server"
-    await client.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching, name=f"{len(client.guilds)} {response}"), status=disnake.Status.dnd)
+    client = commands.Bot(
+        command_prefix=get_prefix,
+        case_insensitive=True,
+        intents=intents,
+        reload=True,
+        status=disnake.Status.dnd
+    )
+    client.remove_command("help")
+
     logger.info(
         f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
     )
 
-initial_cogs = [
-    "cogs.admin",
-    #"cogs.anime",
-    #"cogs.counters",
-    "cogs.fun",
-    "cogs.gah",
-    "cogs.help",
-    "cogs.misc",
-    "cogs.moderation",
-    "cogs.prefix",
-    "cogs.roleplay",
-    "cogs.testing",
-    "cogs.user",
-    "cogs.utility",
-    #"cogs.welcome"
-]
+    initial_cogs = [
+        "cogs.admin",
+        #"cogs.anime",
+        #"cogs.counters",
+        "cogs.fun",
+        "cogs.gah",
+        "cogs.help",
+        "cogs.misc",
+        "cogs.moderation",
+        "cogs.prefix",
+        "cogs.roleplay",
+        "cogs.testing",
+        "cogs.user",
+        "cogs.utility",
+        #"cogs.welcome"
+    ]
 
-for cog in initial_cogs:
-    try:
-        client.load_extension(cog)
-        cog_counter += 1
-        # print(cog_counter)
-    except Exception as e:
-        print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-        print(f"{e}")
+    for cog in initial_cogs:
+        try:
+            client.load_extension(cog)
+            cog_counter += 1
+            # print(cog_counter)
+        except Exception as e:
+            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+            print(f"{e}")
 
-if cog_counter >= len(initial_cogs):
-    print("All cogs imported succesfully", file=sys.stderr)
-    time.sleep(5)
-    try:
-        subprocess.run(["clear"], check=True)
-        #subprocess.run(["cls", "title Royal Knight: STARTED"])
-    except:
-        os.system("cls")
-        os.system("title Royal Knight: STARTED")
-        
-else:
-    print("\nLoading one or more cogs failed...\n")
-    time.sleep(5)
-    try:
-        #subprocess.run(["cls", "title Royal Knight: STARTED"], check=True)
-        subprocess.run(["cls"], check=True)
-    except:
-        os.system("cls")
-        os.system("title Royal Knight: ERROR IN A COG")
+    if cog_counter >= len(initial_cogs):
+        print("All cogs imported succesfully", file=sys.stderr)
+        time.sleep(5)
+        try:
+            subprocess.run(["clear"], check=True)
+            #subprocess.run(["cls", "title Royal Knight: STARTED"])
+        except:
+            os.system("cls")
+            os.system("title Royal Knight: STARTED")
+            
+    else:
+        print("\nLoading one or more cogs failed...\n")
+        time.sleep(5)
+        try:
+            #subprocess.run(["cls", "title Royal Knight: STARTED"], check=True)
+            subprocess.run(["cls"], check=True)
+        except:
+            os.system("cls")
+            os.system("title Royal Knight: ERROR IN A COG")
 
-client.run(config("token"), reconnect=True)
+    client.run(config("token"), reconnect=True)
+
+if __name__ == "__main__":
+    run()
