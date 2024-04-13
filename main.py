@@ -96,4 +96,4 @@ else:
         os.system("cls")
         os.system("title Royal Knight: ERROR IN A COG")
 
-client.run(config("token"), reconnect=True, root_logger=True)
+client.run(config("token"), reconnect=True)
