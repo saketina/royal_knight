@@ -6,6 +6,8 @@ import time
 import traceback
 from datetime import datetime
 
+import subprocess
+
 import disnake
 import pyrebase
 from decouple import config
@@ -76,8 +78,9 @@ if cog_counter >= len(initial_cogs):
     print("All cogs imported succesfully", file=sys.stderr)
     time.sleep(5)
     try:
-        os.system("cls")
-        os.system("title Royal Knight: STARTED")
+        #os.system("cls")
+        #os.system("title Royal Knight: STARTED")
+        subprocess.run(["cls", "title Royal Knight: STARTED"])
     except os.error:
         os.system("clear")
         os.system("Set TERM_TITLE= Royal Knight: STARTED")
