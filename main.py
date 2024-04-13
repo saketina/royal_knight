@@ -39,10 +39,12 @@ def run():
         status=disnake.Status.dnd
     )
     client.remove_command("help")
-
-    logger.info(
-        f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
-    )
+    
+    @client.event
+    async def on_ready():
+        logger.info(
+            f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
+        )
 
     initial_cogs = [
         "cogs.admin",
