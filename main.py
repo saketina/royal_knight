@@ -17,6 +17,7 @@ from disnake.ext.commands import has_permissions, is_owner
 import logging
 
 # //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
+# //TODO transfer all print statements to logger and include logger in GAH
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
@@ -50,7 +51,7 @@ client.remove_command("help")
 
 @client.event
 async def on_ready():
-    logging.warning(
+    logging.info(
         f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
     )
 
