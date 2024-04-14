@@ -1196,16 +1196,18 @@ class Testing(commands.Cog):
             ctx.guild.get_role(896472583212507206)
         ]
         dot_role = ctx.guild.get_role(743724904033288293)
-        print(option)
         
         if option == None:
             def returnNotMatches(a, b):
                 temp=[]
                 for x in a:
-                    if x in b:
-                        pass
+                    if x.bot != True:
+                        if x in b:
+                            pass
+                        else:
+                            temp.append(x)
                     else:
-                        temp.append(x)
+                        pass
                 return temp
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1223,7 +1225,7 @@ class Testing(commands.Cog):
             )
             embed.add_field(
                 name="Admins",
-                value="\n".join(str(member.mention) for member in returnNotMatches([role_list[2].members, role_list[0].members], [role_list[1].members, dot_role.members])),
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[2].members, role_list[1].members) and returnNotMatches(dot_role.members, role_list[1].members + role_list[0].members)),
                 inline=False
             )
             embed.add_field(
