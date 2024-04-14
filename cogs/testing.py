@@ -1195,6 +1195,7 @@ class Testing(commands.Cog):
             ctx.guild.get_role(870431101955493999), ## trial
             ctx.guild.get_role(896472583212507206)
         ]
+        dot_role = ctx.guild.get_role(743724904033288293)
         print(option)
         
         if option == None:
@@ -1222,7 +1223,7 @@ class Testing(commands.Cog):
             )
             embed.add_field(
                 name="Admins",
-                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[2].members, role_list[1].members)),
+                value="\n".join(str(member.mention) for member in returnNotMatches([role_list[2].members, role_list[0].members], [role_list[1].members, dot_role.members])),
                 inline=False
             )
             embed.add_field(
