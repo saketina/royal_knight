@@ -3,6 +3,9 @@ import random
 import disnake
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Anime")
 
 def opening_check(msg):
     allowed_users = [

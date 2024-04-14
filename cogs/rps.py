@@ -6,6 +6,10 @@ from disnake.ui import Button
 import datetime
 from datetime import datetime as dt
 
+import logging
+
+logging = logging.getLogger("Rps")
+
 def author_check(ctx, interaction):
     if interaction.author.id == ctx.author.id:
         return True

@@ -7,6 +7,10 @@ import disnake
 from disnake.ext import commands
 from PIL import Image
 
+import logging
+
+logging = logging.getLogger("Test")
+
 gif_storage={}
 sniped_messages = {}
 

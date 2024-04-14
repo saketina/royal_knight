@@ -3,6 +3,9 @@
 import disnake
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Help")
 
 class Help(commands.Cog):
     def __init__(self, client):

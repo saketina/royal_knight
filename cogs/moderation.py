@@ -7,6 +7,10 @@ import pyrebase
 from disnake import Forbidden
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Moderation")
+
 # TODO ALL/add feature so its easy to add by role perms for commands
 
 # TODO Add a notes tab for moderations similar to reason

@@ -11,6 +11,10 @@ import pyrebase
 from disnake.ext import commands
 from PIL import Image
 
+import logging
+
+logging = logging.getLogger("Roleplay")
+
 # TODO ALL/make different gifs displayed if ctx.author used the command on themselves
 # TODO resize gifs to 498x278
 # TODO ADD wave, sip, shoot command

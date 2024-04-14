@@ -9,6 +9,10 @@ from disnake.ext import commands
 from disnake.ext.commands import guild_only
 from PIL import Image
 
+import logging
+
+logging = logging.getLogger("User")
+
 class User(commands.Cog):
 
     def __init__(self, client):

@@ -6,6 +6,9 @@ import traceback
 import disnake
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Gah")
 
 class CommandErrorHandler(commands.Cog):
 

@@ -6,6 +6,10 @@ import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
 
+import logging
+
+logging = logging.getLogger("Utility")
+
 firebase = pyrebase.initialize_app(
     json.load(open("./firebase_config.json", "r")))
 db = firebase.database()

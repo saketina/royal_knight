@@ -3,6 +3,9 @@ import asyncio
 import disnake
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Misc")
 
 class Misc(commands.Cog):
 

@@ -24,11 +24,11 @@ logging.basicConfig(level=logging.INFO,
                     filename='logs/client.log',
                     filemode='w')
 
-console = logging.StreamHandler()
-console.setLevel(logging.WARNING)
+logger = logging.StreamHandler()
+logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(name)s: %(levelname)s: %(message)s')
-console.setFormatter(formatter)
-logging.getLogger('').addHandler(console)
+logger.setFormatter(formatter)
+logging.getLogger('').addHandler(logger)
 
 cog_counter = 0
 
@@ -75,29 +75,13 @@ for cog in initial_cogs:
     try:
         client.load_extension(cog)
         cog_counter += 1
-        # print(cog_counter)
+        logging.info(f"Loaded {cog}")
     except Exception as e:
-        print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-        print(f"{e}")
+        logging.error(f"Failed to load {cog}, {e}")
 
 if cog_counter >= len(initial_cogs):
-    print("All cogs imported succesfully", file=sys.stderr)
-    time.sleep(5)
-    try:
-        subprocess.run(["clear"], check=True)
-        #subprocess.run(["cls", "title Royal Knight: STARTED"])
-    except:
-        os.system("cls")
-        os.system("title Royal Knight: STARTED")
-        
+    logging.info("All cogs imported succesfully")
 else:
-    print("\nLoading one or more cogs failed...\n")
-    time.sleep(5)
-    try:
-        #subprocess.run(["cls", "title Royal Knight: STARTED"], check=True)
-        subprocess.run(["cls"], check=True)
-    except:
-        os.system("cls")
-        os.system("title Royal Knight: ERROR IN A COG")
+    logging.warning("\nLoading one or more cogs failed...\n")
 
 client.run(config("token"), reconnect=True)

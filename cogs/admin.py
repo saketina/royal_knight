@@ -2,6 +2,9 @@ import disnake
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions
 
+import logging
+
+logging = logging.getLogger("Admin")
 
 class Admin(commands.Cog):
     def __init__(self, client):
@@ -94,7 +97,3 @@ class Admin(commands.Cog):
 
 def setup(client):
     client.add_cog(Admin(client))
-    print(f"Cog: Admin - loaded.")
-
-def teardown(client):
-    print(f"Cog: Admin - unloaded.")

@@ -4,6 +4,10 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Prefix")
+
 ## TODO: PREFIX_ADD create banned prefixes list
 
 firebase = pyrebase.initialize_app(

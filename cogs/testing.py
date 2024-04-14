@@ -14,6 +14,11 @@ from disnake.utils import get
 from PIL import Image
 from io import BytesIO
 
+
+import logging
+
+logging = logging.getLogger("Testing")
+
 # TODO ALL/transfer finished commands to appropriate cogs
 
 firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))

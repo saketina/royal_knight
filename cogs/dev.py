@@ -8,6 +8,10 @@ import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import is_owner
 
+import logging
+
+logging = logging.getLogger("Dev")
+
 firebase = pyrebase.initialize_app(
     json.load(open("./firebase_config.json", "r")))
 db = firebase.database()

@@ -6,6 +6,10 @@ import disnake
 from disnake import Forbidden
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Fun")
+
 # TODO RPS/remove error handler and add try/except
 # ! BUG tested the int vs int values
 # ! need to test str vs str, str vs int, int vs str

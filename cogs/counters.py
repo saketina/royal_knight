@@ -6,6 +6,10 @@ import disnake
 import pyrebase
 from disnake.ext import commands, tasks
 
+import logging
+
+logging = logging.getLogger("Counters")
+
 firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
