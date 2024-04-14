@@ -102,7 +102,4 @@ class Welcome(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Welcome(bot))
-    print(f"Cog: Welcome - loaded.")
 
-def teardown(client):
-    print(f"Cog: Welcome - unloaded.")

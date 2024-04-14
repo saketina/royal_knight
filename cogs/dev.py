@@ -65,7 +65,4 @@ class Dev(commands.Cog):
 
 def setup(client):
     client.add_cog(Dev(client))
-    print(f"Cog: Dev - loaded.")
 
-def teardown(client):
-    print(f"Cog: Dev - unloaded.")

@@ -1356,7 +1356,3 @@ class Testing(commands.Cog):
     
 def setup(client):
     client.add_cog(Testing(client))
-    print("Cog: Testing - loaded")
-
-def teardown(client):
-    print("Cog: Testing - unloaded.")

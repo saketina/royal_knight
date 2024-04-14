@@ -1198,8 +1198,3 @@ class Roleplay(commands.Cog):
 
 def setup(client):
     client.add_cog(Roleplay(client))
-    #gif_loading(f"./RP")
-    print(f"Cog: Roleplay - loaded.")
-
-def teardown(client):
-    print(f"Cog: Roleplay - unloaded.")

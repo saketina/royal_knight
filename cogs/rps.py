@@ -199,7 +199,3 @@ class rps(commands.Cog):
         
 def setup(client):
     client.add_cog(rps(client))
-    print("Cog: RPS - loaded")
-
-def teardown(client):
-    print("Cog: RPS - unloaded.")

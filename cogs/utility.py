@@ -306,7 +306,4 @@ class Utility(commands.Cog):
 
 def setup(client):
     client.add_cog(Utility(client))
-    print(f"Cog: Utility - loaded.")
 
-def teardown(client):
-    print(f"Cog: Utility - unloaded.")

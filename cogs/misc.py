@@ -66,7 +66,3 @@ class Misc(commands.Cog):
 
 def setup(client):
     client.add_cog(Misc(client))
-    print(f"Cog: Misc - loaded.")
-
-def teardown(client):
-    print(f"Cog: Misc - unloaded.")

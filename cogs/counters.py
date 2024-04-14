@@ -158,7 +158,3 @@ class Counters(commands.Cog):
 
 def setup(client):
     client.add_cog(Counters(client))
-    print(f"Cog: Counters - loaded.")
-
-def teardown(client):
-    print(f"Cog: Counters - unloaded.")

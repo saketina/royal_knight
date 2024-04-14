@@ -164,7 +164,4 @@ class User(commands.Cog):
 
 def setup(client):
     client.add_cog(User(client))
-    print("Cog: User - loaded.")
 
-def teardown(client):
-    print("Cog: User - unloaded.")

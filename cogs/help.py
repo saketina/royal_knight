@@ -233,7 +233,3 @@ class Help(commands.Cog):
 
 def setup(client):
     client.add_cog(Help(client))
-    print(f"Cog: Help - loaded.")
-
-def teardown(client):
-    print(f"Cog: Help - unloaded.")

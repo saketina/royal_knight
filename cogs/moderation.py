@@ -411,7 +411,3 @@ class Moderation(commands.Cog):
         
 def setup(client):
     client.add_cog(Moderation(client))
-    print(f"Cog: Moderation - loaded.")
-
-def teardown(client):
-    print(f"Cog: Moderation - unloaded.")

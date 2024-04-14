@@ -355,7 +355,3 @@ class Fun(commands.Cog):
     """
 def setup(client):
     client.add_cog(Fun(client))
-    print(f"Cog: Fun - loaded.")
-
-def teardown(client):
-    print(f"Cog: Fun - unloaded.")

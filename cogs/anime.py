@@ -55,7 +55,3 @@ class Anime(commands.Cog):
 
 def setup(client):
     client.add_cog(Anime(client))
-    print(f"Cog: Anime - loaded.")
-
-def teardown(client):
-    print(f"Cog: Anime - unloaded.")

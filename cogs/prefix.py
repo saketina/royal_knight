@@ -95,7 +95,4 @@ class Prefix(commands.Cog):
 
 def setup(client):
     client.add_cog(Prefix(client))
-    print(f"Cog: Prefix - loaded.")
 
-def teardown(client):
-    print(f"Cog: Prefix - unloaded.")
