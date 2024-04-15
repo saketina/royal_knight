@@ -45,7 +45,9 @@ client = commands.Bot(
     case_insensitive=True,
     intents=intents,
     reload=True,
-    status=disnake.Status.dnd
+    status=disnake.Status.dnd,
+    strip_after_prefix=True,
+    chunk_guilds_at_startup=False
 )
 client.remove_command("help")
 
