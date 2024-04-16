@@ -188,7 +188,7 @@ class Utility(commands.Cog):
             vote = {'yes': [], 'no': []}
 
             bot_id = self.client.user.id
-            print(bot_id)
+            logging.info(bot_id)
 
             await poll_message.add_reaction(yes_mark)
             await poll_message.add_reaction(no_mark)

@@ -149,7 +149,7 @@ class rps(commands.Cog):
                         check=lambda i: i.author.id==player2.id and i.channel==player2.dm_channel,
                         timeout=30
                         )
-                        print(self.player2_answer)
+                        logging.info(self.player2_answer)
                 
                 get_outcome = player1_answer+"1"
                 outcome = options[get_outcome]
@@ -195,7 +195,7 @@ class rps(commands.Cog):
         
         MyView.message = await ctx.send(embed=start_embed, view=view_select1)
         async def on_error(self, error, item, interaction):
-            print(error)
+            logging.error(error)
         
 def setup(client):
     client.add_cog(rps(client))

@@ -74,12 +74,12 @@ class Testing(commands.Cog):
                 gif_image.tobytes()
                 gif_image.save(image_bytes, format="GIF", save_all=True)
                 image_bytes.seek(0)
-                #print(image_bytes)
+                #logging.info(image_bytes)
                 path = f"./RP/{command}/{command}({counter}).gif"
                 #image_bytes.save(path, format="GIF", save_all=True)
                 BytesIO.write(gif_image)
                 gif_image.close()
-        print("done")
+        logging.info("done")
 
     @commands.command()
     async def gif_test(self, ctx):
@@ -338,7 +338,7 @@ class Testing(commands.Cog):
 
                     if author_check(ctx, interaction):
                             moderation = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get().val()
-                            #print(moderation)
+                            #logging.info(moderation)
                             if db_warns != None:
                                 moderation.popitem(str("warns"))
 
@@ -382,9 +382,9 @@ class Testing(commands.Cog):
                                     pages_num.append(key)
                                     
                                 self.pages_list[user.id] = self.pages
-                                #print(moderation)
+                                #logging.info(moderation)
                                 pages = self.pages_list[user.id]
-                                #print(pages_num)
+                                #logging.info(pages_num)
                                 number = moderation.popitem(last=False)
 
                                 self.current_page = 1
@@ -473,7 +473,7 @@ class Testing(commands.Cog):
                                         await interaction.response.edit_message(view=None)
                                 
                                 async def button_warns_previous_previous_callback(interaction):
-                                    # print("started-previous_previous")
+                                    # logging.info("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
 
@@ -494,7 +494,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_warns_previous_callback(interaction):
-                                    # print("started-previous")
+                                    # logging.info("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
 
@@ -515,7 +515,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_warns_next_next_callback(interaction):
-                                    # print("started-next_next")
+                                    # logging.info("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -544,7 +544,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                                 
                                 async def button_warns_next_callback(interaction):
-                                    # print("started-next")
+                                    # logging.info("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -595,9 +595,9 @@ class Testing(commands.Cog):
                                 view_warns.add_item(button_warns_next)
                                 MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_warns)
                                 async def on_error(self, error, item, interaction):
-                                    print(error)
+                                    logging.error(error)
                             else:
-                                print("There aren't any moderations")
+                                await ctx.send("There aren't any moderations")
 
                     else:
                         return
@@ -612,7 +612,7 @@ class Testing(commands.Cog):
 
                     if author_check(ctx, interaction):
                             moderation = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).get().val()
-                            #print(moderation)
+                            #logging.info(moderation)
                             if db_bans != None:
                                 moderation.popitem(str("bans"))
 
@@ -657,9 +657,9 @@ class Testing(commands.Cog):
                                     pages_num.append(key)
                                     
                                 self.pages_list[user.id] = self.pages
-                                #print(moderation)
+                                #logging.info(moderation)
                                 pages = self.pages_list[user.id]
-                                #print(pages_num)
+                                #logging.info(pages_num)
                                 number = moderation.popitem(last=False)
 
                                 self.current_page = 1
@@ -748,7 +748,7 @@ class Testing(commands.Cog):
                                         await interaction.response.edit_message(view=None)
                                 
                                 async def button_bans_previous_previous_callback(interaction):
-                                    # print("started-previous_previous")
+                                    # logging.info("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
 
@@ -769,7 +769,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_bans_previous_callback(interaction):
-                                    # print("started-previous")
+                                    # logging.info("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
 
@@ -790,7 +790,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_bans_next_next_callback(interaction):
-                                    # print("started-next_next")
+                                    # logging.info("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -819,7 +819,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                                 
                                 async def button_bans_next_callback(interaction):
-                                    # print("started-next")
+                                    # logging.info("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -870,9 +870,9 @@ class Testing(commands.Cog):
                                 view_bans.add_item(button_bans_next)
                                 MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_bans) # ! BUG under this line is an error when trying to open up panel
                                 async def on_error(self, error, item, interaction):
-                                    print(error)
+                                    logging.error(error)
                             else:
-                                print("There aren't any moderations")
+                                await ctx.send("There aren't any moderations")
 
                     else:
                         return
@@ -887,7 +887,7 @@ class Testing(commands.Cog):
 
                     if author_check(ctx, interaction):
                             moderation = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).get().val()
-                            #print(moderation)
+                            #logging.info(moderation)
                             if db_kicks != None:
                                 moderation.popitem(str("kicks"))
 
@@ -931,9 +931,9 @@ class Testing(commands.Cog):
                                     pages_num.append(key)
                                     
                                 self.pages_list[user.id] = self.pages
-                                #print(moderation)
+                                #logging.info(moderation)
                                 pages = self.pages_list[user.id]
-                                #print(pages_num)
+                                #logging.info(pages_num)
                                 number = moderation.popitem(last=False)
 
                                 self.current_page = 1
@@ -1022,7 +1022,7 @@ class Testing(commands.Cog):
                                         await interaction.response.edit_message(view=None)
                                 
                                 async def button_kicks_previous_previous_callback(interaction):
-                                    # print("started-previous_previous")
+                                    # logging.info("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
 
@@ -1043,7 +1043,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_kicks_previous_callback(interaction):
-                                    # print("started-previous")
+                                    # logging.info("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
 
@@ -1064,7 +1064,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_kicks_next_next_callback(interaction):
-                                    # print("started-next_next")
+                                    # logging.info("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -1093,7 +1093,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                                 
                                 async def button_kicks_next_callback(interaction):
-                                    # print("started-next")
+                                    # logging.info("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -1144,15 +1144,15 @@ class Testing(commands.Cog):
                                 view_kicks.add_item(button_kicks_next)
                                 MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_kicks)
                                 async def on_error(self, error, item, interaction):
-                                    print(error)
+                                    logging.error(error)
                             else:
-                                print("There aren't any moderations")
+                                await ctx.send("There aren't any moderations")
 
                     else:
                         return
                 
                 async def on_error(self, error, item, interaction):
-                    print(error)
+                    logging.error(error)
 
                 button_warns.callback = button_warns_callback
                 button_bans.callback = button_bans_callback

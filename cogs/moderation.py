@@ -29,11 +29,6 @@ mute_roles = 687228928565444800, 706540593865556071, 743724904033288293, 7061618
 unmute_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 896472583212507206
 warn_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
 
-def staff_check(member):
-    for role in member.roles:
-        if role.id in staff_roles:
-            return True
-
 def moderation_check(ctx):
     try:
         if ctx.command.name == "ban":
@@ -81,7 +76,8 @@ def moderation_check(ctx):
     except AttributeError:
         return False
 
-
+def staff_check(member):
+    return any((True for role in member.roles if role.id in staff_roles))
 
 class Moderation(commands.Cog):
     def __init__(self, client):
@@ -161,7 +157,7 @@ class Moderation(commands.Cog):
             await ctx.send("Please don\'t warn me.")
         elif member == ctx.author:
             await ctx.send("You can\'t warn yourself.")
-        elif staff_check(member) == True:
+        elif staff_check(ctx.guild.get_member(member.id)) == True:
             await ctx.send("You can\'t warn that user.")
         else:
             f = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(member.id).get().val()
@@ -248,7 +244,6 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
-    # ! BUG not checking if user is banned
     async def ban(self, ctx, member:disnake.User=None, *, reason="For no reason"):
         if member==None:
             emb = disnake.Embed(
@@ -257,12 +252,12 @@ class Moderation(commands.Cog):
                 color = disnake.Color.dark_red()
                 )
             await ctx.send(embed=emb)
-        elif staff_check(ctx.guild.get_member(member.id)) == True:
-            await ctx.send("You can\'t ban that user.")
         elif member.id == self.client.user.id:
             await ctx.send("Please don\'t ban me.")
         elif member==ctx.author:
             await ctx.send(content = "You can\'t ban yourself", delete_after = 10)
+        elif staff_check(ctx.guild.get_member(member.id)) == True:
+            await ctx.send("You can\'t ban that user.")
         else:
             f = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).get().val()
             data = f
@@ -314,7 +309,7 @@ class Moderation(commands.Cog):
                             f"Reason: **`{reason}`**\n"
                             f"At: **``{dt_string}``**"
                 )
-            #await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
+            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
             await ctx.send(embed=embed)
 
     @commands.command()
@@ -329,10 +324,10 @@ class Moderation(commands.Cog):
                 color = disnake.Color.dark_red()
                 )
             await ctx.send(embed=emb)
-        elif staff_check(member) == True:
-            await ctx.send("You can\'t kick that user.")
         elif member==ctx.author:
             await ctx.send(content = "You can\'t kick yourself", delete_after = 10)
+        elif staff_check(ctx.guild.get_member(member.id)) == True:
+            await ctx.send("You can\'t kick that user.")
         else:
             f = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(member.id).get().val()
             data = f
@@ -394,18 +389,18 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
-    async def unban(self, ctx, id: int = None):
-        if id == None:
+    async def unban(self, ctx, target: disnake.User = None):
+        if target == None:
             emb = disnake.Embed(
                 title = "UNBAN HELP",
                 description = "`k.unban [user_id]`",
                 color = disnake.Color.dark_red()
                 )
             await ctx.send(embed=emb)
-        elif id == ctx.author:
+        elif target == ctx.author:
             await ctx.send(content = "You aren\'t banned.", delete_after = 10)
         else:
-            user = await self.client.fetch_user(id)
+            user = await self.client.fetch_user(target.id)
             await ctx.guild.unban(user)
             await ctx.send(f"{user} has been unbanned.")
         

@@ -26,7 +26,7 @@ class User(commands.Cog):
         await ctx.trigger_typing()
         if not user:
             user = ctx.author
-        #print(user.raw_status)
+        #logging.info(user.raw_status)
         if user.raw_status == "online":
             status_pic = "cogs/Assets/member_status/online.png"
         elif user.raw_status == "idle":
