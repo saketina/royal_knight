@@ -5,6 +5,8 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
+import datetime
+from datetime import datetime as dt
 
 import logging
 
@@ -122,6 +124,27 @@ class Utility(commands.Cog):
             color=color,
             )
         await ctx.send(embed=PingEmbed)
+        
+    @commands.command()
+    async def info(self, ctx):
+        embed = disnake.Embed(
+            title="General Information",
+            color=disnake.Color.dark_red(),
+            timestamp=dt.now()
+        )
+        embed.add_field(
+            name="Bot info",
+            value=f"Uptime: Not yet implemented\n" # ! TODO make uptime
+                  f"Shard ID: {ctx.guild.shard_id}\n"
+                  f"Currently serving {len(self.client.guilds)} servers"
+        )
+        embed.add_field(
+            name="Developer",
+            value="email: dev.crazydragon@gmail.com\n"
+                  f"Discord: thecrazydragon({self.client.owner.mention})"
+        )
+        embed.set_thumbnail(self.client.owner.avatar)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def serverinfo(self, ctx):
