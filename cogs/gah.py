@@ -1,5 +1,3 @@
-
-# TODO add MISSING PERMISSIONS handler for muted cmd(happens when user tries to unmute themselves + they arent muted)
 import sys
 import traceback
 
@@ -119,8 +117,8 @@ class CommandErrorHandler(commands.Cog):
 
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
-            logging.error('Ignoring exception in command {}:'.format(ctx.command), error, file=sys.stderr)
-            traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            logging.error('Ignoring exception in command {}:'.format(ctx.command), error)
+            #traceback.print_exception(type(error), error, error.__traceback__)
             embed = disnake.Embed(
                 title=f"Error in command {ctx.command.qualified_name}",
                 description=error,
