@@ -93,6 +93,7 @@ class CommandErrorHandler(commands.Cog):
             return
         
         elif isinstance(error, AttributeError):
+            logging.info("error caught by AttributeError instance")
             if ctx.command.qualified_name == "ban":
                 await ctx.send("User not found.")
             else:
