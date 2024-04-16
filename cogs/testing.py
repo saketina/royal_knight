@@ -26,12 +26,16 @@ db = firebase.database()
 
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")
 
+staff_roles = 743724904033288293, 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
+
 def author_check(ctx, interaction):
     if interaction.author.id == ctx.author.id:
         return True
     else:
         return False
 
+def staff_check(member):
+    return any((True for role in member.roles if role.id in staff_roles))
 
 class MyView(disnake.ui.View):
     def __init__(self, timeout: float, interaction:disnake.Interaction):
@@ -102,191 +106,6 @@ class Testing(commands.Cog):
                 kiss_embed.set_image(url="attachment://gif.gif")
                 await ctx.send(embed=kiss_embed, file=file)
 
-    """
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
-    async def mute(self, ctx, member:disnake.Member=None, duration=None, *, reason=None):
-        # TODO MUTE/add checks if the member is muted or not
-        if member == None:
-            embed = disnake.Embed(
-                title = "MUTE COMMAND",
-                description = "``k.mute [member_id/@member] [duration] [reason]``",
-                color = disnake.Color.dark_red()
-                )
-            embed.add_field(
-                name="Duration Options",
-                value="``` d = day/s\n"
-                      " h = hour/s\n"
-                      " m = minute/s\n"
-                      " s = second/s```"
-            )
-            await ctx.send(embed=embed)
-        elif duration == None:
-            duration = "28d"
-        elif reason == None:
-            reason = "no reason"
-        elif member == ctx.author:
-            await ctx.send("You can\'t mute yourself.")
-        elif member.id == self.client.user.id:
-            await ctx.send("Please don\'t mute me.")
-        elif member.guild_permissions.manage_messages == True:
-            await ctx.send("You can\'t mute that user.")
-        else:
-            f = db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).get().val()
-            data = f
-            if data == None:
-                mute_amount = 1
-                data = ({
-                    "mutes": 1,
-                    1:({
-                        "moderator": str(ctx.author.id),
-                        "moderator_name": str(ctx.author.display_name),
-                        "reason": reason,
-                        "datetime": dt_string
-                    })
-                })
-                
-                embed = disnake.Embed(
-                    title = f"{member.name} has been muted for {duration}",
-                    color = disnake.Color.dark_red()
-                    )
-                embed.add_field(
-                    name = "Mute",
-                    value = f"Mute ID: ``{mute_amount}``\nModerator: **``{ctx.author}``**\nReason: **`{reason}`**\nAt: **``{dt_string}``**",
-                    inline = True
-                    )
-                if duration.endswith("s"):
-                    seconds = duration.split(-1)
-                    minutes = 0
-                    hours = 0
-                    days = 0
-                elif duration.endswith("m"):
-                    seconds = 0
-                    minutes = duration.split(-1)
-                    hours = 0
-                    days = 0
-                elif duration.endswith("h"):
-                    seconds = 0
-                    minutes = 0
-                    hours = duration.split(-1)
-                    days = 0
-                elif duration.endswith("d"):
-                    seconds = 0
-                    minutes = 0
-                    hours = 0
-                    days = duration.split(-1)
-                else:
-                    minutes=duration
-
-                time = datetime.timedelta(seconds=seconds, minutes=minutes, days=days, hours=hours)
-                #until = utils.utcnow() + datetime.timedelta(seconds=duration)
-                await member.timeout(time, reason=reason)
-                db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).set(data)
-                await ctx.send(embed=embed)
-            else:
-                mute_amount = data.get("mutes")
-                mute_amount += 1
-                data["mutes"]=mute_amount
-                new_mute = ({
-                    "moderator": str(ctx.author.id),
-                    "moderator_name": str(ctx.author.display_name),
-                    "reason": reason,
-                    "datetime": dt_string
-                })
-                data[mute_amount]=new_mute
-                #db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).set(data)
-
-                #await ctx.send(duration)
-                if duration.endswith("s"):
-                    seconds = duration.replace("s", "")
-                    minutes = 0
-                    hours = 0
-                    days = 0
-                    suffix = "seconds"
-                elif duration.endswith("m"):
-                    seconds = 0
-                    minutes = duration.replace("m", "")
-                    hours = 0
-                    days = 0
-                    suffix = "minutes"
-                elif duration.endswith("h"):
-                    seconds = 0
-                    minutes = 0
-                    hours = duration.replace("h", "")
-                    days = 0
-                    suffix = "hours"
-                elif duration.endswith("d"):
-                    seconds = 0
-                    minutes = 0
-                    hours = 0
-                    days = duration.replace("d", "")
-                    suffix = "days"
-                else:
-                    seconds = 0
-                    minutes = duration
-                    hours = 0
-                    days = 0
-                    suffix = "minutes"
-
-                embed = disnake.Embed(
-                    title = f"{member.name} has been muted for {duration}",
-                    color = disnake.Color.dark_red()
-                )
-                embed.add_field(
-                    name = f"New Mute",
-                    value = f"Mute ID: ``{mute_amount}``\nModerator: **``{ctx.author}``**\nReason: **`{reason}`**\nAt: **``{dt_string}``**"
-                )
-
-                time = datetime.timedelta(seconds=int(seconds), minutes=int(minutes), days=int(days), hours=int(hours))
-                # TODO MUTE_ROLE add a way to dynamically set the role to db
-                try:
-                    await member.add_roles(1125541804654215350)
-                except:
-                    guild = ctx.guild
-                    mutedRole = disnake.utils.get(guild.roles, name="Muted")
-
-                    if not mutedRole:
-                        mutedRole = await guild.create_role(name="Muted")
-
-                        for channel in guild.channels:
-                            await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-                    await member.add_roles(mutedRole)
-
-                await member.timeout(duration=time, reason=reason)
-                #await member.add_roles(mutedRole, reason=reason)
-                db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).set(data)
-                await ctx.send(embed=embed)
-
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
-    async def unmute(self, ctx, member:disnake.Member=None):
-        # TODO UNMUTE/add checks if the member is muted or not
-        if member == None:
-            embed = disnake.Embed(
-                title = "UNMUTE COMMAND",
-                description = "``k.unmute [member_id/@member]``",
-                color = disnake.Color.dark_red()
-                )
-            await ctx.send(embed=embed)
-        else:
-            time = datetime.timedelta(seconds=0, minutes=0, days=0, hours=0)
-
-            try:
-                await member.remove_roles(1125541804654215350)
-            except:
-                guild = ctx.guild
-                mutedRole = disnake.utils.get(guild.roles, name="Muted")
-
-                if not mutedRole:
-                    mutedRole = await guild.create_role(name="Muted")
-
-                    for channel in guild.channels:
-                        await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-                await member.remove_roles(mutedRole)
-
-            await member.timeout(duration=time)
-            await ctx.send(f"{member.name} has been unmuted.")
-    """
     @commands.command(aliases=["warns", "check", "moderations"], pass_context=True)
     async def warnings(self, ctx, user:disnake.User=None):
         try:

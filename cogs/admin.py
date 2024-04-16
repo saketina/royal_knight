@@ -1,6 +1,8 @@
 import disnake
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions
+import datetime
+from datetime import datetime as dt
 
 import logging
 
@@ -74,7 +76,6 @@ class Admin(commands.Cog):
             )
             await ctx.send(embed=emb)
 
-
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)
     async def reload(self, ctx, input=None):
@@ -93,6 +94,27 @@ class Admin(commands.Cog):
                 value="```k.reload <category_name>```"
             )
             await ctx.send(embed=emb)
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def muterole(self, ctx, role:disnake.Role=None):
+        if role == None:
+            embed = disnake.Embed(
+                title="MUTEROLE COMMAND",
+                description= "``k.muterole (@role)``",
+                color = disnake.Color.dark_red(),
+                timestamp=dt.now()
+            )
+            await ctx.send(embed=embed)
+        else:
+            db.child("SETUP").child(ctx.guild.id).child("MODERATION").child("MUTEROLE").set(int(role.id))
+            embed = disnake.Embed(
+                title="Role added",
+                description=f"I set the role {role} as the mute role.",
+                color=disnake.Color.dark_red(),
+                timestamp=dt.now()
+            )
+            await ctx.send(embed=embed)
 
 
 def setup(client):
