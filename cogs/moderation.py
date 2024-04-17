@@ -18,6 +18,9 @@ logging = logging.getLogger("Moderation")
 firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
+# TODO for each moderation add to database as leaderboard and develop a staff leaderboard
+# TODO make tasks to check if the date is the 1st and if yes then display leaderboard and wipe it
+
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")
 
 staff_roles = 743724904033288293, 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
@@ -159,6 +162,7 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(f"Sum ting wong")
 
+    # TODO when user is unmuted remove role "muted" aka set up listener for when the user is unmuted
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def mute(self, ctx, member:disnake.Member=None, duration=None, *, reason=None):

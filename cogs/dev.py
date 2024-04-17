@@ -12,20 +12,9 @@ import logging
 
 logging = logging.getLogger("Dev")
 
-firebase = pyrebase.initialize_app(
-    json.load(open("./firebase_config.json", "r")))
-db = firebase.database()
-
-
 class Dev(commands.Cog):
     def __init__(self, client):
         self.client = client
-
-    @commands.command()
-    @commands.is_owner()
-    async def cls(self, ctx):
-        os.system("cls")
-        await ctx.send("Cleared the terminal, Daddy.")
 
     @commands.command()
     @commands.is_owner()
