@@ -466,11 +466,11 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(ban_members=True)
     @commands.check(moderation_check)
-    async def ban(self, ctx, member:disnake.User=None, *, reason="For no reason"):
-        if member in ctx.guild.members:
-            member = member
+    async def ban(self, ctx, target:disnake.User=None, *, reason="For no reason"):
+        if target in ctx.guild.members:
+            member = target
         else:
-            member = await ctx.guild.getch_member(member.id)
+            member = await self.client.getch_user(target.id)
         if member==None:
             emb = disnake.Embed(
                 title = "BAN HELP",
