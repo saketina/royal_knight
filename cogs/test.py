@@ -166,7 +166,7 @@ class Test(commands.Cog):
                     await ctx.send(f"failed at {g}")
                     raise e
             return
-            ## BUG: this piece of shit works idk how or why, the gifs are moving but on the original rp cmd the embeds arent moving at all
+            # ! BUG this piece of code works idk how or why, the gifs are moving but on the original rp cmd the embeds arent moving at all
 
 def setup(bot):
     bot.add_cog(Test(bot))
