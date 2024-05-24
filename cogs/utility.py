@@ -5,12 +5,20 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
+import datetime
+from datetime import datetime as dt
+
+import logging
+
+logging = logging.getLogger("Utility")
 
 firebase = pyrebase.initialize_app(
-    json.load(open("firebase_config.json", "r")))
+    json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 sniped_messages = {}
+
+# ! FEATURE_ADD add birthday checker
 
 class Utility(commands.Cog):
     def __init__(self, client):
@@ -18,28 +26,21 @@ class Utility(commands.Cog):
 
     @commands.command(pass_context=True)
     async def say(self, ctx, *, message=None):
-        #await ctx.message.delete()
-        try:
-            if message != None:
-                
-                if str(ctx.guild.default_role) not in message and "@here" not in message:
-                    msg = message
-                else:
-                    msg = "You can\'t make me say that"
-                
-                
-                await ctx.send(msg)
-            else: 
-                await ctx.send("Please tell me what to say")
-        except commands.NotOwner:
-            return
-        except Exception as e:
-            print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
+        if message != None:
+            
+            if str(ctx.guild.default_role) not in message and "@here" not in message:
+                msg = message
+            else:
+                msg = "You can\'t make me say that"
+            
+            
+            await ctx.send(msg)
+        else: 
+            await ctx.send("Please tell me what to say")
 
     @say.before_invoke
     async def say_before(self, ctx):
         await ctx.message.delete()
-        print("deleted message before invoke")
     
     @commands.Cog.listener()
     async def on_message_delete(self, message):
@@ -109,8 +110,10 @@ class Utility(commands.Cog):
     
     @commands.command(pass_context=True)
     async def ping(self, ctx):
-        if round(self.client.latency * 1000) >= 155:
+        if round(self.client.latency * 1000) >= 200:
             color = disnake.Color.red()
+        elif round(self.client.latency * 1000) >= 100:
+            color = disnake.Color.yellow()
         else:
             color = disnake.Color.green()
 
@@ -121,6 +124,27 @@ class Utility(commands.Cog):
             color=color,
             )
         await ctx.send(embed=PingEmbed)
+        
+    @commands.command()
+    async def info(self, ctx):
+        embed = disnake.Embed(
+            title="General Information",
+            color=disnake.Color.dark_red(),
+            timestamp=dt.now()
+        )
+        embed.add_field(
+            name="Bot info",
+            value=f"Uptime: Not yet implemented\n" # ! TODO make uptime
+                  f"Shard ID: {ctx.guild.shard_id}\n"
+                  f"Currently serving {len(self.client.guilds)} servers"
+        )
+        embed.add_field(
+            name="Developer",
+            value="email: dev.crazydragon@gmail.com\n"
+                  f"Discord: thecrazydragon({self.client.owner.mention})"
+        )
+        embed.set_thumbnail(self.client.owner.avatar)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def serverinfo(self, ctx):
@@ -162,7 +186,7 @@ class Utility(commands.Cog):
         )
         embed.set_thumbnail(ctx.guild.icon)
         await ctx.send(embed=embed)
-        # //TODO SERVERINFO/finish command
+        # TODO SERVERINFO/finish command
 
     @commands.command(pass_context=True)
     @commands.guild_only()
@@ -187,7 +211,7 @@ class Utility(commands.Cog):
             vote = {'yes': [], 'no': []}
 
             bot_id = self.client.user.id
-            print(bot_id)
+            logging.info(bot_id)
 
             await poll_message.add_reaction(yes_mark)
             await poll_message.add_reaction(no_mark)
@@ -297,13 +321,12 @@ class Utility(commands.Cog):
             except ValueError:
                 await ctx.send("Invalid time format ,use `'s'` for seconds, `'m'` for minutes, `'h'` for hours, and `'d'` for days.")
                 return
+            finally:
+                pass
         await ctx.send(f"Setting a timer for `{time}`")
         await asyncio.sleep(total_time)
         await ctx.send(f"{ctx.author.mention}, the timer is done!!!")
 
 def setup(client):
     client.add_cog(Utility(client))
-    print(f"Cog: Utility - loaded.")
 
-def teardown(client):
-    print(f"Cog: Utility - unloaded.")

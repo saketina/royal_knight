@@ -1,5 +1,6 @@
 config.py
 __pycache__
+.python-version
 .idea
 .vscode
 .env
@@ -9,3 +10,4 @@ firebase_config.json
 cogs/Assets/afk_mention_list_messages/
 cogs/Assets/welcome/images/welcome_image/output/
 images/generated/
+logs/

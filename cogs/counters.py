@@ -6,7 +6,11 @@ import disnake
 import pyrebase
 from disnake.ext import commands, tasks
 
-firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
+import logging
+
+logging = logging.getLogger("Counters")
+
+firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 guild_id = 940292707102900244
@@ -35,7 +39,6 @@ class Counters(commands.Cog):
     async def reset(self):
         time = dt.now().strftime("%d/%m/%Y %H:%M:%S")
         hour = dt.now().hour
-        # print(hour)
 
         msgCounter = await self.client.fetch_channel(message_counter_id)
         joinCounter = await self.client.fetch_channel(member_counter_id)
@@ -49,12 +52,11 @@ class Counters(commands.Cog):
                 await msgCounter.edit(name="Msgs Today • 0")
                 await joinCounter.edit(name="Joined Today • 0")
             except Exception as e:
-                print(f"Error in reset task: {e}")
+                logging.error(f"Error in reset task: {e}")
 
 
     @tasks.loop(minutes=2.0, reconnect = True)
     async def update_vc(self):
-        #await asyncio.sleep(1)
         guild = self.client.get_guild(guild_id)
         channel = guild.get_channel(vc_counter_id)
         count = 0
@@ -62,8 +64,6 @@ class Counters(commands.Cog):
             for member in vc.members:
                 if not member.bot:
                     count += 1
-        #await asyncio.sleep(1)
-        #print(f"VC: {count}")
         await channel.edit(name=f"VC members • {count}")
 
     @commands.Cog.listener()
@@ -82,7 +82,7 @@ class Counters(commands.Cog):
             ).val
             await joinCounter.edit(name=f"Joined Today • {p}")
             #db.child("COUNTERS").child("MEMBERS_JOINED").set(p)
-            #print("Added: +1")
+            #logging.info("Added: +1")
         """
         if member.guild.id == guild_id:
             joinCounter = await self.client.fetch_channel(member_counter_id)
@@ -92,7 +92,7 @@ class Counters(commands.Cog):
                 ).val
                 await joinCounter.edit(name=f"Joined Today • {p}")
             except Exception as e:
-                print(f"Error in on_member_join: {e}")
+                logging.error(f"Error in on_member_join: {e}")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -110,7 +110,7 @@ class Counters(commands.Cog):
             ).val
             await joinCounter.edit(name=f"Joined Today • {p}")
             #db.child("COUNTERS").child("MEMBERS_JOINED").set(p)
-            #print("Removed: -1")
+            #logging.info("Removed: -1")
         """
         if member.guild.id == guild_id:
             joinCounter = await self.client.fetch_channel(member_counter_id)
@@ -120,7 +120,7 @@ class Counters(commands.Cog):
                 ).val
                 await joinCounter.edit(name=f"Joined Today • {p}")
             except Exception as e:
-                print(f"Error in on_member_remove: {e}")
+                logging.error(f"Error in on_member_remove: {e}")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -137,7 +137,6 @@ class Counters(commands.Cog):
                 if message.author.bot or message.guild.id == ignored_guild_id:
                     return
 
-                #print(f"Messages: {self.msg_buffer}")
                 if self.msg_buffer >= 10:
                     try:
                         msgs = db.child("COUNTERS").child("MESSAGES_SENT").get().val()
@@ -146,7 +145,7 @@ class Counters(commands.Cog):
                         db.child("COUNTERS").child("MESSAGES_SENT").set(msgs)
                         await msgCounter.edit(name=f"Msgs Today • {msgs}")
                     except Exception as e:
-                        print(f"Error in on_message: {e}")
+                        logging.error(f"Error in on_message: {e}")
                 else:
                     self.msg_buffer += 1
         except AttributeError:
@@ -154,7 +153,3 @@ class Counters(commands.Cog):
 
 def setup(client):
     client.add_cog(Counters(client))
-    print(f"Cog: Counters - loaded.")
-
-def teardown(client):
-    print(f"Cog: Counters - unloaded.")

@@ -6,18 +6,30 @@ import time
 import traceback
 from datetime import datetime
 
+import subprocess
+
 import disnake
 import pyrebase
 from decouple import config
 from disnake.ext import commands
 from disnake.ext.commands import has_permissions, is_owner
 
-# //TODO when bot is done remove [reload = True] from client setup
-# //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
-# //TODO add birthday checker
+import logging
 
-#import logging
-# logging.basicConfig(level=logging.ERROR)
+# //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    filename='logs/client.log',
+                    filemode='w')
+
+logger = logging.StreamHandler()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(name)s: %(levelname)s: %(message)s')
+logger.setFormatter(formatter)
+logging.getLogger('').addHandler(logger)
+
 cog_counter = 0
 
 intents = disnake.Intents.all()
@@ -32,19 +44,17 @@ client = commands.Bot(
     case_insensitive=True,
     intents=intents,
     reload=True,
-    status=disnake.Status.dnd
+    status=disnake.Status.dnd,
+    strip_after_prefix=True,
+    chunk_guilds_at_startup=False,
+    shard_count=1,
+    shard_id=0
 )
 client.remove_command("help")
 
-
 @client.event
 async def on_ready():
-    if len(client.guilds) > 1:
-        response = "servers"
-    else:
-        response = "server"
-    await client.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching, name=f"{len(client.guilds)} {response}"), status=disnake.Status.dnd)
-    print(
+    logging.info(
         f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
     )
 
@@ -70,26 +80,13 @@ for cog in initial_cogs:
     try:
         client.load_extension(cog)
         cog_counter += 1
-        # print(cog_counter)
+        logging.info(f"Loaded {cog}")
     except Exception as e:
-        #print(f"Error: \nType: {type(e).__name__} \nInfo - {e}")
-        print(f"{e}")
+        logging.error(f"Failed to load {cog}, {e}")
 
 if cog_counter >= len(initial_cogs):
-    print("All cogs imported succesfully", file=sys.stderr)
-    time.sleep(5)
-    try:
-        os.system("cls")
-    except:
-        os.system("clear")
-    os.system("title Royal Bot: STARTED")
+    logging.info("All cogs imported succesfully")
 else:
-    print("\nLoading one or more cogs failed...\n")
-    time.sleep(5)
-    try:
-        os.system("cls")
-    except:
-        os.system("clear")
-    os.system("title Royal Bot: ERROR IN A COG")
+    logging.warning("\nLoading one or more cogs failed...\n")
 
 client.run(config("token"), reconnect=True)

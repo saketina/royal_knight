@@ -11,11 +11,15 @@ import pyrebase
 from disnake.ext import commands
 from PIL import Image
 
-# //TODO ALL/make different gifs displayed if ctx.author used the command on themselves
-# //TODO resize gifs to 498x278
-# //TODO ADD wave, sip, shoot command
+import logging
 
-firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
+logging = logging.getLogger("Roleplay")
+
+# TODO ALL/make different gifs displayed if ctx.author used the command on themselves
+# TODO resize gifs to 498x278
+# TODO ADD wave, sip, shoot command
+
+firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 def load_gif(command, last_gif):
@@ -30,7 +34,7 @@ def load_gif(command, last_gif):
     gif_image.tobytes()
     gif_image.save(image_bytes, format="GIF", save_all=True)
     image_bytes.seek(0)
-    #print(image_bytes)
+    #logging.info(image_bytes)
     gif_image.close()
     return image_bytes
 
@@ -38,9 +42,9 @@ def per_cmd_loader(folder):
     loaded_gifs = {}
     gifs = []
     files = os.listdir(f"./RP/{folder}")
-    #print(files)
+    #logging.info(files)
     for file_name in files:
-        #print("done")
+        #logging.info("done")
         # Get the full path to the GIF
         #gif_path = os.path.join(root, file_name)
 
@@ -52,17 +56,17 @@ def per_cmd_loader(folder):
         #gif_im.tobytes()
         #gif_im.save(image_byt, format="GIF", save_all=True)
         #image_byt.seek(0)
-        #print(gif_im)
+        #logging.info(gif_im)
 
         gifs.append(gif_im)
                 
 
     loaded_gifs = gifs
-    #print(loaded_gifs)
+    #logging.info(loaded_gifs)
 
-    #print(loaded_gifs)
-    #print(loaded_gifs)
-    print("gifs have been preloaded")
+    #logging.info(loaded_gifs)
+    #logging.info(loaded_gifs)
+    logging.info("gifs have been preloaded")
     return loaded_gifs  # Return the dictionary of processed GIFs
 
 class Roleplay(commands.Cog):
@@ -92,16 +96,16 @@ class Roleplay(commands.Cog):
         loaded_gifs = {}  # Create a dictionary to store the GIFs
 
         subfolders = [f for f in os.listdir(gif_folder) if os.path.isdir(os.path.join(gif_folder, f))]
-        #print(subfolders)
+        #logging.info(subfolders)
         #for folder_name in subfolders:
         #    folder_path = os.path.join(gif_folder, folder_name)
         gifs = []
 
         #for root, _, files in os.walk(folder_path):
         files = os.listdir("./RP/bite")
-        print(files)
+        logging.info(files)
         for file_name in files:
-            print("done")
+            logging.info("done")
             # Get the full path to the GIF
             #gif_path = os.path.join(root, file_name)
 
@@ -118,11 +122,11 @@ class Roleplay(commands.Cog):
                     
 
         loaded_gifs['bite'] = gifs
-        print(loaded_gifs)
+        logging.info(loaded_gifs)
 
         self.gifs[gif_folder] = loaded_gifs
 
-        print("gifs have been preloaded")
+        logging.info("gifs have been preloaded")
         #return loaded_gifs  # Return the dictionary of processed GIFs
         return
 
@@ -133,12 +137,12 @@ class Roleplay(commands.Cog):
         for command in rp:
             loaded_gifs = gif_loading(command)
 
-            print(gifs)
+            logging.info(gifs)
             self.gifs[command]=loaded_gifs
-            print("gay")
-            print(gifs)
+            logging.info("gay")
+            logging.info(gifs)
             await ctx.send(f"GIFs loaded for command '{command}'")
-        print("done")"""
+        logging.info("done")"""
         # Check if the specified directory exists
         if not os.path.exists("./RP"):
             await ctx.send(f"The folder RP does not exist.")
@@ -146,7 +150,7 @@ class Roleplay(commands.Cog):
 
         gifs = gif_loading(f"./RP/")
         await ctx.send("GIFs loaded and stored.")
-        #print(gifs)
+        #logging.info(gifs)
 
     @commands.command(pass_context=True)
     async def bite(self, ctx, member:disnake.Member=None):
@@ -160,18 +164,18 @@ class Roleplay(commands.Cog):
             db_target = "OTHER"
 
         try:
-            #print(self.gifs[ctx.command.qualified_name])
+            #logging.info(self.gifs[ctx.command.qualified_name])
             loaded_gifs = self.gifs[ctx.command.qualified_name]
-            #print("sexy bitches")
+            #logging.info("sexy bitches")
         except KeyError:
             loaded_gifs = per_cmd_loader(ctx.command.qualified_name)
-            #print(f"loaded gifs in {ctx.command.qualified_name}")
+            #logging.info(f"loaded gifs in {ctx.command.qualified_name}")
             gifs = self.gifs[ctx.command.qualified_name] = loaded_gifs
-            #print("gifs preloaded in command/bite")
+            #logging.info("gifs preloaded in command/bite")
 
         async with ctx.typing():
             rnd_gif = choice(loaded_gifs)
-            #print(self.gifs)
+            #logging.info(self.gifs)
 
             try:
                 last = self.rp_last[ctx.command.qualified_name]
@@ -186,10 +190,10 @@ class Roleplay(commands.Cog):
             image_byt = BytesIO()
             #gif_im.resize((500, 264))
             #gif_im.tobytes()
-            #print(gif_im)
+            #logging.info(gif_im)
             gif = gif_im.save(image_byt, format="GIF", save_all=True)
             image_byt.seek(0)
-            #print(image_byt)
+            #logging.info(image_byt)
 
             
             file = disnake.File(image_byt, filename="gif.gif")
@@ -234,7 +238,7 @@ class Roleplay(commands.Cog):
         image_byt.close()
         #rnd_gif.close()
         end_time = time.monotonic()
-        print(f"{ctx.command.qualified_name}\n{timedelta(seconds = end_time - start_time)}")
+        logging.info(f"{ctx.command.qualified_name}\n{timedelta(seconds = end_time - start_time)}")
 
     @commands.command(pass_context=True)
     async def blush(self, ctx, member:disnake.Member=None):
@@ -297,7 +301,7 @@ class Roleplay(commands.Cog):
         self.blush_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
         end_time = time.monotonic()
-        print(f"blush\n{timedelta(seconds = end_time - start_time)}")
+        logging.info(f"blush\n{timedelta(seconds = end_time - start_time)}")
 
     @commands.command(pass_context=True)
     async def bonk(self, ctx, member:disnake.Member=None):
@@ -398,7 +402,7 @@ class Roleplay(commands.Cog):
 
         self_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("SELF").get().val()
         other_num = db.child("COUNTERS").child("RP").child(ctx.guild.id).child(ctx.author.id).child(ctx.command.name).child("OTHER").get().val()
-        print(self_num, other_num)
+        logging.info(self_num, other_num)
 
         if other_num == None:
             other_time = "times"
@@ -1194,8 +1198,3 @@ class Roleplay(commands.Cog):
 
 def setup(client):
     client.add_cog(Roleplay(client))
-    #gif_loading(f"./RP")
-    print(f"Cog: Roleplay - loaded.")
-
-def teardown(client):
-    print(f"Cog: Roleplay - unloaded.")

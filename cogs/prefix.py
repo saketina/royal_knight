@@ -4,10 +4,14 @@ import disnake
 import pyrebase
 from disnake.ext import commands
 
-## //TODO: PREFIX_ADD create banned prefixes list
+import logging
+
+logging = logging.getLogger("Prefix")
+
+## TODO: PREFIX_ADD create banned prefixes list
 
 firebase = pyrebase.initialize_app(
-    json.load(open("firebase_config.json", "r")))
+    json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 class Prefix(commands.Cog):
@@ -89,16 +93,6 @@ class Prefix(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-    @prefix.error
-    async def prefix_error(self, ctx, error):
-        if isinstance(error, commands.CommandInvokeError):
-            await ctx.send("I can't find that in the list.")
-        else:
-            print(error)
-
 def setup(client):
     client.add_cog(Prefix(client))
-    print(f"Cog: Prefix - loaded.")
 
-def teardown(client):
-    print(f"Cog: Prefix - unloaded.")

@@ -6,7 +6,14 @@ import disnake
 from disnake import Forbidden
 from disnake.ext import commands
 
-# //TODO RPS/remove error handler and add try/except
+import logging
+
+logging = logging.getLogger("Fun")
+
+# TODO RPS/remove error handler and add try/except
+# ! BUG tested the int vs int values
+# ! need to test str vs str, str vs int, int vs str
+# ! need to test the same with user vs CPU
 
 
 class Fun(commands.Cog):
@@ -162,7 +169,7 @@ class Fun(commands.Cog):
                     mp_answer = bot_answer
                     rejected = True
                 
-                ## BUG HERE SOMEWHERE RPS FUCKED
+                # ! BUG HERE SOMEWHERE RPS FUCKED
                 if answer_options[answer+mp_answer] == 0:
                     if answer.isnumeric():
                         final_options = finalOptions.get(answer)
@@ -348,7 +355,3 @@ class Fun(commands.Cog):
     """
 def setup(client):
     client.add_cog(Fun(client))
-    print(f"Cog: Fun - loaded.")
-
-def teardown(client):
-    print(f"Cog: Fun - unloaded.")

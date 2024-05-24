@@ -7,6 +7,10 @@ import disnake
 from disnake.ext import commands
 from PIL import Image
 
+import logging
+
+logging = logging.getLogger("Test")
+
 gif_storage={}
 sniped_messages = {}
 
@@ -14,9 +18,9 @@ def per_cmd_loader(folder):
     loaded_gifs = {}
     gifs = []
     files = os.listdir(f"./RP/{folder}")
-    print(files)
+    logging.info(files)
     for file_name in files:
-        print("done")
+        logging.info("done")
         # Get the full path to the GIF
         #gif_path = os.path.join(root, file_name)
 
@@ -33,11 +37,11 @@ def per_cmd_loader(folder):
                 
 
     loaded_gifs = gifs
-    print(loaded_gifs)
+    logging.info(loaded_gifs)
 
-    #print(loaded_gifs)
-    #print(loaded_gifs)
-    print("gifs have been preloaded")
+    #logging.info(loaded_gifs)
+    #logging.info(loaded_gifs)
+    logging.info("gifs have been preloaded")
     return loaded_gifs  # Return the dictionary of processed GIFs
 
 class Test(commands.Cog):
@@ -132,21 +136,21 @@ class Test(commands.Cog):
                         gif_imag.tobytes()
                         gif_imag.save(image_bytes, "GIF", save_all=True)
                         #image_bytes = b.getvalue()
-                        #print(image_bytes)
+                        #logging.info(image_bytes)
                         image_bytes.seek(0)
-                        #print(image_bytes)
+                        #logging.info(image_bytes)
                         #path = f"./RP/{command}/{command}({counter}).gif"
                         #image_bytes.save(path, format="GIF", save_all=True)
                         #BytesIO.write(gif_image)
                         """
                         gif = gif_storage[command]
-                        print(gif)
+                        logging.info(gif)
                         image_bytes = gif[counter]
                     else:
                         loaded_gifs = per_cmd_loader(command)
-                        print(f"loaded gifs in {command}")
+                        logging.info(f"loaded gifs in {command}")
                         gif = gif_storage[command] = loaded_gifs
-                        print("gifs preloaded in command/bite")
+                        logging.info("gifs preloaded in command/bite")
                         image_bytes = gif[counter]
                     file = disnake.File(image_bytes, filename="gif.gif")
                     kiss_embed = disnake.Embed(
@@ -162,7 +166,7 @@ class Test(commands.Cog):
                     await ctx.send(f"failed at {g}")
                     raise e
             return
-            ## BUG: this piece of shit works idk how or why, the gifs are moving but on the original rp cmd the embeds arent moving at all
+            # ! BUG this piece of code works idk how or why, the gifs are moving but on the original rp cmd the embeds arent moving at all
 
 def setup(bot):
     bot.add_cog(Test(bot))

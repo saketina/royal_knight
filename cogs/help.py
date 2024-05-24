@@ -1,8 +1,11 @@
-# //TODO search through commands and sync commands to respected categories
+# TODO search through commands and sync commands to respected categories
 
 import disnake
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Help")
 
 class Help(commands.Cog):
     def __init__(self, client):
@@ -230,7 +233,3 @@ class Help(commands.Cog):
 
 def setup(client):
     client.add_cog(Help(client))
-    print(f"Cog: Help - loaded.")
-
-def teardown(client):
-    print(f"Cog: Help - unloaded.")

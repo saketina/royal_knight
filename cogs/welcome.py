@@ -10,6 +10,9 @@ import requests
 from disnake.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+import logging
+
+logging = logging.getLogger("Welcome")
 
 class Welcome(commands.Cog):
     def __init__(self, bot):
@@ -99,7 +102,4 @@ class Welcome(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Welcome(bot))
-    print(f"Cog: Welcome - loaded.")
 
-def teardown(client):
-    print(f"Cog: Welcome - unloaded.")

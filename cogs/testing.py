@@ -14,12 +14,19 @@ from disnake.utils import get
 from PIL import Image
 from io import BytesIO
 
-# //TODO ALL/transfer finished commands to appropriate cogs
 
-firebase = pyrebase.initialize_app(json.load(open("firebase_config.json", "r")))
+import logging
+
+logging = logging.getLogger("Testing")
+
+# TODO ALL/transfer finished commands to appropriate cogs
+
+firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")
+
+staff_roles = 743724904033288293, 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
 
 def author_check(ctx, interaction):
     if interaction.author.id == ctx.author.id:
@@ -27,6 +34,8 @@ def author_check(ctx, interaction):
     else:
         return False
 
+def staff_check(member):
+    return any((True for role in member.roles if role.id in staff_roles))
 
 class MyView(disnake.ui.View):
     def __init__(self, timeout: float, interaction:disnake.Interaction):
@@ -69,12 +78,12 @@ class Testing(commands.Cog):
                 gif_image.tobytes()
                 gif_image.save(image_bytes, format="GIF", save_all=True)
                 image_bytes.seek(0)
-                #print(image_bytes)
+                #logging.info(image_bytes)
                 path = f"./RP/{command}/{command}({counter}).gif"
                 #image_bytes.save(path, format="GIF", save_all=True)
                 BytesIO.write(gif_image)
                 gif_image.close()
-        print("done")
+        logging.info("done")
 
     @commands.command()
     async def gif_test(self, ctx):
@@ -97,191 +106,6 @@ class Testing(commands.Cog):
                 kiss_embed.set_image(url="attachment://gif.gif")
                 await ctx.send(embed=kiss_embed, file=file)
 
-    """
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
-    async def mute(self, ctx, member:disnake.Member=None, duration=None, *, reason=None):
-        # //TODO MUTE/add checks if the member is muted or not
-        if member == None:
-            embed = disnake.Embed(
-                title = "MUTE COMMAND",
-                description = "``k.mute [member_id/@member] [duration] [reason]``",
-                color = disnake.Color.dark_red()
-                )
-            embed.add_field(
-                name="Duration Options",
-                value="``` d = day/s\n"
-                      " h = hour/s\n"
-                      " m = minute/s\n"
-                      " s = second/s```"
-            )
-            await ctx.send(embed=embed)
-        elif duration == None:
-            duration = "28d"
-        elif reason == None:
-            reason = "no reason"
-        elif member == ctx.author:
-            await ctx.send("You can\'t mute yourself.")
-        elif member.id == self.client.user.id:
-            await ctx.send("Please don\'t mute me.")
-        elif member.guild_permissions.manage_messages == True:
-            await ctx.send("You can\'t mute that user.")
-        else:
-            f = db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).get().val()
-            data = f
-            if data == None:
-                mute_amount = 1
-                data = ({
-                    "mutes": 1,
-                    1:({
-                        "moderator": str(ctx.author.id),
-                        "moderator_name": str(ctx.author.display_name),
-                        "reason": reason,
-                        "datetime": dt_string
-                    })
-                })
-                
-                embed = disnake.Embed(
-                    title = f"{member.name} has been muted for {duration}",
-                    color = disnake.Color.dark_red()
-                    )
-                embed.add_field(
-                    name = "Mute",
-                    value = f"Mute ID: ``{mute_amount}``\nModerator: **``{ctx.author}``**\nReason: **`{reason}`**\nAt: **``{dt_string}``**",
-                    inline = True
-                    )
-                if duration.endswith("s"):
-                    seconds = duration.split(-1)
-                    minutes = 0
-                    hours = 0
-                    days = 0
-                elif duration.endswith("m"):
-                    seconds = 0
-                    minutes = duration.split(-1)
-                    hours = 0
-                    days = 0
-                elif duration.endswith("h"):
-                    seconds = 0
-                    minutes = 0
-                    hours = duration.split(-1)
-                    days = 0
-                elif duration.endswith("d"):
-                    seconds = 0
-                    minutes = 0
-                    hours = 0
-                    days = duration.split(-1)
-                else:
-                    minutes=duration
-
-                time = datetime.timedelta(seconds=seconds, minutes=minutes, days=days, hours=hours)
-                #until = utils.utcnow() + datetime.timedelta(seconds=duration)
-                await member.timeout(time, reason=reason)
-                db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).set(data)
-                await ctx.send(embed=embed)
-            else:
-                mute_amount = data.get("mutes")
-                mute_amount += 1
-                data["mutes"]=mute_amount
-                new_mute = ({
-                    "moderator": str(ctx.author.id),
-                    "moderator_name": str(ctx.author.display_name),
-                    "reason": reason,
-                    "datetime": dt_string
-                })
-                data[mute_amount]=new_mute
-                #db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).set(data)
-
-                #await ctx.send(duration)
-                if duration.endswith("s"):
-                    seconds = duration.replace("s", "")
-                    minutes = 0
-                    hours = 0
-                    days = 0
-                    suffix = "seconds"
-                elif duration.endswith("m"):
-                    seconds = 0
-                    minutes = duration.replace("m", "")
-                    hours = 0
-                    days = 0
-                    suffix = "minutes"
-                elif duration.endswith("h"):
-                    seconds = 0
-                    minutes = 0
-                    hours = duration.replace("h", "")
-                    days = 0
-                    suffix = "hours"
-                elif duration.endswith("d"):
-                    seconds = 0
-                    minutes = 0
-                    hours = 0
-                    days = duration.replace("d", "")
-                    suffix = "days"
-                else:
-                    seconds = 0
-                    minutes = duration
-                    hours = 0
-                    days = 0
-                    suffix = "minutes"
-
-                embed = disnake.Embed(
-                    title = f"{member.name} has been muted for {duration}",
-                    color = disnake.Color.dark_red()
-                )
-                embed.add_field(
-                    name = f"New Mute",
-                    value = f"Mute ID: ``{mute_amount}``\nModerator: **``{ctx.author}``**\nReason: **`{reason}`**\nAt: **``{dt_string}``**"
-                )
-
-                time = datetime.timedelta(seconds=int(seconds), minutes=int(minutes), days=int(days), hours=int(hours))
-                # //TODO MUTE_ROLE add a way to dynamically set the role to db
-                try:
-                    await member.add_roles(1125541804654215350)
-                except:
-                    guild = ctx.guild
-                    mutedRole = disnake.utils.get(guild.roles, name="Muted")
-
-                    if not mutedRole:
-                        mutedRole = await guild.create_role(name="Muted")
-
-                        for channel in guild.channels:
-                            await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-                    await member.add_roles(mutedRole)
-
-                await member.timeout(duration=time, reason=reason)
-                #await member.add_roles(mutedRole, reason=reason)
-                db.child("MODERATIONS").child("MUTES").child(ctx.guild.id).child(member.id).set(data)
-                await ctx.send(embed=embed)
-
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
-    async def unmute(self, ctx, member:disnake.Member=None):
-        # //TODO UNMUTE/add checks if the member is muted or not
-        if member == None:
-            embed = disnake.Embed(
-                title = "UNMUTE COMMAND",
-                description = "``k.unmute [member_id/@member]``",
-                color = disnake.Color.dark_red()
-                )
-            await ctx.send(embed=embed)
-        else:
-            time = datetime.timedelta(seconds=0, minutes=0, days=0, hours=0)
-
-            try:
-                await member.remove_roles(1125541804654215350)
-            except:
-                guild = ctx.guild
-                mutedRole = disnake.utils.get(guild.roles, name="Muted")
-
-                if not mutedRole:
-                    mutedRole = await guild.create_role(name="Muted")
-
-                    for channel in guild.channels:
-                        await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-                await member.remove_roles(mutedRole)
-
-            await member.timeout(duration=time)
-            await ctx.send(f"{member.name} has been unmuted.")
-    """
     @commands.command(aliases=["warns", "check", "moderations"], pass_context=True)
     async def warnings(self, ctx, user:disnake.User=None):
         try:
@@ -333,7 +157,7 @@ class Testing(commands.Cog):
 
                     if author_check(ctx, interaction):
                             moderation = db.child("MODERATIONS").child("WARNS").child(ctx.guild.id).child(user.id).get().val()
-                            #print(moderation)
+                            #logging.info(moderation)
                             if db_warns != None:
                                 moderation.popitem(str("warns"))
 
@@ -377,9 +201,9 @@ class Testing(commands.Cog):
                                     pages_num.append(key)
                                     
                                 self.pages_list[user.id] = self.pages
-                                #print(moderation)
+                                #logging.info(moderation)
                                 pages = self.pages_list[user.id]
-                                #print(pages_num)
+                                #logging.info(pages_num)
                                 number = moderation.popitem(last=False)
 
                                 self.current_page = 1
@@ -468,7 +292,7 @@ class Testing(commands.Cog):
                                         await interaction.response.edit_message(view=None)
                                 
                                 async def button_warns_previous_previous_callback(interaction):
-                                    # print("started-previous_previous")
+                                    # logging.info("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
 
@@ -489,7 +313,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_warns_previous_callback(interaction):
-                                    # print("started-previous")
+                                    # logging.info("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
 
@@ -510,7 +334,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_warns_next_next_callback(interaction):
-                                    # print("started-next_next")
+                                    # logging.info("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -539,7 +363,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                                 
                                 async def button_warns_next_callback(interaction):
-                                    # print("started-next")
+                                    # logging.info("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -590,9 +414,9 @@ class Testing(commands.Cog):
                                 view_warns.add_item(button_warns_next)
                                 MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_warns)
                                 async def on_error(self, error, item, interaction):
-                                    print(error)
+                                    logging.error(error)
                             else:
-                                print("There aren't any moderations")
+                                await ctx.send("There aren't any moderations")
 
                     else:
                         return
@@ -607,7 +431,7 @@ class Testing(commands.Cog):
 
                     if author_check(ctx, interaction):
                             moderation = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(user.id).get().val()
-                            #print(moderation)
+                            #logging.info(moderation)
                             if db_bans != None:
                                 moderation.popitem(str("bans"))
 
@@ -652,9 +476,9 @@ class Testing(commands.Cog):
                                     pages_num.append(key)
                                     
                                 self.pages_list[user.id] = self.pages
-                                #print(moderation)
+                                #logging.info(moderation)
                                 pages = self.pages_list[user.id]
-                                #print(pages_num)
+                                #logging.info(pages_num)
                                 number = moderation.popitem(last=False)
 
                                 self.current_page = 1
@@ -743,7 +567,7 @@ class Testing(commands.Cog):
                                         await interaction.response.edit_message(view=None)
                                 
                                 async def button_bans_previous_previous_callback(interaction):
-                                    # print("started-previous_previous")
+                                    # logging.info("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
 
@@ -764,7 +588,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_bans_previous_callback(interaction):
-                                    # print("started-previous")
+                                    # logging.info("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
 
@@ -785,7 +609,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_bans_next_next_callback(interaction):
-                                    # print("started-next_next")
+                                    # logging.info("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -814,7 +638,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                                 
                                 async def button_bans_next_callback(interaction):
-                                    # print("started-next")
+                                    # logging.info("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -863,11 +687,11 @@ class Testing(commands.Cog):
                                 view_bans.add_item(button_bans_proof)
                                 view_bans.add_item(button_bans_exit)
                                 view_bans.add_item(button_bans_next)
-                                MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_bans)
+                                MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_bans) # ! BUG under this line is an error when trying to open up panel
                                 async def on_error(self, error, item, interaction):
-                                    print(error)
+                                    logging.error(error)
                             else:
-                                print("There aren't any moderations")
+                                await ctx.send("There aren't any moderations")
 
                     else:
                         return
@@ -882,7 +706,7 @@ class Testing(commands.Cog):
 
                     if author_check(ctx, interaction):
                             moderation = db.child("MODERATIONS").child("KICKS").child(ctx.guild.id).child(user.id).get().val()
-                            #print(moderation)
+                            #logging.info(moderation)
                             if db_kicks != None:
                                 moderation.popitem(str("kicks"))
 
@@ -926,9 +750,9 @@ class Testing(commands.Cog):
                                     pages_num.append(key)
                                     
                                 self.pages_list[user.id] = self.pages
-                                #print(moderation)
+                                #logging.info(moderation)
                                 pages = self.pages_list[user.id]
-                                #print(pages_num)
+                                #logging.info(pages_num)
                                 number = moderation.popitem(last=False)
 
                                 self.current_page = 1
@@ -1017,7 +841,7 @@ class Testing(commands.Cog):
                                         await interaction.response.edit_message(view=None)
                                 
                                 async def button_kicks_previous_previous_callback(interaction):
-                                    # print("started-previous_previous")
+                                    # logging.info("started-previous_previous")
                                     if interaction.author.id == ctx.author.id:                                      
                                         self.current_page -= 1
 
@@ -1038,7 +862,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_kicks_previous_callback(interaction):
-                                    # print("started-previous")
+                                    # logging.info("started-previous")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page -= 1
 
@@ -1059,7 +883,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                             
                                 async def button_kicks_next_next_callback(interaction):
-                                    # print("started-next_next")
+                                    # logging.info("started-next_next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -1088,7 +912,7 @@ class Testing(commands.Cog):
                                         MyView.message = await interaction.response.edit_message(embed=pages[self.current_page], view=view)
                                 
                                 async def button_kicks_next_callback(interaction):
-                                    # print("started-next")
+                                    # logging.info("started-next")
                                     if interaction.author.id == ctx.author.id:
                                         self.current_page += 1
 
@@ -1139,15 +963,15 @@ class Testing(commands.Cog):
                                 view_kicks.add_item(button_kicks_next)
                                 MyView.message = await interaction.response.edit_message(embed=pages[1], view=view_kicks)
                                 async def on_error(self, error, item, interaction):
-                                    print(error)
+                                    logging.error(error)
                             else:
-                                print("There aren't any moderations")
+                                await ctx.send("There aren't any moderations")
 
                     else:
                         return
                 
                 async def on_error(self, error, item, interaction):
-                    print(error)
+                    logging.error(error)
 
                 button_warns.callback = button_warns_callback
                 button_bans.callback = button_bans_callback
@@ -1167,27 +991,20 @@ class Testing(commands.Cog):
     ## TODO FEATURE-ADD staff: create, promote, update, demote
     ## TODO link to database
     async def staff(self, ctx, option=None):
-        auth_roles = []
-        for role in ctx.author.roles:
-            auth_roles.append(role.id)
-
-        if 706162869783363725 not in auth_roles:
-            return
-        else:
-            ## staff profile here
-            embed = disnake.Embed(
-                title= f"{ctx.author.nick}'s staff profile",
-                color=disnake.Color.dark_red()
-            )
-            embed.add_field(
-                name="Staff info",
-                value="Staff since: forever"
-            )
-            embed.set_author(
-                name=ctx.author.nick,
-                icon_url=ctx.author.avatar
-            )
-            await ctx.send(embed=embed)
+        ## staff profile here
+        embed = disnake.Embed(
+            title= f"{ctx.author.nick}'s staff profile",
+            color=disnake.Color.dark_red()
+        )
+        embed.add_field(
+            name="Staff info",
+            value="Staff since: forever"
+        )
+        embed.set_author(
+            name=ctx.author.nick,
+            icon_url=ctx.author.avatar
+        )
+        await ctx.send(embed=embed)
     
     @commands.command()
     async def staffteam(self, ctx, option=None):
@@ -1200,17 +1017,21 @@ class Testing(commands.Cog):
             ctx.guild.get_role(801614132771160095), ## head mod
             ctx.guild.get_role(747680315257913384), ## mod
             ctx.guild.get_role(870431101955493999), ## trial
+            ctx.guild.get_role(896472583212507206)
         ]
-        #print(role_list)
+        dot_role = ctx.guild.get_role(743724904033288293)
         
         if option == None:
             def returnNotMatches(a, b):
                 temp=[]
                 for x in a:
-                    if x in b:
-                        pass
+                    if x.bot != True:
+                        if x in b:
+                            pass
+                        else:
+                            temp.append(x)
                     else:
-                        temp.append(x)
+                        pass
                 return temp
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1228,7 +1049,7 @@ class Testing(commands.Cog):
             )
             embed.add_field(
                 name="Admins",
-                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[2].members, role_list[1].members)),
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[2].members, role_list[1].members) and returnNotMatches(dot_role.members, role_list[1].members + role_list[0].members)),
                 inline=False
             )
             embed.add_field(
@@ -1246,6 +1067,11 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in returnNotMatches(role_list[5].members, role_list[4].members)),
                 inline=False
             )
+            embed.add_field(
+                name="Helpers",
+                value="\n".join(str(member.mention) for member in returnNotMatches(role_list[6].members, role_list[5].members)),
+                inline=False
+            )
             await ctx.send(embed=embed)
             
         elif option=="help":
@@ -1256,7 +1082,7 @@ class Testing(commands.Cog):
             )
             staff_help.add_field(
                 name="Options",
-                value="``help\nowners\nco-owners\nadmins\nhmods\nmods\ntrials``"
+                value="``help\nowners\nco-owners\nadmins\nhmods\nmods\ntrials\nhelpers``"
             )
             await ctx.send(embed=staff_help)
         elif option=="owners":
@@ -1269,6 +1095,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[0].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="co-owners":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1279,6 +1106,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[1].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="admins":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1289,6 +1117,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[2].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="hmods":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1299,6 +1128,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[3].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="mods":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1309,6 +1139,7 @@ class Testing(commands.Cog):
                 value="\n".join(str(member.mention) for member in role_list[4].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
         elif option=="trials":
             embed = disnake.Embed(
                 title="Staff Team",
@@ -1316,9 +1147,20 @@ class Testing(commands.Cog):
             )
             embed.add_field(
                 name="Trial Moderators",
-                value="\n".join(str(member.mention) for member in role_list[0].members),
+                value="\n".join(str(member.mention) for member in role_list[5].members),
                 inline=False
             )
+            await ctx.send(embed=embed)
+        elif option=="helpers":
+            embed = disnake.Embed(
+                title="Staff Team",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                title="Helpers",
+                value="\n".join(str(member.mention) for member in role_list[6].members)
+            )
+            await ctx.send(embed=embed)
         else:
             staff_help = disnake.Embed(
                 title= "Command help",
@@ -1333,7 +1175,3 @@ class Testing(commands.Cog):
     
 def setup(client):
     client.add_cog(Testing(client))
-    print("Cog: Testing - loaded")
-
-def teardown(client):
-    print("Cog: Testing - unloaded.")

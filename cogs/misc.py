@@ -3,6 +3,9 @@ import asyncio
 import disnake
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("Misc")
 
 class Misc(commands.Cog):
 
@@ -63,7 +66,3 @@ class Misc(commands.Cog):
 
 def setup(client):
     client.add_cog(Misc(client))
-    print(f"Cog: Misc - loaded.")
-
-def teardown(client):
-    print(f"Cog: Misc - unloaded.")

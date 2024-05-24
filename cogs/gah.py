@@ -1,12 +1,12 @@
-# //TODO finish global error handler
-# //TODO transfer error handlers to GAH
-# //TODO add MISSING PERMISSIONS handler for muted cmd(happens when user tries to unmute themselves + they arent muted)
 import sys
 import traceback
 
 import disnake
 from disnake.ext import commands
 
+import logging
+
+logging = logging.getLogger("GAH")
 
 class CommandErrorHandler(commands.Cog):
 
@@ -15,14 +15,6 @@ class CommandErrorHandler(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        """The event triggered when an error is raised while invoking a command.
-        Parameters
-        ------------
-        ctx: commands.Context
-            The context used for command invocation.
-        error: commands.CommandError
-            The Exception raised.
-        """
 
         # This prevents any commands with local handlers being handled here in on_command_error.
         if hasattr(ctx.command, 'on_error'):
@@ -45,17 +37,31 @@ class CommandErrorHandler(commands.Cog):
             return
 
         if isinstance(error, commands.CommandInvokeError):
-            #print("should not be here")
             if ctx.command.qualified_name == "unban":
                 await ctx.send(content = "I can\'t find that member.", delete_after = 10)
+            elif ctx.command.qualified_name == "prefix":
+                await ctx.send("I can't find that in the list.")
             else:
-                await ctx.send("I didn\'t quite catch that.")
+                pass
+        
+        elif isinstance(error, commands.ExtensionNotFound):
+            await ctx.send(f"I could not find **{ctx.args[-1]}**")
+        
+        elif isinstance(error, commands.ExtensionAlreadyLoaded):
+            await ctx.send(f"Error: **{ctx.args[-1]}** is already loaded.")
+        
+        elif isinstance(error, commands.ExtensionNotLoaded):
+            await ctx.send(f"Error: **{ctx.args[-1]}** is not loaded.")
 
         elif isinstance(error, commands.BotMissingPermissions):
-            if ctx.command.qualified_name == "unban":
-                await ctx.send(BotMissingPermissions.missing_permissions)
-            elif ctx.command.qualified_name == "kick":
-                await ctx.send(BotMissingPermissions.missing_permissions)
+            try:
+                await ctx.send(error)
+            except disnake.Forbidden as f:
+                if f.code == 50013:
+                    await ctx.author.send("I seem to be missing permissions to speak in that channel, please contact an administrator")
+                    return
+                else:
+                    pass
 
         elif isinstance(error, commands.CheckFailure):
             return
@@ -80,20 +86,20 @@ class CommandErrorHandler(commands.Cog):
                 await ctx.author.send(f'{ctx.command} can not be used in Private Messages.')
             except disnake.HTTPException:
                 pass
+            
+        elif isinstance(error, commands.NotOwner):
+            return
+        
+        elif isinstance(error, AttributeError):
+            logging.info("error caught by AttributeError instance")
+            if ctx.command.qualified_name == "ban":
+                await ctx.send("User not found.")
+            else:
+                pass
 
         elif isinstance(error, commands.MissingPermissions):
-            try:
-                await ctx.send(f"I\'m missing permissions for this!\nPermissions missing:{commands.MissingPermissions(missing_permissions=error.missing_permissions)}")
-            except:
-                await ctx.author.send(f"I\'m missing permissions for this!\nPermissions missing:{commands.missing_permissions}")
-        elif isinstance(error, commands.MemberNotFound):
-            if ctx.command.qualified_name == "ban":
-                await ctx.send(content = "I couldn\'t find that person", delete_after = 10)
-        
-        elif isinstance(error, commands.UserNotFound):
-            if ctx.command.qualified_name == "ban":
-                await ctx.send(content = "I couldn\'t find that person", delete_after = 10)
-
+            await ctx.send("You seem to be missing permissions")
+            
         # For this error example we check to see where it came from...
         elif isinstance(error, commands.BadArgument):
             if ctx.command.qualified_name == "purge":
@@ -102,21 +108,23 @@ class CommandErrorHandler(commands.Cog):
                 await ctx.send(content = "Please input only the members id.", delete_after = 10)
 
         elif isinstance(error, disnake.Forbidden):
-            #print("should be here")
-            #print(error.code)
-            if error.code == 50013:
-                #print("done goofeds")
-                await ctx.author.send("I seem to be missing permissions to speak in that channel, please contact an administrator")
-                return
+            if ctx.command.qualified_name == "ban":
+                await ctx.send("You can\'t ban that user.")
+            elif ctx.command.qualified_name == "kick":
+                await ctx.send("You can\'t ban that user.")            
+            else:
+                pass
 
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
-            print('Ignoring exception in command {}:'.format(ctx.command), error, file=sys.stderr)
-            #traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            logging.error('Ignoring exception in command {}:'.format(ctx.command), error)
+            #traceback.print_exception(type(error), error, error.__traceback__)
+            embed = disnake.Embed(
+                title=f"Error in command {ctx.command.qualified_name}",
+                description=error,
+                color=disnake.Color.red()
+            )
+            await ctx.send("Please send this to the developer.", embed=embed)
 
 def setup(client):
     client.add_cog(CommandErrorHandler(client))
-    print(f"Cog: GAH - loaded.")
-
-def teardown(client):
-    print(f"Cog: GAH - unloaded.")
