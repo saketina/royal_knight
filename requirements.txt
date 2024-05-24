@@ -3,5 +3,5 @@ aiofiles
 pillow
 python-decouple
 requests
-pyrebase4
+pyrebase
 psutil
