@@ -61,7 +61,7 @@ async def on_ready():
 initial_cogs = [
     "cogs.admin",
     #"cogs.anime",
-    "cogs.cache",
+    #"cogs.cache",
     #"cogs.counters",
     "cogs.fun",
     "cogs.gah",

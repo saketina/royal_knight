@@ -4,7 +4,7 @@ __pycache__
 .idea
 .vscode
 .env
-/env
+/venv
 firebase_config.json
 .DS_Store
 .json
