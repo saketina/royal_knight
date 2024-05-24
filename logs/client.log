@@ -1,0 +1,19 @@
+05-24 18:13: root: INFO: Loaded cogs.admin
+05-24 18:13: root: INFO: Loaded cogs.fun
+05-24 18:13: root: INFO: Loaded cogs.gah
+05-24 18:13: root: INFO: Loaded cogs.help
+05-24 18:13: root: INFO: Loaded cogs.misc
+05-24 18:13: root: ERROR: Failed to load cogs.moderation, Extension 'cogs.moderation' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
+05-24 18:13: root: ERROR: Failed to load cogs.prefix, Extension 'cogs.prefix' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
+05-24 18:13: root: ERROR: Failed to load cogs.roleplay, Extension 'cogs.roleplay' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
+05-24 18:13: root: ERROR: Failed to load cogs.testing, Extension 'cogs.testing' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
+05-24 18:13: root: INFO: Loaded cogs.user
+05-24 18:13: root: ERROR: Failed to load cogs.utility, Extension 'cogs.utility' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
+05-24 18:13: root: WARNING: 
+Loading one or more cogs failed...
+
+05-24 18:13: disnake.client: INFO: logging in using static token
+05-24 18:13: disnake.client: INFO: Cleaning up tasks.
+05-24 18:13: disnake.client: INFO: Cleaning up after 3 tasks.
+05-24 18:13: disnake.client: INFO: All tasks finished cancelling.
+05-24 18:13: disnake.client: INFO: Closing the event loop.
