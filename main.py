@@ -63,13 +63,23 @@ async def on_ready():
 async def restart(ctx):
     embed = disnake.Embed(
         title = ":white_check_mark:",
-	description = "restarted",
-	color = disnake.Color.dark_red()
-	)
+	    description = "Restarted my system",
+	    color = disnake.Color.dark_red()
+	    )
     await ctx.send(embed = embed)
     os.system("clear")
     os.execv(sys.executable, ["python"] + sys.argv)
-    await ctx.send("restarted the bot, boss.")
+    #await ctx.send("restarted the bot, boss.")
+    
+@client.command()
+@is_owner()
+async def update(ctx):
+    embed = disnake.Embed(
+        title="Updated the current host server",
+        color=disnake.Color.dark_red()
+    )
+    os.system("git pull")
+    await ctx.send(embed=embed)
 
 initial_cogs = [
     "cogs.admin",
