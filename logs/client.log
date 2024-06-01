@@ -1,19 +1,21 @@
-05-24 18:13: root: INFO: Loaded cogs.admin
-05-24 18:13: root: INFO: Loaded cogs.fun
-05-24 18:13: root: INFO: Loaded cogs.gah
-05-24 18:13: root: INFO: Loaded cogs.help
-05-24 18:13: root: INFO: Loaded cogs.misc
-05-24 18:13: root: ERROR: Failed to load cogs.moderation, Extension 'cogs.moderation' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
-05-24 18:13: root: ERROR: Failed to load cogs.prefix, Extension 'cogs.prefix' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
-05-24 18:13: root: ERROR: Failed to load cogs.roleplay, Extension 'cogs.roleplay' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
-05-24 18:13: root: ERROR: Failed to load cogs.testing, Extension 'cogs.testing' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
-05-24 18:13: root: INFO: Loaded cogs.user
-05-24 18:13: root: ERROR: Failed to load cogs.utility, Extension 'cogs.utility' raised an error: AttributeError: module 'pyrebase' has no attribute 'initialize_app'
-05-24 18:13: root: WARNING: 
-Loading one or more cogs failed...
+06-01 15:51: root: INFO: Loaded cogs.admin
+06-01 15:51: root: INFO: Loaded cogs.fun
+06-01 15:51: root: INFO: Loaded cogs.gah
+06-01 15:51: root: INFO: Loaded cogs.help
+06-01 15:51: root: INFO: Loaded cogs.misc
+06-01 15:51: root: INFO: Loaded cogs.moderation
+06-01 15:51: root: INFO: Loaded cogs.prefix
+06-01 15:51: root: INFO: Loaded cogs.roleplay
+06-01 15:51: root: INFO: Loaded cogs.testing
+06-01 15:51: root: INFO: Loaded cogs.user
+06-01 15:51: root: INFO: Loaded cogs.utility
+06-01 15:51: root: INFO: All cogs imported succesfully
+06-01 15:51: disnake.client: INFO: logging in using static token
+06-01 15:51: disnake.gateway: INFO: Shard ID 0 has sent the IDENTIFY payload.
+06-01 15:51: disnake.gateway: INFO: Shard ID 0 has connected to Gateway: ["gateway-prd-us-east1-d-n78t",{"micros":35089,"calls":["id_created",{"micros":813,"calls":[]},"session_lookup_time",{"micros":309,"calls":[]},"session_lookup_finished",{"micros":15,"calls":[]},"discord-sessions-prd-1-168",{"micros":33698,"calls":["start_session",{"micros":32479,"calls":["discord-api-pyupgrade-84c8bb8b79-55jh6",{"micros":28882,"calls":["get_user",{"micros":5181},"get_guilds",{"micros":3822},"send_scheduled_deletion_message",{"micros":22},"guild_join_requests",{"micros":1},"authorized_ip_coro",{"micros":8}]}]},"starting_guild_connect",{"micros":61,"calls":[]},"presence_started",{"micros":452,"calls":[]},"guilds_started",{"micros":144,"calls":[]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":536,"calls":[]},"connect_finished",{"micros":541,"calls":[]},"build_ready",{"micros":16,"calls":[]},"clean_ready",{"micros":1,"calls":[]},"optimize_ready",{"micros":0,"calls":[]},"split_ready",{"micros":1,"calls":[]}]}]}] (Session ID: cc71ea6ff05e51243b585d7148595280, Resume URL: wss://gateway-us-east1-d.discord.gg).
+06-01 15:51: disnake.ext.commands.common_bot_base: INFO: WATCHDOG: Watching extensions
+06-01 15:51: root: INFO: 
+Logged in as: Royal Knight - 970753358535225354
+Wrapper Version: 2.9.2
+At: 2024-06-01 15:51:52.224224
 
-05-24 18:13: disnake.client: INFO: logging in using static token
-05-24 18:13: disnake.client: INFO: Cleaning up tasks.
-05-24 18:13: disnake.client: INFO: Cleaning up after 3 tasks.
-05-24 18:13: disnake.client: INFO: All tasks finished cancelling.
-05-24 18:13: disnake.client: INFO: Closing the event loop.

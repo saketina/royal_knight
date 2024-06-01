@@ -58,6 +58,19 @@ async def on_ready():
         f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {datetime.now()}\n"
     )
 
+@client.command()
+@is_owner()
+async def restart(ctx):
+    embed = disnake.Embed(
+        title = ":white_check_mark:",
+	description = "restarted",
+	color = disnake.Color.dark_red()
+	)
+    await ctx.send(embed = embed)
+    os.system("clear")
+    os.execv(sys.executable, ["python"] + sys.argv)
+    await ctx.send("restarted the bot, boss.")
+
 initial_cogs = [
     "cogs.admin",
     #"cogs.anime",
