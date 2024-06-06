@@ -12,3 +12,4 @@ cogs/Assets/afk_mention_list_messages/
 cogs/Assets/welcome/images/welcome_image/output/
 images/generated/
 .log
+logs/client.log
