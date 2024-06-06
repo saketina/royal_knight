@@ -47,8 +47,8 @@ client = commands.Bot(
     status=disnake.Status.dnd,
     strip_after_prefix=True,
     chunk_guilds_at_startup=False,
-    shard_count=1,
-    shard_id=0
+    shard_count=2,
+    shard_id=1
 )
 client.remove_command("help")
 
