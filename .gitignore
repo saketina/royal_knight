@@ -3,6 +3,7 @@ __pycache__
 .python-version
 .idea
 .vscode
+dockerfile
 .env
 /venv
 firebase_config.json
