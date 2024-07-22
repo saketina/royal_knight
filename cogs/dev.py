@@ -35,6 +35,19 @@ class Dev(commands.Cog):
             embed.add_field(name=key, value=value, inline=False)
 
         await ctx.send(embed=embed)    
+        
+    @commands.command()
+    async def sync(self, ctx):
+        #try:
+            os.system("git pull")
+            embed = disnake.Embed(
+                title="Success!!",
+                description="I pulled and synced the repo, I\'m at the latest version.",
+                color=disnake.dark_red()
+            )
+            ctx.send(embed=embed)
+        #except:    
+        
 
     @commands.command(pass_context=True)
     @commands.is_owner()
