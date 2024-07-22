@@ -6,3 +6,4 @@ requests
 pyrebase
 psutil
 colour==0.1.5
+urllib3
