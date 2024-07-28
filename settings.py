@@ -2,8 +2,6 @@ import os
 import logging
 from logging.config import dictConfig
 
-print(os.system())
-
 LOGGING_CONFIG = {
 	"version": 1,
 	"disabled_existing_loggers": False,

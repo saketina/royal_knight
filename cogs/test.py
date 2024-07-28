@@ -49,6 +49,11 @@ class Test(commands.Cog):
 		self.client = client
 		self.rp_last = None
 		#self.gifs = {}  # Dictionary to store paths of GIFs
+  
+	@commands.command()
+	@is_owner()
+	async def machine(self, ctx):
+		ctx.send(os.system())
 
 	def send_embed(self, title=None, description=None):
 		embed = disnake.Embed(
