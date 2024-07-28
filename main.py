@@ -18,10 +18,17 @@ import logging
 
 # //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
 
+
+if os.name == "nt":
+    log_file_path = 'logs/client.log'
+elif os.name == "posix" :
+    log_file_path = '~/logs/client.log'
+else:
+    log_file_path = 'logs/client.log'
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                     datefmt='%m-%d %H:%M',
-                    filename='logs/client.log',
+                    filename=log_file_path,
                     filemode='w')
 
 logger = logging.StreamHandler()
