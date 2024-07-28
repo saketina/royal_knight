@@ -1,3 +1,4 @@
+import logging
 import os
 import random
 from io import BytesIO
@@ -6,8 +7,6 @@ from random import choice
 import disnake
 from disnake.ext import commands
 from PIL import Image
-
-import logging
 
 logging = logging.getLogger("Test")
 
