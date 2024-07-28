@@ -107,7 +107,7 @@ class Admin(commands.Cog):
             )
             await ctx.send(embed=embed)
         else:
-            db.child("SETUP").child(ctx.guild.id).child("MODERATION").child("MUTEROLE").set(int(role.id))
+            #db.child("SETUP").child(ctx.guild.id).child("MODERATION").child("MUTEROLE").set(int(role.id))
             embed = disnake.Embed(
                 title="Role added",
                 description=f"I set the role {role} as the mute role.",

@@ -28,7 +28,7 @@ def load_gif(command, last_gif):
     if gifs == []:
         return
 
-    gif_image = Image.open(f"./RP/{command}/{rnd_gif}")
+    gif_image = Image.open(f"./RP/{command}/{last_gif}")
     image_bytes = BytesIO()
     gif_image.resize((500, 264))
     gif_image.tobytes()
@@ -148,7 +148,7 @@ class Roleplay(commands.Cog):
             await ctx.send(f"The folder RP does not exist.")
             return
 
-        gifs = gif_loading(f"./RP/")
+        gifs = load_gif(f"./RP/")
         await ctx.send("GIFs loaded and stored.")
         #logging.info(gifs)
 
