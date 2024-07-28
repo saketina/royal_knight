@@ -5,7 +5,7 @@ from io import BytesIO
 from random import choice
 
 import disnake
-from disnake.ext import commands
+from disnake.ext import commands, is_owner
 from PIL import Image
 
 logging = logging.getLogger("Test")
