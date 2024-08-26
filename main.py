@@ -16,7 +16,7 @@ from disnake.ext.commands import has_permissions, is_owner
 
 import logging
 
-# //TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
+#?# TODO optimize code so less data is stored in memory and more data is stored locally, would improve speed and efficiency
 
 
 if os.name == "nt":

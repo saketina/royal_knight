@@ -8,7 +8,7 @@ import logging
 
 logging = logging.getLogger("Prefix")
 
-## TODO: PREFIX_ADD create banned prefixes list
+#?# [ ] PREFIX_ADD create banned prefixes list
 
 firebase = pyrebase.initialize_app(
     json.load(open("./firebase_config.json", "r")))

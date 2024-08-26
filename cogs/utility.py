@@ -18,7 +18,7 @@ db = firebase.database()
 
 sniped_messages = {}
 
-# ! FEATURE_ADD add birthday checker
+#?# [ ] add birthday checker
 
 class Utility(commands.Cog):
     def __init__(self, client):
@@ -186,7 +186,7 @@ class Utility(commands.Cog):
         )
         embed.set_thumbnail(ctx.guild.icon)
         await ctx.send(embed=embed)
-        # TODO SERVERINFO/finish command
+        #?# [ ] SERVERINFO/finish command
 
     @commands.command(pass_context=True)
     @commands.guild_only()

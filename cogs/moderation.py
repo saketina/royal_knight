@@ -9,20 +9,20 @@ from disnake.ext import commands
 
 import logging
 
-# TODO ALL/add dynamic exception list for moderation commands
+#?# [ ] ALL/add dynamic exception list for moderation commands
 
 
 logging = logging.getLogger("Moderation")
 
-# TODO ALL/add feature so its easy to add by role perms for commands
+#?# [ ] ALL/add feature so its easy to add by role perms for commands
 
-# TODO Add a notes tab for moderations similar to reason
+#?# [ ] Add a notes tab for moderations similar to reason
 
 firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
 
-# TODO for each moderation add to database as leaderboard and develop a staff leaderboard
-# TODO make tasks to check if the date is the 1st and if yes then display leaderboard and wipe it
+#?# [ ] for each moderation add to database as leaderboard and develop a staff leaderboard
+#?# [ ] make tasks to check if the date is the 1st and if yes then display leaderboard and wipe it
 
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")
 
@@ -108,8 +108,8 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
         
-    # TODO add checks if roles exist in list(multiple-role-sys)
-    # TODO when check is complete store roles unable to process to another list and output them to the user
+    #?# [ ] add checks if roles exist in list(multiple-role-sys)
+    #?# [ ] when check is complete store roles unable to process to another list and output them to the user
     @commands.command()
     @commands.guild_only()
     async def role(self, ctx, action=None, command=None, *roles:disnake.Role):
@@ -165,7 +165,7 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(f"Sum ting wong")
 
-    # TODO when user is unmuted remove role "muted" aka set up listener for when the user is unmuted
+    #?# [ ] when user is unmuted remove role "muted" aka set up listener for when the user is unmuted
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def mute(self, ctx, member:disnake.Member=None, duration=None, *, reason=None):

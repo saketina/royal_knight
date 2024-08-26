@@ -1,10 +1,11 @@
-# //  TODO transfer settings to this file instead of the settings being all over the place
+
+#?# [ ] transfer settings to this file instead of the settings being all over the place
 
 import datetime
 import json
 from datetime import datetime as dt
 from typing import Optional
-from colour import Color
+#from colour import Color
 
 import disnake
 import pyrebase
@@ -17,7 +18,7 @@ embed_warning = disnake.Color.yellow()
 embed_success = disnake.Color.green()
 
 guild_members = {}
-
+"""
 def check_color(color):
     try:
         # Converting 'deep sky blue' to 'deepskyblue'
@@ -27,18 +28,18 @@ def check_color(color):
         return True
     except ValueError: # The color code was not found
         return False
-
+"""
 class Settings(commands.cog):
     def __init__(self, client):
         self.client = client
 
     @commands.command()
     async def color(self, ctx, option=["set", "default"], new_color: Optional[None] = None):
-        if check_color(new_color) == True:
+        #if check_color(new_color) == True:
             if option == "set":
                 await ctx.send("set")
-        else:
-            await ctx.send("Incorrect input!\nPlease give me a valid color")
+        #else:
+        #    await ctx.send("Incorrect input!\nPlease give me a valid color")
 
 def setup(client):
     client.add_cog(Settings(client))

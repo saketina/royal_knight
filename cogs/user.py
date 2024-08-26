@@ -18,8 +18,8 @@ class User(commands.Cog):
     def __init__(self, client):
         self.client=client
 
-    # TODO PROFILE/add badges
-    # TODO PROFILE/add total messages, most used channel, etc...
+    #?# [ ] PROFILE/add badges
+    #?# [ ] PROFILE/add total messages, most used channel, etc...
     @commands.command(pass_context=True)
     @commands.guild_only()
     async def profile(self, ctx, user: disnake.Member = None):

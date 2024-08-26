@@ -10,10 +10,10 @@ import logging
 
 logging = logging.getLogger("Fun")
 
-# TODO RPS/remove error handler and add try/except
-# ! BUG tested the int vs int values
-# ! need to test str vs str, str vs int, int vs str
-# ! need to test the same with user vs CPU
+#!# XXX RPS/remove error handler and add try/except
+#?# [ ] test the int vs int values 
+#?# [ ]  need to test str vs str, str vs int, int vs str
+#?# [ ] need to test the same with user vs CPU
 
 
 class Fun(commands.Cog):

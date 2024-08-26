@@ -19,7 +19,7 @@ import logging
 
 logging = logging.getLogger("Testing")
 
-# TODO ALL/transfer finished commands to appropriate cogs
+#!# XXX ALL/transfer finished commands to appropriate cogs
 
 firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
@@ -988,8 +988,8 @@ class Testing(commands.Cog):
                 await ctx.send("I see no moderations")
 
     @commands.command()
-    ## TODO FEATURE-ADD staff: create, promote, update, demote
-    ## TODO link to database
+    #?# [ ] FEATURE-ADD staff: create, promote, update, demote
+    #?# [ ] link to database
     async def staff(self, ctx, option=None):
         ## staff profile here
         embed = disnake.Embed(

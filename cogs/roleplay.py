@@ -15,9 +15,9 @@ import logging
 
 logging = logging.getLogger("Roleplay")
 
-# TODO ALL/make different gifs displayed if ctx.author used the command on themselves
-# TODO resize gifs to 498x278
-# TODO ADD wave, sip, shoot command
+#?# [ ] ALL/make different gifs displayed if ctx.author used the command on themselves
+#?# [ ] resize gifs to 498x278
+#?# [ ] ADD wave, sip, shoot command
 
 firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
 db = firebase.database()
