@@ -12,7 +12,7 @@ logging = logging.getLogger("Fun")
 
 #!# XXX RPS/remove error handler and add try/except
 #?# [ ] test the int vs int values 
-#?# [ ]  need to test str vs str, str vs int, int vs str
+#?# [ ] need to test str vs str, str vs int, int vs str
 #?# [ ] need to test the same with user vs CPU
 
 

@@ -604,7 +604,7 @@ class Roleplay(commands.Cog):
         self.dance_last = rnd_gif
         await ctx.send(embed=kiss_embed, file=file)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=["bang"])
     async def fuck(self, ctx, member:disnake.Member=None):
         if member is None or member == ctx.author:
             target = "themselves"
