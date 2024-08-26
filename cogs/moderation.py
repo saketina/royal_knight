@@ -9,6 +9,9 @@ from disnake.ext import commands
 
 import logging
 
+# TODO ALL/add dynamic exception list for moderation commands
+
+
 logging = logging.getLogger("Moderation")
 
 # TODO ALL/add feature so its easy to add by role perms for commands
