@@ -29,6 +29,11 @@ def check_color(color):
     except ValueError: # The color code was not found
         return False
 """
+def moderation_set(module, option, input):
+    if module == "ban":
+        print("ban")
+        return
+    
 class Settings(commands.cog):
     def __init__(self, client):
         self.client = client
@@ -40,6 +45,23 @@ class Settings(commands.cog):
                 await ctx.send("set")
         #else:
         #    await ctx.send("Incorrect input!\nPlease give me a valid color")
+        
+    @commands.command()
+    async def moderation(self, ctx, module=None, option=None, input=None):
+        if module == None:
+            embed = disnake.Embed(
+                title="MODERATION HELP",
+                description="A command to change moderation settings",
+                color=disnake.Color.dark_red()
+            )
+            embed.add_field(
+                name="VIEW",
+                value="k.moderation view"
+            )
+            await ctx.send(embed=embed)
+        elif module != "ban":
+            await ctx.send("ban")
+            
 
 def setup(client):
     client.add_cog(Settings(client))
