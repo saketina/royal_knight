@@ -23,7 +23,7 @@ start_time = time.time()
 if os.name == "nt":
     log_file_path = 'logs/client.log'
 elif os.name == "posix" :
-    log_file_path = '~/logs/client.log'
+    log_file_path = '/home/admin/logs/client.log'
 else:
     log_file_path = 'logs/client.log'
 """logging.basicConfig(level=logging.INFO,
