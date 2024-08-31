@@ -93,7 +93,12 @@ class CommandErrorHandler(commands.Cog):
         elif isinstance(error, AttributeError):
             logging.info("error caught by AttributeError instance")
             if ctx.command.qualified_name == "ban":
-                await ctx.send("User not found.")
+                emb = disnake.Embed(
+                    title = "BAN HELP",
+                    description = "`k.ban [mention/user_id] (reason)`",
+                    color = disnake.Color.dark_red()
+                    )
+                await ctx.send(embed=emb)
             else:
                 pass
 
