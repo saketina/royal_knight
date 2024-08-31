@@ -3,6 +3,7 @@
 
 import disnake
 from disnake.ext import commands
+from disnake.ext.commands import is_owner
 
 import logging
 
@@ -27,9 +28,13 @@ class Help(commands.Cog):
             text=f"{ctx.author.name}",
             icon_url=ctx.author.display_avatar
             )
+        if ctx.author.id == 385683162799538176 or ctx.author.id == 705974979228991522:
+            tmp = "\nDev"
+        else:
+            tmp = ""
         emb.add_field(
             name="CATEGORIES",
-            value="```\nAdmin\nFun\nModeration\nRoleplay\nUser\nUtility\nMisc```"
+            value=f"```\nAdmin\nFun\nModeration\nRoleplay\nUser\nUtility\nMisc{tmp}```"
             )
 
         await ctx.send(embed=emb)
@@ -59,10 +64,15 @@ class Help(commands.Cog):
             value="```k.reload <category_name>```",
             inline=False
             )
+        emb.add_filed(
+            name="MuteRole",
+            value="```k.muterole <@role>```",
+            inline=False
+        )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
 
-    @help.command(pass_context=True)
+    @help.command()
     async def fun(self, ctx):
         emb = disnake.Embed(
             title = "FUN COMMANDS",
@@ -74,6 +84,35 @@ class Help(commands.Cog):
             value="```k.rps (@user)```"
             )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
+        await ctx.send(embed=emb)
+        
+    @help.command()
+    @commands.is_owner()
+    async def dev(self, ctx):
+        emb = disnake.Embed(
+            title = "DEVELOPER COMMANDS",
+            color = disnake.Color.dark_red()
+        )
+        emb.add_field(
+            name = "SYSTEM INFO",
+            value = "```k.system_info```",
+            inline = False
+        )
+        emb.add_field(
+            name = "SYNC",
+            value = "```k.sync```",
+            inline = False
+        )
+        emb.add_field(
+            name = "LEAVE",
+            value = "```k.leave```",
+            inline = False
+        )
+        emb.add_field(
+            name = "SERVERS",
+            value = "```k.servers```",
+            inline = False
+        )
         await ctx.send(embed=emb)
 
     @help.command()
@@ -110,6 +149,16 @@ class Help(commands.Cog):
         emb.add_field(
             name="Unban",
             value="```k.unban [user_id]```",
+            inline=False
+            )
+        emb.add_field(
+            name="Mute",
+            value="```k.mute [member_id/@member] [time] [reason]```",
+            inline=False
+            )
+        emb.add_field(
+            name="Unmute",
+            value="```k.unmute [member_id/@member]```",
             inline=False
             )
         emb.set_footer(
@@ -166,11 +215,6 @@ class Help(commands.Cog):
             inline=False
             )
         emb.add_field(
-            name="Prefix",
-            value="```k.[prefix] (add/remove)```",
-            inline=False
-            )
-        emb.add_field(
             name="Avatar\n`alias:av, pfp`",
             value="```k.[avatar] (@user)```",
             inline=False
@@ -197,6 +241,11 @@ class Help(commands.Cog):
             inline=False
             )
         emb.add_field(
+            name="Prefix",
+            value="```k.[prefix] (add/remove)```",
+            inline=False
+            )
+        emb.add_field(
             name="Poll",
             value="```k.poll [time] [question]```",
             inline=False
@@ -212,10 +261,20 @@ class Help(commands.Cog):
             inline=False
         )
         emb.add_field(
+            name="Server info",
+            value="```k.serverinfo```",
+            inline=False
+        )
+        emb.add_field(
             name="Snipe",
             value="```k.snipe```",
             inline=False
         )
+        emb.add_field(
+            name="Timer",
+            value="```k.timer [time]```",
+            inline=False
+            )
         emb.set_footer(text=f"{ctx.author.name}", icon_url=ctx.author.display_avatar)
         await ctx.send(embed=emb)
 
