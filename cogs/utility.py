@@ -3,6 +3,7 @@ import json
 
 import disnake
 import pyrebase
+import time
 from disnake.ext import commands
 from disnake.ext.commands import guild_only
 import datetime
@@ -17,6 +18,7 @@ firebase = pyrebase.initialize_app(
 db = firebase.database()
 
 sniped_messages = {}
+start_time = time.time()
 
 #?# [ ] add birthday checker
 
@@ -108,9 +110,9 @@ class Utility(commands.Cog):
     async def hello(self, ctx):
         await ctx.send("Hello! Pleased to meet you.")
     
-    @commands.command(pass_context=True)
+    @commands.command()
     async def ping(self, ctx):
-        if round(self.client.latency * 1000) >= 200:
+        """if round(self.client.latency * 1000) >= 200:
             color = disnake.Color.red()
         elif round(self.client.latency * 1000) >= 100:
             color = disnake.Color.yellow()
@@ -123,28 +125,83 @@ class Utility(commands.Cog):
                         f"**{round(self.client.latency * 1000)}ms**",
             color=color,
             )
-        await ctx.send(embed=PingEmbed)
+        await ctx.send(embed=PingEmbed)"""
+        """ Pong! """
+        channel = ctx.message.channel   
+        try:
+            t1 = time.perf_counter()
+            await ctx.trigger_typing()
+            ta = t1
+            t2 = time.perf_counter()
+            await ctx.trigger_typing()
+            tb = t2
+            ra = round((tb - ta) * 1000)
+        finally:
+            pass
+        try:
+            t1a = time.perf_counter()
+            await ctx.trigger_typing()
+            ta1 = t1a
+            t2a = time.perf_counter()
+            await ctx.trigger_typing()
+            tb1 = t2a
+            ra1 = round((tb1 - ta1) * 1000)
+        finally:
+            pass
+        try:
+            t1b = time.perf_counter()
+            await ctx.trigger_typing()
+            ta2 = t1b
+            t2b = time.perf_counter()
+            await ctx.trigger_typing()
+            tb2 = t2b
+            ra2 = round((tb2 - ta2) * 1000)
+        finally:
+            pass
+        """
+        try:
+            t1c = time.perf_counter()
+            await ctx.trigger_typing()
+            ta3 = t1c
+
+            t2c = time.perf_counter()
+            await ctx.trigger_typing()
+            tb3 = t2c
+
+            ra3 = round((tb3 - ta3) * 1000)
+        finally:
+            pass
         
-    @commands.command()
-    async def info(self, ctx):
-        embed = disnake.Embed(
-            title="General Information",
-            color=disnake.Color.dark_red(),
-            timestamp=dt.now()
-        )
-        embed.add_field(
-            name="Bot info",
-            value=f"Uptime: Not yet implemented\n" # ! TODO make uptime
-                  f"Shard ID: {ctx.guild.shard_id}\n"
-                  f"Currently serving {len(self.client.guilds)} servers"
-        )
-        embed.add_field(
-            name="Developer",
-            value="email: dev.crazydragon@gmail.com\n"
-                  f"Discord: thecrazydragon({self.client.owner.mention})"
-        )
-        embed.set_thumbnail(self.client.owner.avatar)
-        await ctx.send(embed=embed)
+        try:
+            t1d = time.perf_counter()
+            await ctx.trigger_typing()
+            ta4 = t1d
+
+            t2d = time.perf_counter()
+            await ctx.trigger_typing()
+            tb4 = t2d
+
+            ra4 = round((tb4 - ta4) * 1000)
+        finally:
+            pass"""
+            
+        average_ping = round(sum([ra, ra1, ra2])/3)
+            
+        if round(average_ping) >= 200:
+            color = disnake.Color.red()
+        elif round(average_ping) >= 100:
+            color = disnake.Color.yellow()
+        else:
+            color = disnake.Color.green()
+
+        e = disnake.Embed(title="Pong!", colour = color)
+        e.add_field(name='', value=str(ra))
+        e.add_field(name='', value=str(ra1))
+        e.add_field(name='', value=str(ra2))
+        #e.add_field(name='', value=str(ra3))
+        #e.add_field(name='', value=str(ra4))
+        e.add_field(name='Average ping', value=str(round(sum([ra, ra1, ra2])/3)), inline=False)
+        await ctx.send(embed=e)
 
     @commands.command()
     async def serverinfo(self, ctx):
@@ -192,7 +249,7 @@ class Utility(commands.Cog):
     @commands.guild_only()
     async def poll(self, ctx, *, question = None):
         if question != None:
-            time=25
+            time=5
             yes_mark="✅"
             no_mark="❎"
             poll_embed = disnake.Embed(
@@ -211,7 +268,7 @@ class Utility(commands.Cog):
             vote = {'yes': [], 'no': []}
 
             bot_id = self.client.user.id
-            logging.info(bot_id)
+            #logging.info(bot_id)
 
             await poll_message.add_reaction(yes_mark)
             await poll_message.add_reaction(no_mark)
@@ -220,27 +277,23 @@ class Utility(commands.Cog):
 
             poll_message = await ctx.channel.fetch_message(poll_message.id)
             for reaction in poll_message.reactions:
-
                 if str(reaction.emoji) == yes_mark:
                     reactions = await reaction.users().flatten()
 
                     for member in reactions:
-                        if member.display_name == bot_id:
-                            return
-                        vote_yes.append(member.display_name)
-                        yx = slice(0, 1)
+                        if member.id == bot_id:
+                            pass
+                        else:
+                            vote_yes.append(member.display_name)
 
                 elif str(reaction.emoji) == no_mark:
                     reactions = await reaction.users().flatten()
 
                     for member in reactions:
                         if member.id == bot_id:
-                            return
-                        vote_no.append(member.display_name)
-                        nx = slice(0, 1)
-
-            vote_yes[yx] = ""
-            vote_no[nx] = ""
+                            pass
+                        else:
+                            vote_no.append(member.display_name)
 
             if vote_yes<vote_no:
                 poll_answer = "Majority is in opposition of the poll"
@@ -269,21 +322,21 @@ class Utility(commands.Cog):
             in_favour = 'Nobody' if len(vote_yes) == 0 else ''
             not_in_favour = 'Nobody' if len(vote_no) == 0 else ''
 
-            len_count = 0
+            yes_len_count = 0
             for name in vote_yes:
                 if len(in_favour) > 980:
                     in_favour += '...'
                     break
                 in_favour += f'{name}\n'
-                len_count += len(name)
+                yes_len_count += len(name)
 
-            len_count = 0
+            no_len_count = 0
             for name in vote_no:
                 if len(in_favour) > 980:
                     not_in_favour += '...'
                     break
                 not_in_favour += f'{name}\n'
-                len_count += len(name)
+                no_len_count += len(name)
 
             result_embed.add_field(
                 name=f'People in Favour: {len(vote_yes)}',
