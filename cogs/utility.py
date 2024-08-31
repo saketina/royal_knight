@@ -228,18 +228,14 @@ class Utility(commands.Cog):
             inline=False
         )
         created_at = ctx.guild.created_at.strftime("%d/%m/%Y")
-
+        guild_owner = await ctx.guild.getch_member(ctx.guild.owner_id)
         embed.add_field(
             name="General Info",
             value=f"Created at: ``{created_at}``\n"
-                  f"Owner: ``{ctx.guild.owner}``\n"
+                  f"Owner: {guild_owner.mention}\n"
                   f"Preferred language: ``{ctx.guild.preferred_locale}``\n"
                   f"Nitro Tier: ``{ctx.guild.premium_tier}``",
             inline=True
-        )
-        embed.add_field(
-            name="Test",
-            value="Testing"
         )
         embed.set_thumbnail(ctx.guild.icon)
         await ctx.send(embed=embed)
