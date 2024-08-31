@@ -987,11 +987,38 @@ class Testing(commands.Cog):
             else:
                 await ctx.send("I see no moderations")
 
-    @commands.command()
+
     #?# [ ] FEATURE-ADD staff: create, promote, update, demote
     #?# [ ] link to database
-    async def staff(self, ctx, option=None):
-        ## staff profile here
+    @commands.group(name="staff")
+    async def staff(self, ctx):
+        if ctx.invoked_subcommand != None:
+            return
+        
+        embed = disnake.Embed(
+            title= f"STAFF COMMAND",
+            color=disnake.Color.dark_red()
+        )
+        embed.add_field(
+            name="VIEW",
+            value="``k.view [member]``"
+        )
+        embed.add_field(
+            name="PROMOTE",
+            value="``k.promote (member)``"
+        )
+        embed.add_field(
+            name="DEMOTE",
+            value="``k.demote (member)``"
+        )
+        embed.set_author(
+            name=ctx.author.nick,
+            icon_url=ctx.author.avatar
+        )
+        await ctx.send(embed=embed)
+    
+    @staff.command()
+    async def view(self, ctx, member:disnake.Member=None):
         embed = disnake.Embed(
             title= f"{ctx.author.nick}'s staff profile",
             color=disnake.Color.dark_red()
@@ -1005,6 +1032,16 @@ class Testing(commands.Cog):
             icon_url=ctx.author.avatar
         )
         await ctx.send(embed=embed)
+    
+    @staff.command()
+    async def promote(self, ctx, member:disnake.Member=None):
+        await ctx.send("insert promote staff here")
+    
+    @staff.command()
+    async def demote(self, ctx, member:disnake.Member=None):
+        await ctx.send("insert demote staff here")
+        
+        
     
     @commands.command()
     async def staffteam(self, ctx, option=None):
