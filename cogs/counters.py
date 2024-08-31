@@ -34,6 +34,7 @@ class Counters(commands.Cog):
 
         if not self.reset.is_running():
             self.reset.start()
+        pass
 
     @tasks.loop(hours=1.0, reconnect = True)
     async def reset(self):
@@ -93,6 +94,7 @@ class Counters(commands.Cog):
                 await joinCounter.edit(name=f"Joined Today • {p}")
             except Exception as e:
                 logging.error(f"Error in on_member_join: {e}")
+        pass
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -121,6 +123,7 @@ class Counters(commands.Cog):
                 await joinCounter.edit(name=f"Joined Today • {p}")
             except Exception as e:
                 logging.error(f"Error in on_member_remove: {e}")
+        pass
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -150,6 +153,7 @@ class Counters(commands.Cog):
                     self.msg_buffer += 1
         except AttributeError:
             return
+        pass
 
 def setup(client):
     client.add_cog(Counters(client))
