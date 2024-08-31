@@ -26,7 +26,7 @@ db = firebase.database()
 
 dt_string = dt.now().strftime("%d/%m/%Y %H:%M:%S")
 
-staff_roles = 743724904033288293, 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206
+staff_roles = 743724904033288293, 687228928565444800, 706540593865556071, 706161806426767470, 801614132771160095, 747680315257913384, 870431101955493999, 896472583212507206, 830905221281480756
 
 ban_roles = 687228928565444800,706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095, 747680315257913384
 unban_roles = 687228928565444800, 706540593865556071, 743724904033288293, 706161806426767470, 801614132771160095
@@ -100,7 +100,7 @@ def moderation_check(ctx):
 
 def staff_check(member):
     try:
-        return any((True for role in member.roles if role.id in staff_roles))
+        return any((True for role in member.roles if str(role.id) in str(staff_roles)))
     except AttributeError:
         return False
 
@@ -112,7 +112,7 @@ class Moderation(commands.Cog):
     #?# [ ] when check is complete store roles unable to process to another list and output them to the user
     @commands.command()
     @commands.guild_only()
-    async def role(self, ctx, action=None, command=None, *roles:disnake.Role):
+    async def role(self, ctx, action=None, command=None, *, roles:disnake.Role=None):
         command_list = ["ban", "unban", "kick", "mute", "unmute", "warn", "purge"]
         
         help_embed = disnake.Embed(
@@ -124,7 +124,7 @@ class Moderation(commands.Cog):
         if action != "add" or action != "remove":
             await ctx.send(embed=help_embed)
             
-        if command and roles == None:
+        if command == None or roles == None:
             await ctx.send(embed=help_embed)
             
         elif command not in command_list:
@@ -472,8 +472,11 @@ class Moderation(commands.Cog):
     async def ban(self, ctx, target:disnake.User=None, *, reason="For no reason"):
         if target in ctx.guild.members:
             member = target
-        else:
+        elif target != ctx.guild.members:
             member = await self.client.getch_user(target.id)
+        else:
+            member = None
+            
         if member==None:
             emb = disnake.Embed(
                 title = "BAN HELP",
@@ -485,7 +488,7 @@ class Moderation(commands.Cog):
             await ctx.send("Please don\'t ban me.")
         elif member==ctx.author:
             await ctx.send(content = "You can\'t ban yourself", delete_after = 10)
-        elif staff_check(ctx.guild.get_member(member.id)) == True:
+        elif staff_check(await ctx.guild.getch_member(member.id)) == True:
             await ctx.send("You can\'t ban that user.")
         else:
             f = db.child("MODERATIONS").child("BANS").child(ctx.guild.id).child(member.id).get().val()
@@ -538,7 +541,7 @@ class Moderation(commands.Cog):
                             f"Reason: **`{reason}`**\n"
                             f"At: **``{dt_string}``**"
                 )
-            await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
+            #await ctx.guild.ban(member, reason=f"By {ctx.author} was banned for {reason}.")
             await ctx.send(embed=embed)
 
     @commands.command()
