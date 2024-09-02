@@ -23,8 +23,11 @@ start_time = time.time()
 if os.name == "nt":
     log_file_path = 'logs/client.log'
 elif os.name == "posix" :
-    os.mkdir(f"/home/admin/logs/{dt.date()}-rk.log")
-    log_file_path = f"/home/admin/logs/{dt.date()}-rk.log"
+    try:
+        dir_path = os.mkdir(path=f"/home/admin/logs/{dt.date(dt.now())}")
+    except:
+        dir_path = f"/home/admin/logs/{dt.date(dt.now())}"
+    log_file_path = f"{dir_path}/royal_knight-{round(time.time())}.log"
 else:
     log_file_path = 'logs/client.log'
 """logging.basicConfig(level=logging.INFO,
