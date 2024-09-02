@@ -23,7 +23,8 @@ start_time = time.time()
 if os.name == "nt":
     log_file_path = 'logs/client.log'
 elif os.name == "posix" :
-    log_file_path = '/home/admin/logs/client.log'
+    os.mkdir(f"/home/admin/logs/{dt.date()}-rk.log")
+    log_file_path = f"/home/admin/logs/{dt.date()}-rk.log"
 else:
     log_file_path = 'logs/client.log'
 """logging.basicConfig(level=logging.INFO,
