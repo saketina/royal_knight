@@ -26,7 +26,7 @@ elif os.name == "posix" :
     os.mkdir(f"/home/admin/logs/{dt.date()}-rk.log")
     log_file_path = f"/home/admin/logs/{dt.date()}-rk.log"
 else:
-    log_file_path = 'logs/client.log'
+    log_file_path = 'logs/client-else.log'
 """logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                     datefmt='%m-%d %H:%M',
