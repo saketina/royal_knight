@@ -150,4 +150,4 @@ if cog_counter >= len(initial_cogs):
 else:
     logging.warning("\nLoading one or more cogs failed...\n")
 
-client.run(config("token"), reconnect=True)
+client.run(config("TOKEN"), reconnect=True)
