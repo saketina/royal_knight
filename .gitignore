@@ -5,7 +5,6 @@ __pycache__
 .idea
 .vscode
 dockerfile
-.github
 .env
 /venv
 firebase_config.json
