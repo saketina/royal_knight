@@ -1,7 +1,5 @@
 FROM python:3.11.2
 
-WORKDIR /usr/src/admin/royal_knight
-
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
