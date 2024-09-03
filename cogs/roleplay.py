@@ -4,7 +4,7 @@ import time
 from datetime import timedelta
 from io import BytesIO
 from random import choice
-
+from decouple import config
 import disnake
 import PIL
 import pyrebase
@@ -19,7 +19,7 @@ logging = logging.getLogger("Roleplay")
 #?# [ ] resize gifs to 498x278
 #?# [ ] ADD wave, sip, shoot command
 
-firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
+firebase = pyrebase.initialize_app(config("firebase_config"))
 db = firebase.database()
 
 def load_gif(command, last_gif):

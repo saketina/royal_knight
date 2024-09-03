@@ -6,7 +6,7 @@ import disnake
 import pyrebase
 from disnake import Forbidden
 from disnake.ext import commands
-
+from decouple import config
 import logging
 
 #?# [ ] ALL/add dynamic exception list for moderation commands
@@ -18,7 +18,7 @@ logging = logging.getLogger("Moderation")
 
 #?# [ ] Add a notes tab for moderations similar to reason
 
-firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
+firebase = pyrebase.initialize_app(config("firebase_config"))
 db = firebase.database()
 
 #?# [ ] for each moderation add to database as leaderboard and develop a staff leaderboard

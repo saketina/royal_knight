@@ -8,13 +8,13 @@ from disnake.ext import commands
 from disnake.ext.commands import guild_only
 import datetime
 from datetime import datetime as dt
-
+from decouple import config
 import logging
 
 logging = logging.getLogger("Utility")
 
 firebase = pyrebase.initialize_app(
-    json.load(open("./firebase_config.json", "r")))
+    config("firebase_config"))
 db = firebase.database()
 
 sniped_messages = {}
