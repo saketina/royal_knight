@@ -1,9 +1,11 @@
 config.py
 __pycache__
+.dockerignore
 .python-version
 .idea
 .vscode
 dockerfile
+.github
 .env
 /venv
 firebase_config.json
