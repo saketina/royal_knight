@@ -22,6 +22,7 @@ start_time = time.time()
 
 
 log_file_path = 'logs/client.log'
+os.system("ls")
 
 """logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
