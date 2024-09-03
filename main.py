@@ -20,6 +20,10 @@ import logging
 
 start_time = time.time()
 
+try:
+    os.mkdir("logs")
+except:
+    pass
 
 log_file_path = 'logs/client.log'
 os.system("ls")
