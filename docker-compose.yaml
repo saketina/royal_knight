@@ -1,0 +1,8 @@
+services:
+    royal_knight:
+        build: https://github.com/saketina/royal_knight.git
+        container_name: royal_knight
+        volumes:
+          - /home/royal_knight:/app/logs
+        environment:
+          - TOKEN
