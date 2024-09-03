@@ -20,16 +20,9 @@ import logging
 
 start_time = time.time()
 
-if os.name == "nt":
-    log_file_path = 'logs/client.log'
-elif os.name == "posix" :
-    try:
-        dir_path = os.mkdir(path=f"/home/admin/logs/{dt.date(dt.now())}")
-    except:
-        dir_path = f"/home/admin/logs/{dt.date(dt.now())}"
-    log_file_path = f"{dir_path}/royal_knight-{round(time.time())}.log"
-else:
-    log_file_path = 'logs/client.log'
+
+log_file_path = 'logs/client.log'
+
 """logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                     datefmt='%m-%d %H:%M',
