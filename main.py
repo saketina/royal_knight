@@ -26,7 +26,7 @@ except:
     pass
 
 log_file_path = 'logs/client.log'
-os.system("ls")
+#os.system("ls")
 
 """logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(name)s: %(levelname)s: %(message)s',
@@ -150,4 +150,4 @@ if cog_counter >= len(initial_cogs):
 else:
     logging.warning("\nLoading one or more cogs failed...\n")
 
-client.run(config("TOKEN"), reconnect=True)
+client.run(config("token"), reconnect=True)
