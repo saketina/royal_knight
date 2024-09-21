@@ -149,13 +149,13 @@ class User(commands.Cog):
         await ctx.send(embed = ProfileEmbed, file=file)
 
     @commands.command(aliases=["av", "avatar"], pass_context=True)
-    async def pfp(self, ctx, member: disnake.Member = None):
-        if member is None:
-            member = ctx.author
+    async def pfp(self, ctx, target: disnake.Member = None):
+        if target is None:
+            target = ctx.author
 
-        avatar_url = member.display_avatar
+        avatar_url = target.display_avatar
         avatar_embed = disnake.Embed(
-            title=f"{member}'s Avatar",
+            title=f"{target}'s Avatar",
             color=disnake.Color.dark_red()
         )
         avatar_embed.set_image(url=avatar_url)
