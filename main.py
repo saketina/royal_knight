@@ -41,7 +41,7 @@ file_handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:
 terminal_handler = logging.StreamHandler()
 file_handler.setFormatter(logging.Formatter('%(levelname)s:%(name)-15s: %(message)s'))
 logger.addHandler(file_handler)
-logger.addHandler(terminal_handler)
+#logger.addHandler(terminal_handler)
 
 cog_counter = 0
 
@@ -68,10 +68,10 @@ client.remove_command("help")
 
 @client.event
 async def on_ready():
-    logging.info(
+    logger.info(
         f"\nLogged in as: {client.user.name} - {client.user.id}\nWrapper Version: {disnake.__version__}\nAt: {dt.now()}\n"
     )
-    pass
+    #pass
 
 @client.command()
 @is_owner()
