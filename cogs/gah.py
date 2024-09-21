@@ -71,7 +71,10 @@ class CommandErrorHandler(commands.Cog):
             await ctx.send(error)
         
         elif isinstance(error, commands.MemberNotFound):
-            await ctx.send(error)
+            if ctx.command.qualified_name == "pfp":
+                await ctx.send("That person isn\'t a member.")
+            else:
+                await ctx.send(error)
         
         elif isinstance(error, commands.UserNotFound):
             await ctx.send(error)
