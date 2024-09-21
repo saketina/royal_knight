@@ -19,7 +19,13 @@ logging = logging.getLogger("Roleplay")
 #?# [ ] resize gifs to 498x278
 #?# [ ] ADD wave, sip, shoot command
 
-firebase = pyrebase.initialize_app(config("firebase_config"))
+try:
+    firebase = pyrebase.initialize_app(config('firebase_config'))
+except TypeError:
+    firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
+except Exception as e:
+    print(e)
+    
 db = firebase.database()
 
 def load_gif(command, last_gif):

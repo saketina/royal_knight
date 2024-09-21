@@ -10,7 +10,13 @@ import logging
 
 logging = logging.getLogger("Counters")
 
-firebase = pyrebase.initialize_app(config("firebase_config"))
+try:
+    firebase = pyrebase.initialize_app(config('firebase_config'))
+except TypeError:
+    firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
+except Exception as e:
+    print(e)
+    
 db = firebase.database()
 
 guild_id = 940292707102900244

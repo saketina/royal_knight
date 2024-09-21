@@ -13,8 +13,13 @@ import logging
 
 logging = logging.getLogger("Utility")
 
-firebase = pyrebase.initialize_app(
-    config("firebase_config"))
+try:
+    firebase = pyrebase.initialize_app(config('firebase_config'))
+except TypeError:
+    firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
+except Exception as e:
+    print(e)
+    
 db = firebase.database()
 
 sniped_messages = {}
@@ -112,96 +117,112 @@ class Utility(commands.Cog):
     
     @commands.command()
     async def ping(self, ctx):
-        """if round(self.client.latency * 1000) >= 200:
-            color = disnake.Color.red()
-        elif round(self.client.latency * 1000) >= 100:
-            color = disnake.Color.yellow()
-        else:
-            color = disnake.Color.green()
+        if await self.client.is_owner(ctx.author) == True:
+            """if round(self.client.latency * 1000) >= 200:
+                color = disnake.Color.red()
+            elif round(self.client.latency * 1000) >= 100:
+                color = disnake.Color.yellow()
+            else:
+                color = disnake.Color.green()
 
-        PingEmbed = disnake.Embed(
-            title="Pong!",
-            description="Current latency: "
-                        f"**{round(self.client.latency * 1000)}ms**",
-            color=color,
-            )
-        await ctx.send(embed=PingEmbed)"""
-        """ Pong! """
-        channel = ctx.message.channel   
-        try:
-            t1 = time.perf_counter()
-            await ctx.trigger_typing()
-            ta = t1
-            t2 = time.perf_counter()
-            await ctx.trigger_typing()
-            tb = t2
-            ra = round((tb - ta) * 1000)
-        finally:
-            pass
-        try:
-            t1a = time.perf_counter()
-            await ctx.trigger_typing()
-            ta1 = t1a
-            t2a = time.perf_counter()
-            await ctx.trigger_typing()
-            tb1 = t2a
-            ra1 = round((tb1 - ta1) * 1000)
-        finally:
-            pass
-        try:
-            t1b = time.perf_counter()
-            await ctx.trigger_typing()
-            ta2 = t1b
-            t2b = time.perf_counter()
-            await ctx.trigger_typing()
-            tb2 = t2b
-            ra2 = round((tb2 - ta2) * 1000)
-        finally:
-            pass
-        """
-        try:
-            t1c = time.perf_counter()
-            await ctx.trigger_typing()
-            ta3 = t1c
+            PingEmbed = disnake.Embed(
+                title="Pong!",
+                description="Current latency: "
+                            f"**{round(self.client.latency * 1000)}ms**",
+                color=color,
+                )
+            await ctx.send(embed=PingEmbed)"""
+            """ Pong! """
+            channel = ctx.message.channel   
+            try:
+                t1 = time.perf_counter()
+                await ctx.trigger_typing()
+                ta = t1
+                t2 = time.perf_counter()
+                await ctx.trigger_typing()
+                tb = t2
+                ra = round((tb - ta) * 1000)
+            finally:
+                pass
+            try:
+                t1a = time.perf_counter()
+                await ctx.trigger_typing()
+                ta1 = t1a
+                t2a = time.perf_counter()
+                await ctx.trigger_typing()
+                tb1 = t2a
+                ra1 = round((tb1 - ta1) * 1000)
+            finally:
+                pass
+            try:
+                t1b = time.perf_counter()
+                await ctx.trigger_typing()
+                ta2 = t1b
+                t2b = time.perf_counter()
+                await ctx.trigger_typing()
+                tb2 = t2b
+                ra2 = round((tb2 - ta2) * 1000)
+            finally:
+                pass
+            """
+            try:
+                t1c = time.perf_counter()
+                await ctx.trigger_typing()
+                ta3 = t1c
 
-            t2c = time.perf_counter()
-            await ctx.trigger_typing()
-            tb3 = t2c
+                t2c = time.perf_counter()
+                await ctx.trigger_typing()
+                tb3 = t2c
 
-            ra3 = round((tb3 - ta3) * 1000)
-        finally:
-            pass
-        
-        try:
-            t1d = time.perf_counter()
-            await ctx.trigger_typing()
-            ta4 = t1d
-
-            t2d = time.perf_counter()
-            await ctx.trigger_typing()
-            tb4 = t2d
-
-            ra4 = round((tb4 - ta4) * 1000)
-        finally:
-            pass"""
+                ra3 = round((tb3 - ta3) * 1000)
+            finally:
+                pass
             
-        average_ping = round(sum([ra, ra1, ra2])/3)
-            
-        if round(average_ping) >= 200:
-            color = disnake.Color.red()
-        elif round(average_ping) >= 100:
-            color = disnake.Color.yellow()
-        else:
-            color = disnake.Color.green()
+            try:
+                t1d = time.perf_counter()
+                await ctx.trigger_typing()
+                ta4 = t1d
 
-        e = disnake.Embed(title="Pong!", colour = color)
-        e.add_field(name='', value=str(ra))
-        e.add_field(name='', value=str(ra1))
-        e.add_field(name='', value=str(ra2))
-        #e.add_field(name='', value=str(ra3))
-        #e.add_field(name='', value=str(ra4))
-        e.add_field(name='Average ping', value=str(round(sum([ra, ra1, ra2])/3)), inline=False)
-        await ctx.send(embed=e)
+                t2d = time.perf_counter()
+                await ctx.trigger_typing()
+                tb4 = t2d
+
+                ra4 = round((tb4 - ta4) * 1000)
+            finally:
+                pass"""
+                
+            average_ping = round(sum([ra, ra1, ra2])/3)
+                
+            if round(average_ping) >= 200:
+                color = disnake.Color.red()
+            elif round(average_ping) >= 100:
+                color = disnake.Color.yellow()
+            else:
+                color = disnake.Color.green()
+
+            e = disnake.Embed(title="Pong!", colour = color)
+            e.add_field(name='', value=str(ra))
+            e.add_field(name='', value=str(ra1))
+            e.add_field(name='', value=str(ra2))
+            #e.add_field(name='', value=str(ra3))
+            #e.add_field(name='', value=str(ra4))
+            e.add_field(name='Average ping', value=str(round(sum([ra, ra1, ra2])/3)), inline=False)
+            await ctx.send(embed=e)
+        else:
+            if round(self.client.latency * 1000) >= 200:
+                color = disnake.Color.red()
+            elif round(self.client.latency * 1000) >= 100:
+                color = disnake.Color.yellow()
+            else:
+                color = disnake.Color.green()
+
+            PingEmbed = disnake.Embed(
+                title="Pong!",
+                description="Current latency: "
+                            f"**{round(self.client.latency * 1000)}ms**",
+                color=color,
+                )
+            await ctx.send(embed=PingEmbed)
 
     @commands.command()
     async def serverinfo(self, ctx):

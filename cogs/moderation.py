@@ -17,8 +17,13 @@ logging = logging.getLogger("Moderation")
 #?# [ ] ALL/add feature so its easy to add by role perms for commands
 
 #?# [ ] Add a notes tab for moderations similar to reason
+try:
+    firebase = pyrebase.initialize_app(config('firebase_config'))
+except TypeError:
+    firebase = pyrebase.initialize_app(json.load(open("./firebase_config.json", "r")))
+except Exception as e:
+    print(e)
 
-firebase = pyrebase.initialize_app(config("firebase_config"))
 db = firebase.database()
 
 #?# [ ] for each moderation add to database as leaderboard and develop a staff leaderboard
